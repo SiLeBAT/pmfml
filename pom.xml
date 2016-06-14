@@ -50,7 +50,7 @@
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
                     <!-- remote branch -->
                     <branch>refs/heads/mvn-repo</branch>
-                    <merge>false</merge>
+                    <merge>true</merge>
                     <includes>
                         <include>**/*</include>
                     </includes>
