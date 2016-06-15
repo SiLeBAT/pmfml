@@ -50,6 +50,31 @@
 <a id="combine-archive-toolkit" class="anchor" href="#combine-archive-toolkit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Combine Archive Toolkit</h2>
 
 <p>Java library to create, read, write and manipulate COMBINE archives. Developed by <a href="https://www.sbi.uni-rostock.de/team/single/martin-scharm/">Martin Scharm</a>. More info at <a href="https://sems.uni-rostock.de/projects/combinearchive">https://sems.uni-rostock.de/projects/combinearchive</a>.</p>
+
+<h1>
+<a id="maven-configuration" class="anchor" href="#maven-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Maven configuration</h1>
+
+<p>PMFML may be added as a maven dependency. In order to so the BfR maven repository must be added too.</p>
+
+<pre><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;bfr-formats&lt;/id&gt;
+        &lt;url&gt;https://raw.github.com/SiLeBAT/bfr-formats/mvn/repo&lt;/url&gt;
+        &lt;snapshots&gt;
+            &lt;enabled&gt;true&lt;/enabled&gt;
+            &lt;updatePolicy&gt;always&lt;/updatePolicy&gt;
+        &lt;/snapshots&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+
+&lt;dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;de.bund.bfr&lt;/groupId&gt;
+        &lt;artifactId&gt;pmfml&lt;/artifactId&gt;
+        &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
       </section>
     </div>
 
