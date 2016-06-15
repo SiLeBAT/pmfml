@@ -55,7 +55,7 @@
                         <include>**/*</include>
                     </includes>
                     <repositoryName>bfr-formats</repositoryName>  <!-- github repo name -->
-                    <repositoryOwner>miguelalba</repositoryOwner> <!-- github username -->
+                    <repositoryOwner>SiLeBAT</repositoryOwner> <!-- github username -->
                     <server>github</server>
                 </configuration>
                 <executions>
@@ -75,7 +75,7 @@
         <!-- GitHub repository -->
         <repository>
             <id>bfr-formats</id>
-            <url>https://raw.github.com/miguelalba/bfr-formats/mvn/repo</url>
+            <url>https://raw.github.com/SiLeBAT/bfr-formats/mvn/repo</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
