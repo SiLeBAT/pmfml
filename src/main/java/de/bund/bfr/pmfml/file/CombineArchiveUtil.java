@@ -54,20 +54,6 @@ public class CombineArchiveUtil {
   private CombineArchiveUtil() {}
 
   /**
-   * Opens safely a CombineArchive
-   *
-   * @param filename
-   * @throws CombineArchiveException if the CombineArchive could not be opened properly
-   */
-  public static CombineArchive open(final String filename) throws CombineArchiveException {
-    try {
-      return new CombineArchive(new File(filename));
-    } catch (IOException | JDOMException | ParseException | CombineArchiveException e) {
-      throw new CombineArchiveException(filename + " could not be opened");
-    }
-  }
-
-  /**
    * Packs safely a CombineArchive
    *
    * @param combineArchive
