@@ -49,7 +49,7 @@ public class LimitsConstraint {
     } else if (min != null) {
       formula = String.format(Locale.ENGLISH, "(%s >= %f)", var, min);
     } else if (max != null) {
-      formula = String.format(Locale.ENGLISH, "(%s <= %f)", var, min);
+      formula = String.format(Locale.ENGLISH, "(%s <= %f)", var, max);
     } else {
       formula = "";
     }
