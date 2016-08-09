@@ -54,6 +54,6 @@ public class Correlation {
 
   public boolean equals(final Object obj) {
     final Correlation other = (Correlation) obj;
-    return name.equals(other.name) && value == other.value;
+    return name.equals(other.name) && value.equals(other.value);
   }
 }
