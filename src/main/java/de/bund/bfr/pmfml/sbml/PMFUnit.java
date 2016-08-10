@@ -22,72 +22,87 @@ import java.util.Locale;
 
 public class PMFUnit {
 
-  private static final int LEVEL = 3;
-  private static final int VERSION = 1;
+    private static final int LEVEL = 3;
+    private static final int VERSION = 1;
 
-  public static final double DEFAULT_MULTIPLIER = 1.0;
-  public static final int DEFAULT_SCALE = 0;
-  public static final double DEFAULT_EXPONENT = 1.0;
+    public static final double DEFAULT_MULTIPLIER = 1.0;
+    public static final int DEFAULT_SCALE = 0;
+    public static final double DEFAULT_EXPONENT = 1.0;
 
-  Unit unit;
+    Unit unit;
 
-  /**
-   * Creates a PMFUnit instance from a multiplier, scale, kind and exponent.
-   */
-  public PMFUnit(final double multiplier, final int scale, final Unit.Kind kind,
-      final double exponent) {
-    unit = new Unit(multiplier, scale, kind, exponent, LEVEL, VERSION);
-  }
+    /**
+     * Creates a PMFUnit instance from a multiplier, scale, kind and exponent.
+     */
+    public PMFUnit(final double multiplier, final int scale, final Unit.Kind kind,
+                   final double exponent) {
+        unit = new Unit(multiplier, scale, kind, exponent, LEVEL, VERSION);
+    }
 
-  public double getMultiplier() {
-    return unit.getMultiplier();
-  }
-
-
-  public int getScale() {
-    return unit.getScale();
-  }
+    public double getMultiplier() {
+        return unit.getMultiplier();
+    }
 
 
-  public Unit.Kind getKind() {
-    return unit.getKind();
-  }
+    public int getScale() {
+        return unit.getScale();
+    }
 
 
-  public double getExponent() {
-    return unit.getExponent();
-  }
+    public Unit.Kind getKind() {
+        return unit.getKind();
+    }
 
-  /** Sets the exponent of this {@link PMFUnit}. */
-  public void setExponent(final double exponent) {
-    unit.setExponent(exponent);
-  }
 
-  /** Sets the multiplier of this {@link PMFUnit}. */
-  public void setMultiplier(final double multiplier) {
-    unit.setMultiplier(multiplier);
-  }
+    public double getExponent() {
+        return unit.getExponent();
+    }
 
-  /** Sets the Unit.Kind of this {@link PMFUnit}. */
-  public void setKind(final Unit.Kind kind) {
-    unit.setKind(kind);
-  }
+    /**
+     * Sets the exponent of this {@link PMFUnit}.
+     */
+    public void setExponent(final double exponent) {
+        unit.setExponent(exponent);
+    }
 
-  /** Sets the scale of this {@link PMFUnit}. */
-  public void setScale(final int scale) {
-    unit.setScale(scale);
-  }
+    /**
+     * Sets the multiplier of this {@link PMFUnit}.
+     */
+    public void setMultiplier(final double multiplier) {
+        unit.setMultiplier(multiplier);
+    }
 
-  public String toString() {
-    return String.format(Locale.ENGLISH, "unit [exponent=%.6f, kind=%s, multiplier=%.6f, scale=%d]",
-        unit.getExponent(), unit.getKind(), unit.getMultiplier(), unit.getScale());
-  }
+    /**
+     * Sets the Unit.Kind of this {@link PMFUnit}.
+     */
+    public void setKind(final Unit.Kind kind) {
+        unit.setKind(kind);
+    }
 
-  public boolean equals(final Object other) {
-    PMFUnit otherPMFUnit = (PMFUnit) other;
-      return unit.getMultiplier() == otherPMFUnit.getMultiplier() &&
-              unit.getScale() == otherPMFUnit.getScale() &&
-              unit.getKind() == otherPMFUnit.getKind() &&
-              unit.getExponent() == otherPMFUnit.getExponent();
-  }
+    /**
+     * Sets the scale of this {@link PMFUnit}.
+     */
+    public void setScale(final int scale) {
+        unit.setScale(scale);
+    }
+
+    public String toString() {
+        return String.format(Locale.ENGLISH, "unit [exponent=%.6f, kind=%s, multiplier=%.6f, scale=%d]",
+                unit.getExponent(), unit.getKind(), unit.getMultiplier(), unit.getScale());
+    }
+
+    public boolean equals(final Object other) {
+        if (this == other)
+            return true;
+        if (other == null)
+            return false;
+        if (getClass() != other.getClass())
+            return false;
+
+        PMFUnit otherPMFUnit = (PMFUnit) other;
+        return unit.getMultiplier() == otherPMFUnit.getMultiplier() &&
+                unit.getScale() == otherPMFUnit.getScale() &&
+                unit.getKind() == otherPMFUnit.getKind() &&
+                unit.getExponent() == otherPMFUnit.getExponent();
+    }
 }

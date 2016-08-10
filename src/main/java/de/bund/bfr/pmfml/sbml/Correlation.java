@@ -53,6 +53,13 @@ public class Correlation {
   }
 
   public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+
     final Correlation other = (Correlation) obj;
     return name.equals(other.name) && value.equals(other.value);
   }

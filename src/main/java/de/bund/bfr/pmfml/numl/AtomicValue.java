@@ -16,10 +16,10 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import java.util.Locale;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import java.util.Locale;
 
 /**
  * @author Miguel Alba
@@ -48,6 +48,13 @@ public class AtomicValue {
 
   @Override
   public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+
     AtomicValue other = (AtomicValue) obj;
     return value == other.value;
   }

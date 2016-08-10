@@ -56,8 +56,14 @@ public class TupleDescription {
 
     @Override
     public boolean equals(final Object obj) {
-        final TupleDescription other = (TupleDescription) obj;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
 
+        final TupleDescription other = (TupleDescription) obj;
         return concDesc.equals(other.concDesc) && timeDesc.equals(other.timeDesc);
     }
 

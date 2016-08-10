@@ -90,6 +90,13 @@ public class ConcentrationOntology {
 
     @Override
     public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
         final ConcentrationOntology other = (ConcentrationOntology) obj;
         return unitDefinition.equals(other.unitDefinition) && compartment.equals(other.compartment)
                 && species.equals(other.species);
