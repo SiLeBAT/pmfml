@@ -181,9 +181,6 @@ public class PMFUnitDefinition {
             return false;
         }
 
-        if (!unitDefinition.getListOfUnits().equals(other.unitDefinition.getListOfUnits()))
-            return false;
-
-        return true;
+        return unitDefinition.getListOfUnits().equals(other.unitDefinition.getListOfUnits());
     }
 }

@@ -266,10 +266,7 @@ public class PMFCompartmentImpl implements PMFCompartment {
         if (detail != null && other.detail != null && !detail.equals(other.detail))
             return false;
 
-        if (modelVariables != null && other.modelVariables != null
-                && !Arrays.equals(modelVariables, other.modelVariables))
-            return false;
-
-        return true;
+        return !(modelVariables != null && other.modelVariables != null
+                && !Arrays.equals(modelVariables, other.modelVariables));
     }
 }

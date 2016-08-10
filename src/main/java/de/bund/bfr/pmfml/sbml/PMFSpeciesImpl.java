@@ -289,9 +289,6 @@ public class PMFSpeciesImpl implements PMFSpecies {
         if (detail != null && other.detail != null && !detail.equals(other.detail))
             return false;
 
-        if (description != null && other.description != null && !description.equals(other.description))
-            return false;
-
-        return true;
+        return !(description != null && other.description != null && !description.equals(other.description));
     }
 }

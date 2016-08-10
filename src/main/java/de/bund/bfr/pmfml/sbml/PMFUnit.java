@@ -16,9 +16,9 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import java.util.Locale;
-
 import org.sbml.jsbml.Unit;
+
+import java.util.Locale;
 
 public class PMFUnit {
 
@@ -91,8 +91,6 @@ public class PMFUnit {
       return false;
     if (unit.getKind() != otherPMFUnit.getKind())
       return false;
-    if (unit.getExponent() != otherPMFUnit.getExponent())
-      return false;
-    return true;
+    return unit.getExponent() == otherPMFUnit.getExponent();
   }
 }

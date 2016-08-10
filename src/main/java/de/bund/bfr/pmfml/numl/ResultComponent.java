@@ -352,9 +352,7 @@ public class ResultComponent {
             return false;
         if (condID != null && other.condID != null && !condID.equals(other.condID))
             return false;
-        if (modelType != null && other.modelType != null && !modelType.equals(other.modelType))
-            return false;
-        return true;
+        return !(modelType != null && other.modelType != null && !modelType.equals(other.modelType));
     }
 
     public Element toNode(final Document doc) {
