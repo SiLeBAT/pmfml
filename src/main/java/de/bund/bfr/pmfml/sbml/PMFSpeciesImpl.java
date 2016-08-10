@@ -271,24 +271,12 @@ public class PMFSpeciesImpl implements PMFSpecies {
             return false;
 
         PMFSpeciesImpl other = (PMFSpeciesImpl) obj;
-        if (!species.getCompartment().equals(other.species.getCompartment()))
-            return false;
-
-        if (!species.getId().equals(other.species.getId()))
-            return false;
-
-        if (!species.getName().equals(other.species.getName()))
-            return false;
-
-        if (!species.getSubstanceUnits().equals(other.species.getSubstanceUnits()))
-            return false;
-
-        if (combaseCode != null && other.combaseCode != null && !combaseCode.equals(other.combaseCode))
-            return false;
-
-        if (detail != null && other.detail != null && !detail.equals(other.detail))
-            return false;
-
-        return !(description != null && other.description != null && !description.equals(other.description));
+        return species.getCompartment().equals(other.species.getCompartment()) &&
+                species.getId().equals(other.species.getId()) &&
+                species.getName().equals(other.species.getName()) &&
+                species.getSubstanceUnits().equals(other.species.getSubstanceUnits()) &&
+                !(combaseCode != null && other.combaseCode != null && !combaseCode.equals(other.combaseCode)) &&
+                !(detail != null && other.detail != null && !detail.equals(other.detail)) &&
+                !(description != null && other.description != null && !description.equals(other.description));
     }
 }

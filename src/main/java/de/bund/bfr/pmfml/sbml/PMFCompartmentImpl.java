@@ -254,19 +254,10 @@ public class PMFCompartmentImpl implements PMFCompartment {
 
         PMFCompartmentImpl other = (PMFCompartmentImpl) obj;
 
-        if (!compartment.getId().equals(other.compartment.getId()))
-            return false;
-
-        if (!compartment.getName().equals(other.compartment.getName()))
-            return false;
-
-        if (pmfCode != null && other.pmfCode != null && !pmfCode.equals(other.pmfCode))
-            return false;
-
-        if (detail != null && other.detail != null && !detail.equals(other.detail))
-            return false;
-
-        return !(modelVariables != null && other.modelVariables != null
-                && !Arrays.equals(modelVariables, other.modelVariables));
+        return compartment.getId().equals(other.compartment.getId()) &&
+                compartment.getName().equals(other.compartment.getName()) &&
+                !(pmfCode != null && other.pmfCode != null && !pmfCode.equals(other.pmfCode)) &&
+                !(detail != null && other.detail != null && !detail.equals(other.detail)) &&
+                !(modelVariables != null && other.modelVariables != null && !Arrays.equals(modelVariables, other.modelVariables));
     }
 }

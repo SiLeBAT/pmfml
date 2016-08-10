@@ -347,12 +347,9 @@ public class ResultComponent {
             return false;
 
         final ResultComponent other = (ResultComponent) obj;
-
-        if (strProps != null && other.strProps != null && !strProps.equals(other.strProps))
-            return false;
-        if (condID != null && other.condID != null && !condID.equals(other.condID))
-            return false;
-        return !(modelType != null && other.modelType != null && !modelType.equals(other.modelType));
+        return !(strProps != null && other.strProps != null && !strProps.equals(other.strProps)) &&
+                !(condID != null && other.condID != null && !condID.equals(other.condID)) &&
+                !(modelType != null && other.modelType != null && !modelType.equals(other.modelType));
     }
 
     public Element toNode(final Document doc) {

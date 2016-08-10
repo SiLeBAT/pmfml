@@ -169,18 +169,9 @@ public class PMFUnitDefinition {
             return false;
 
         PMFUnitDefinition other = (PMFUnitDefinition) obj;
-
-        if (!unitDefinition.getId().equals(other.getId()))
-            return false;
-
-        if (!unitDefinition.getName().equals(other.getName()))
-            return false;
-
-        if (transformationName != null && other.transformationName != null
-                && !transformationName.equals(other.transformationName)) {
-            return false;
-        }
-
-        return unitDefinition.getListOfUnits().equals(other.unitDefinition.getListOfUnits());
+        return unitDefinition.getId().equals(other.getId()) &&
+                unitDefinition.getName().equals(other.getName()) &&
+                !(transformationName != null && other.transformationName != null && !transformationName.equals(other.transformationName)) &&
+                unitDefinition.getListOfUnits().equals(other.unitDefinition.getListOfUnits());
     }
 }

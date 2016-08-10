@@ -85,12 +85,9 @@ public class PMFUnit {
 
   public boolean equals(final Object other) {
     PMFUnit otherPMFUnit = (PMFUnit) other;
-    if (unit.getMultiplier() != otherPMFUnit.getMultiplier())
-      return false;
-    if (unit.getScale() != otherPMFUnit.getScale())
-      return false;
-    if (unit.getKind() != otherPMFUnit.getKind())
-      return false;
-    return unit.getExponent() == otherPMFUnit.getExponent();
+      return unit.getMultiplier() == otherPMFUnit.getMultiplier() &&
+              unit.getScale() == otherPMFUnit.getScale() &&
+              unit.getKind() == otherPMFUnit.getKind() &&
+              unit.getExponent() == otherPMFUnit.getExponent();
   }
 }
