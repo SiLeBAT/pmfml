@@ -88,7 +88,7 @@ public class LimitsConstraint {
         Double max = null;
 
         // Constraint with a single condition
-        if (math.toString().indexOf("&&") == -1) {
+        if (!math.toString().contains("&&")) {
             var = nodes.get(0).getName();
             final double val = Double.parseDouble(nodes.get(1).toString());
 

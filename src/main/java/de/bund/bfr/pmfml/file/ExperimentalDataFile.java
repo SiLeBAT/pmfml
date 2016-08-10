@@ -143,7 +143,7 @@ public class ExperimentalDataFile {
         }
 
         final ModelType modelType = ModelType.EXPERIMENTAL_DATA;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<String>(0)).node;
+        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<>(0)).node;
         combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
 
         // Packs and closes the combineArchive

@@ -16,90 +16,90 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.sbml.jsbml.Annotation;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Primary model annotation. Holds model id, model title, uncertainties, references, and condId.
- * 
+ *
  * @author Miguel de Alba
  */
 public class Model1Annotation {
 
-  private static final String METADATA_NS = "pmf";
-  private static final String METADATA_TAG = "metadata";
+    private static final String METADATA_NS = "pmf";
+    private static final String METADATA_TAG = "metadata";
 
-  Uncertainties uncertainties;
-  List<Reference> refs;
-  int condID;
-  Annotation annotation;
+    Uncertainties uncertainties;
+    List<Reference> refs;
+    int condID;
+    Annotation annotation;
 
-  /** Gets fields from existing primary model annotation. */
-  public Model1Annotation(final Annotation annotation) {
+    /**
+     * Gets fields from existing primary model annotation.
+     */
+    public Model1Annotation(final Annotation annotation) {
 
-    this.annotation = annotation;
+        this.annotation = annotation;
 
-    final XMLNode metadataNode = annotation.getNonRDFannotation().getChildElement(METADATA_TAG, "");
+        final XMLNode metadataNode = annotation.getNonRDFannotation().getChildElement(METADATA_TAG, "");
 
-    // Gets condID
-    condID = new CondIdNode(metadataNode.getChildElement(CondIdNode.TAG, "")).getCondId();
+        // Gets condID
+        condID = new CondIdNode(metadataNode.getChildElement(CondIdNode.TAG, "")).getCondId();
 
-    // Gets model quality annotation
-    final XMLNode modelQualityNode = metadataNode.getChildElement(UncertaintyNode.TAG, "");
-    if (modelQualityNode != null) {
-      uncertainties = new UncertaintyNode(modelQualityNode).getMeasures();
+        // Gets model quality annotation
+        final XMLNode modelQualityNode = metadataNode.getChildElement(UncertaintyNode.TAG, "");
+        if (modelQualityNode != null) {
+            uncertainties = new UncertaintyNode(modelQualityNode).getMeasures();
+        }
+
+        // Gets references
+        refs = metadataNode.getChildElements(ReferenceSBMLNode.TAG, "").stream().
+                map(refNode -> new ReferenceSBMLNode(refNode).toReference()).collect(Collectors.toList());
     }
 
-    // Gets references
-    refs = new LinkedList<>();
-    for (final XMLNode refNode : metadataNode.getChildElements(ReferenceSBMLNode.TAG, "")) {
-      refs.add(new ReferenceSBMLNode(refNode).toReference());
+    public Model1Annotation(final Uncertainties uncertainties, final List<Reference> references,
+                            final int condID) {
+
+        // Builds metadata node
+        final XMLNode metadataNode = new XMLNode(new XMLTriple(METADATA_TAG, "", METADATA_NS));
+
+        // Builds uncertainties node
+        metadataNode.addChild(new UncertaintyNode(uncertainties).getNode());
+
+        // Builds reference nodes
+        for (final Reference reference : references) {
+            metadataNode.addChild(new ReferenceSBMLNode(reference).node);
+        }
+
+        // Builds condID node
+        metadataNode.addChild(new CondIdNode(condID).node);
+
+        // Saves fields
+        this.uncertainties = uncertainties;
+        this.refs = references;
+        this.condID = condID;
+
+        this.annotation = new Annotation();
+        this.annotation.setNonRDFAnnotation(metadataNode);
     }
-  }
 
-  public Model1Annotation(final Uncertainties uncertainties, final List<Reference> references,
-      final int condID) {
-
-    // Builds metadata node
-    final XMLNode metadataNode = new XMLNode(new XMLTriple(METADATA_TAG, "", METADATA_NS));
-
-    // Builds uncertainties node
-    metadataNode.addChild(new UncertaintyNode(uncertainties).getNode());
-
-    // Builds reference nodes
-    for (final Reference reference : references) {
-      metadataNode.addChild(new ReferenceSBMLNode(reference).node);
+    public Uncertainties getUncertainties() {
+        return uncertainties;
     }
 
-    // Builds condID node
-    metadataNode.addChild(new CondIdNode(condID).node);
+    public List<Reference> getReferences() {
+        return refs;
+    }
 
-    // Saves fields
-    this.uncertainties = uncertainties;
-    this.refs = references;
-    this.condID = condID;
+    public int getCondID() {
+        return condID;
+    }
 
-    this.annotation = new Annotation();
-    this.annotation.setNonRDFAnnotation(metadataNode);
-  }
-
-  public Uncertainties getUncertainties() {
-    return uncertainties;
-  }
-
-  public List<Reference> getReferences() {
-    return refs;
-  }
-
-  public int getCondID() {
-    return condID;
-  }
-
-  public Annotation getAnnotation() {
-    return annotation;
-  }
+    public Annotation getAnnotation() {
+        return annotation;
+    }
 }

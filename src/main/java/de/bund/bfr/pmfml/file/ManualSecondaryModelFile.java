@@ -145,7 +145,7 @@ public class ManualSecondaryModelFile {
 
         // Adds description with model type
         final ModelType modelType = ModelType.MANUAL_SECONDARY_MODEL;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<String>(0)).node;
+        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<>(0)).node;
         combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
 
         CombineArchiveUtil.pack(combineArchive);

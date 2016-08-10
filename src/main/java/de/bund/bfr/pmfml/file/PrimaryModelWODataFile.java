@@ -145,7 +145,7 @@ public class PrimaryModelWODataFile {
 
         // Adds description with model type
         final ModelType modelType = ModelType.PRIMARY_MODEL_WODATA;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<String>(0)).node;
+        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<>(0)).node;
         combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
 
         // Packs and closes the combineArchive

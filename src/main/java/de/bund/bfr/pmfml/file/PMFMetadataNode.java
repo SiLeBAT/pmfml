@@ -16,57 +16,53 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.file;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import de.bund.bfr.pmfml.ModelType;
 import org.jdom2.Element;
 
-import de.bund.bfr.pmfml.ModelType;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Miguel Alba
  */
 public class PMFMetadataNode {
 
-  private static final String MODEL_TYPE_TAG = "modelType";
-  private static final String MASTER_FILE_TAG = "masterfile";
+    private static final String MODEL_TYPE_TAG = "modelType";
+    private static final String MASTER_FILE_TAG = "masterfile";
 
-  ModelType modelType;
-  Set<String> masterFiles;
-  Element node;
+    ModelType modelType;
+    Set<String> masterFiles;
+    Element node;
 
-  public PMFMetadataNode(final ModelType modelType, final Set<String> masterFiles) {
-    this.modelType = modelType;
-    this.masterFiles = masterFiles;
+    public PMFMetadataNode(final ModelType modelType, final Set<String> masterFiles) {
+        this.modelType = modelType;
+        this.masterFiles = masterFiles;
 
-    node = new Element("metaParent");
-    final Element modelTypeElement = new Element(MODEL_TYPE_TAG);
-    modelTypeElement.addContent(modelType.name());
-    node.addContent(modelTypeElement);
-    for (final String masterFile : masterFiles) {
-      final Element masterFileElement = new Element(MASTER_FILE_TAG);
-      masterFileElement.addContent(masterFile);
-      node.addContent(masterFileElement);
+        node = new Element("metaParent");
+        final Element modelTypeElement = new Element(MODEL_TYPE_TAG);
+        modelTypeElement.addContent(modelType.name());
+        node.addContent(modelTypeElement);
+        for (final String masterFile : masterFiles) {
+            final Element masterFileElement = new Element(MASTER_FILE_TAG);
+            masterFileElement.addContent(masterFile);
+            node.addContent(masterFileElement);
+        }
     }
-  }
 
-  public PMFMetadataNode(final Element node) {
-    this.node = node;
+    public PMFMetadataNode(final Element node) {
+        this.node = node;
 
-    modelType = ModelType.valueOf(node.getChildText(MODEL_TYPE_TAG));
-    final List<Element> masterFileElements = node.getChildren(MASTER_FILE_TAG);
-    masterFiles = new HashSet<>(masterFileElements.size());
-    for (final Element masterFileElement : masterFileElements) {
-      masterFiles.add(masterFileElement.getText());
+        modelType = ModelType.valueOf(node.getChildText(MODEL_TYPE_TAG));
+        final List<Element> masterFileElements = node.getChildren(MASTER_FILE_TAG);
+        masterFiles = masterFileElements.stream().map(Element::getText).collect(Collectors.toSet());
     }
-  }
 
-  public final ModelType getModelType() {
-    return modelType;
-  }
+    public final ModelType getModelType() {
+        return modelType;
+    }
 
-  public final Set<String> masterFiles() {
-    return masterFiles;
-  }
+    public final Set<String> masterFiles() {
+        return masterFiles;
+    }
 }
