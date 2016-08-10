@@ -16,10 +16,10 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import de.bund.bfr.pmfml.ModelType;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import de.bund.bfr.pmfml.ModelType;
 
 /**
  * @author Miguel Alba
@@ -195,8 +195,7 @@ public class MetadataImpl implements Metadata {
   /** {@inheritDoc} */
   @Override
   public int hashCode() {
-    final int result = 31 * 1 + ((props == null) ? 0 : props.hashCode());
-    return result;
+    return 31 * 1 + ((props == null) ? 0 : props.hashCode());
   }
 
   /** {@inheritDoc} */

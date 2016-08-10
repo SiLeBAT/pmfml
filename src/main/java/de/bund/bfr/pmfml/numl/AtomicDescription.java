@@ -55,9 +55,8 @@ public class AtomicDescription {
 
   @Override
   public String toString() {
-      String string = "AtomicDescription [name=" + name + ", ontologyTerm=" + ontologyTermId + ", valueType=" +
+      return "AtomicDescription [name=" + name + ", ontologyTerm=" + ontologyTermId + ", valueType=" +
               valueType + "]";
-    return string;
   }
 
   @Override

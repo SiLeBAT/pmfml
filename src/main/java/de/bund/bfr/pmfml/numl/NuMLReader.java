@@ -16,17 +16,16 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Miguel Alba
@@ -40,8 +39,7 @@ public class NuMLReader {
     final DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     final Document xmlDoc = docBuilder.parse(is);
 
-    final NuMLDocument numlDoc = new NuMLDocument(xmlDoc.getDocumentElement());
-    return numlDoc;
+    return new NuMLDocument(xmlDoc.getDocumentElement());
   }
 
   public static NuMLDocument read(final File file)
