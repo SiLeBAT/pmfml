@@ -25,48 +25,47 @@ import org.w3c.dom.NodeList;
  */
 public class TupleDescription {
 
-  static final String ELEMENT_NAME = "tupleDescription";
+    static final String ELEMENT_NAME = "tupleDescription";
 
-  AtomicDescription concDesc;
-  AtomicDescription timeDesc;
+    AtomicDescription concDesc;
+    AtomicDescription timeDesc;
 
-  public TupleDescription(final AtomicDescription concDesc, final AtomicDescription timeDesc) {
-    this.concDesc = concDesc;
-    this.timeDesc = timeDesc;
-  }
+    public TupleDescription(final AtomicDescription concDesc, final AtomicDescription timeDesc) {
+        this.concDesc = concDesc;
+        this.timeDesc = timeDesc;
+    }
 
-  public TupleDescription(final Element node) {
-    NodeList nodes = node.getElementsByTagName(AtomicDescription.ELEMENT_NAME);
-    concDesc = new AtomicDescription((Element) nodes.item(0));
-    timeDesc = new AtomicDescription((Element) nodes.item(1));
-  }
+    public TupleDescription(final Element node) {
+        NodeList nodes = node.getElementsByTagName(AtomicDescription.ELEMENT_NAME);
+        concDesc = new AtomicDescription((Element) nodes.item(0));
+        timeDesc = new AtomicDescription((Element) nodes.item(1));
+    }
 
-  public AtomicDescription getConcentrationDescription() {
-    return concDesc;
-  }
+    public AtomicDescription getConcentrationDescription() {
+        return concDesc;
+    }
 
-  public AtomicDescription getTimeDescription() {
-    return timeDesc;
-  }
+    public AtomicDescription getTimeDescription() {
+        return timeDesc;
+    }
 
-  @Override
-  public String toString() {
-    return String.format("TupleDescription [concentrationDescription=%s, timeDescription=%s]",
-        concDesc, timeDesc);
-  }
+    @Override
+    public String toString() {
+        return "TupleDescription [concentrationDescription=" + concDesc + ", timeDescription=" + timeDesc + "]";
+    }
 
-  @Override
-  public boolean equals(final Object obj) {
-    final TupleDescription other = (TupleDescription) obj;
+    @Override
+    public boolean equals(final Object obj) {
+        final TupleDescription other = (TupleDescription) obj;
 
-    return concDesc.equals(other.concDesc) && timeDesc.equals(other.timeDesc);
-  }
+        return concDesc.equals(other.concDesc) && timeDesc.equals(other.timeDesc);
+    }
 
-  public Element toNode(final Document doc) {
-    final Element node = doc.createElement(ELEMENT_NAME);
-    node.appendChild(concDesc.toNode(doc));
-    node.appendChild(timeDesc.toNode(doc));
+    public Element toNode(final Document doc) {
+        final Element node = doc.createElement(ELEMENT_NAME);
+        node.appendChild(concDesc.toNode(doc));
+        node.appendChild(timeDesc.toNode(doc));
 
-    return node;
-  }
+        return node;
+    }
 }

@@ -16,71 +16,70 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
+import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
-
 public class TimeOntology {
 
-  static final String ELEMENT_NAME = "ontologyTerm";
-  private static final String ANNOTATION = "annotation";
+    static final String ELEMENT_NAME = "ontologyTerm";
+    private static final String ANNOTATION = "annotation";
 
-  private static final String ID_TAG = "id";
-  private static final String TERM_TAG = "term";
-  private static final String SOURCE_TERM_ID_TAG = "sourceTermId";
-  private static final String URI_TAG = "ontologyURI";
+    private static final String ID_TAG = "id";
+    private static final String TERM_TAG = "term";
+    private static final String SOURCE_TERM_ID_TAG = "sourceTermId";
+    private static final String URI_TAG = "ontologyURI";
 
-  public static final String ID = "time";
-  public static final String TERM = "time";
-  public static final String SOURCE_TERM_ID = "SBO:0000345";
-  public static final String URI = "http://www.ebi.ac.uk/sbo";
+    public static final String ID = "time";
+    public static final String TERM = "time";
+    public static final String SOURCE_TERM_ID = "SBO:0000345";
+    public static final String URI = "http://www.ebi.ac.uk/sbo";
 
-  PMFUnitDefinition unitDefinition;
+    PMFUnitDefinition unitDefinition;
 
-  public TimeOntology(final PMFUnitDefinition unitDefinition) {
-    this.unitDefinition = unitDefinition;
-  }
+    public TimeOntology(final PMFUnitDefinition unitDefinition) {
+        this.unitDefinition = unitDefinition;
+    }
 
-  public TimeOntology(final Element node) {
-    final NodeList annotationNodes = node.getElementsByTagName(ANNOTATION);
-    final Element annotationNode = (Element) annotationNodes.item(0);
+    public TimeOntology(final Element node) {
+        final NodeList annotationNodes = node.getElementsByTagName(ANNOTATION);
+        final Element annotationNode = (Element) annotationNodes.item(0);
 
-    final NodeList unitNodes = annotationNode.getElementsByTagName(UnitDefinitionNuMLNode.TAG);
-    final Element unitNode = (Element) unitNodes.item(0);
+        final NodeList unitNodes = annotationNode.getElementsByTagName(UnitDefinitionNuMLNode.TAG);
+        final Element unitNode = (Element) unitNodes.item(0);
 
-    unitDefinition = new UnitDefinitionNuMLNode(unitNode).toPMFUnitDefinition();
-  }
+        unitDefinition = new UnitDefinitionNuMLNode(unitNode).toPMFUnitDefinition();
+    }
 
-  public PMFUnitDefinition getUnitDefinition() {
-    return unitDefinition;
-  }
+    public PMFUnitDefinition getUnitDefinition() {
+        return unitDefinition;
+    }
 
-  @Override
-  public String toString() {
-    return String.format("OntologyTerm [id=%s, term=%s, sourceTermId=%s, ontologyURI=%s]", ID, TERM,
-        SOURCE_TERM_ID, URI);
-  }
+    @Override
+    public String toString() {
+        return "OntologyTerm [id=" + ID + ", term=" + TERM + ", sourceTermId=" + SOURCE_TERM_ID + ", ontologyURI=" + URI
+                + "]";
+    }
 
-  @Override
-  public boolean equals(final Object obj) {
-    TimeOntology other = (TimeOntology) obj;
-    return unitDefinition.equals(other.unitDefinition);
-  }
+    @Override
+    public boolean equals(final Object obj) {
+        TimeOntology other = (TimeOntology) obj;
+        return unitDefinition.equals(other.unitDefinition);
+    }
 
-  public Element toNode(final Document doc) {
-    final Element node = doc.createElement(ELEMENT_NAME);
-    node.setAttribute(ID_TAG, ID);
-    node.setAttribute(TERM_TAG, TERM);
-    node.setAttribute(SOURCE_TERM_ID_TAG, SOURCE_TERM_ID);
-    node.setAttribute(URI_TAG, URI);
+    public Element toNode(final Document doc) {
+        final Element node = doc.createElement(ELEMENT_NAME);
+        node.setAttribute(ID_TAG, ID);
+        node.setAttribute(TERM_TAG, TERM);
+        node.setAttribute(SOURCE_TERM_ID_TAG, SOURCE_TERM_ID);
+        node.setAttribute(URI_TAG, URI);
 
-    final Element annotation = doc.createElement(ANNOTATION);
-    node.appendChild(annotation);
+        final Element annotation = doc.createElement(ANNOTATION);
+        node.appendChild(annotation);
 
-    annotation.appendChild(new UnitDefinitionNuMLNode(unitDefinition, doc).node);
+        annotation.appendChild(new UnitDefinitionNuMLNode(unitDefinition, doc).node);
 
-    return node;
-  }
+        return node;
+    }
 }

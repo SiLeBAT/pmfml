@@ -16,22 +16,6 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.file;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.text.ParseException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.xml.sax.SAXException;
-
 import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.ExperimentalData;
@@ -40,6 +24,20 @@ import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
 import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.text.ParseException;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Case 0: Experimental data file.
@@ -65,13 +63,13 @@ public class ExperimentalDataFile {
 
     public static void writePMF(final String dir, final String filename,
                                 List<ExperimentalData> dataRecords) throws CombineArchiveException {
-        final String caName = String.format("%s/%s.pmf", dir, filename);
+        String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), dataRecords);
     }
 
     public static void writePMFX(final String dir, final String filename,
                                  List<ExperimentalData> dataRecords) throws CombineArchiveException {
-        final String caName = String.format("%s/%s.pmfx", dir, filename);
+        String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), dataRecords);
     }
 

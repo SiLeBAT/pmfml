@@ -55,8 +55,8 @@ public class AtomicDescription {
 
   @Override
   public String toString() {
-    String string = String.format("AtomicDescription [name=%s, ontologyTerm=%s, valueType=%s]",
-        name, ontologyTermId, valueType);
+      String string = "AtomicDescription [name=" + name + ", ontologyTerm=" + ontologyTermId + ", valueType=" +
+              valueType + "]";
     return string;
   }
 

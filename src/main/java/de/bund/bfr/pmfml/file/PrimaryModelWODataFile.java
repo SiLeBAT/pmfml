@@ -16,21 +16,6 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.file;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.text.ParseException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.xml.stream.XMLStreamException;
-
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
-
 import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWOData;
@@ -38,6 +23,19 @@ import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
 import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
+
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.text.ParseException;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Case 1b: Primary models without data file.
@@ -61,13 +59,13 @@ public class PrimaryModelWODataFile {
 
     public static void writePMF(final String dir, final String filename,
                                 final List<PrimaryModelWOData> models) throws Exception {
-        final String caName = String.format("%s/%s.pmf", dir, filename);
+        String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), SBML_URI, models);
     }
 
     public static void writePMFX(final String dir, final String filename,
                                  final List<PrimaryModelWOData> models) throws Exception {
-        final String caName = String.format("%s/%s.pmfx", dir, filename);
+        String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), PMF_URI, models);
     }
 

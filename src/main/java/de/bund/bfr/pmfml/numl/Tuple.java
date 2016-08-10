@@ -25,46 +25,46 @@ import org.w3c.dom.NodeList;
  */
 public class Tuple {
 
-  static final String ELEMENT_NAME = "tuple";
+    static final String ELEMENT_NAME = "tuple";
 
-  AtomicValue concValue;
-  AtomicValue timeValue;
+    AtomicValue concValue;
+    AtomicValue timeValue;
 
-  public Tuple(final AtomicValue concValue, final AtomicValue timeValue) {
-    this.concValue = concValue;
-    this.timeValue = timeValue;
-  }
+    public Tuple(final AtomicValue concValue, final AtomicValue timeValue) {
+        this.concValue = concValue;
+        this.timeValue = timeValue;
+    }
 
-  public Tuple(final Element node) {
-    final NodeList nodeList = node.getElementsByTagName(AtomicValue.ELEMENT_NAME);
-    concValue = new AtomicValue((Element) nodeList.item(0));
-    timeValue = new AtomicValue((Element) nodeList.item(1));
-  }
+    public Tuple(final Element node) {
+        final NodeList nodeList = node.getElementsByTagName(AtomicValue.ELEMENT_NAME);
+        concValue = new AtomicValue((Element) nodeList.item(0));
+        timeValue = new AtomicValue((Element) nodeList.item(1));
+    }
 
-  public AtomicValue getConcValue() {
-    return concValue;
-  }
+    public AtomicValue getConcValue() {
+        return concValue;
+    }
 
-  public AtomicValue getTimeValue() {
-    return timeValue;
-  }
+    public AtomicValue getTimeValue() {
+        return timeValue;
+    }
 
-  @Override
-  public String toString() {
-    return String.format("Tuple [atomicValues=%s %s]", concValue, timeValue);
-  }
+    @Override
+    public String toString() {
+        return "Tuple [atomicValues=" + concValue + " " + timeValue + "]";
+    }
 
-  @Override
-  public boolean equals(final Object obj) {
-    Tuple other = (Tuple) obj;
-    return concValue.equals(other.concValue) && timeValue.equals(other.timeValue);
-  }
+    @Override
+    public boolean equals(final Object obj) {
+        Tuple other = (Tuple) obj;
+        return concValue.equals(other.concValue) && timeValue.equals(other.timeValue);
+    }
 
-  public Element toNode(final Document doc) {
-    final Element node = doc.createElement(ELEMENT_NAME);
-    node.appendChild(concValue.toNode(doc));
-    node.appendChild(timeValue.toNode(doc));
+    public Element toNode(final Document doc) {
+        final Element node = doc.createElement(ELEMENT_NAME);
+        node.appendChild(concValue.toNode(doc));
+        node.appendChild(timeValue.toNode(doc));
 
-    return node;
-  }
+        return node;
+    }
 }
