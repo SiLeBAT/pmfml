@@ -34,88 +34,88 @@ import org.sbml.jsbml.Species;
  */
 public interface PMFSpecies {
 
-  public static final boolean BOUNDARY_CONDITION = true;
-  public static final boolean CONSTANT = false;
-  public static final boolean ONLY_SUBSTANCE_UNITS = false;
+  boolean BOUNDARY_CONDITION = true;
+  boolean CONSTANT = false;
+  boolean ONLY_SUBSTANCE_UNITS = false;
 
   /** Returns the {@link Species} of this {@link PMFSpecies}. */
-  public Species getSpecies();
+  Species getSpecies();
 
   /** Returns the compartment of this {@link PMFSpecies}. */
-  public String getCompartment();
+  String getCompartment();
 
   /** Returns the id of this {@link PMFSpecies}. */
-  public String getId();
+  String getId();
 
   /** Returns the name of this {@link PMFSpecies}. */
-  public String getName();
+  String getName();
 
   /** Returns the units of this {@link PMFSpecies}. */
-  public String getUnits();
+  String getUnits();
 
   /**
    * Returns the combase code of this {@link PMFSpecies}. If not set, returns null.
    */
-  public String getCombaseCode();
+  String getCombaseCode();
 
   /**
    * Returns the detail of this {@link PMFSpecies}. If not set, returns null.
    */
-  public String getDetail();
+  String getDetail();
 
   /**
    * Returns the description of this {@link PMFSpecies}. If not set, returns null.
    */
-  public String getDescription();
+  String getDescription();
 
   /**
    * Sets the compartment value of this {@link PMFSpecies} with 'compartment'. If 'compartment' is
    * null or empty it will do nothing.
    */
-  public void setCompartment(final String compartment);
+  void setCompartment(final String compartment);
 
   /**
    * Sets the id value of this {@link PMFSpecies} with 'id'. If 'id' is null or empty it will do
    * nothing.
    */
-  public void setId(final String id);
+  void setId(final String id);
 
   /**
    * Sets the name value of this {@link PMFSpecies} with 'name'. If 'name' is null or empty it will
    * do nothing.
    */
-  public void setName(final String name);
+  void setName(final String name);
 
   /**
    * Sets the units value of this {@link PMFSpecies} with 'units'. It 'units' is null or empty it
    * will do nothing.
    */
-  public void setUnits(final String units);
+  void setUnits(final String units);
 
   /**
    * Sets the combase code value of this {@link PMFSpecies} with 'combaseCode'. It 'combaseCode' is
    * null or empty it will do nothing.
    */
-  public void setCombaseCode(final String combaseCode);
+  void setCombaseCode(final String combaseCode);
 
   /**
    * Sets the detail of this {@link PMFSpecies} with 'detail'. If 'detail' is null or empty it will
    * do nothing.
    */
-  public void setDetail(final String detail);
+  void setDetail(final String detail);
 
   /**
    * Sets the description of this {@link PMFSpecies} with 'description'. If 'description' is null or
    * empty it will do nothing.
    */
-  public void setDescription(final String description);
+  void setDescription(final String description);
 
   /** Returns true if the combase code of this {@link PMFSpecies} is set. */
-  public boolean isSetCombaseCode();
+  boolean isSetCombaseCode();
 
   /** Returns true if the detail of this {@link PMFSpecies} is set. */
-  public boolean isSetDetail();
+  boolean isSetDetail();
 
   /** Returns true if the description of this {@link PMFSpecies} is set. */
-  public boolean isSetDescription();
+  boolean isSetDescription();
 }

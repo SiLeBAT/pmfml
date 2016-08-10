@@ -34,85 +34,85 @@ package de.bund.bfr.pmfml.sbml;
 public interface Uncertainties {
 
   /** Returns the id of this {@link Uncertainties}. If not set returns null. */
-  public Integer getID();
+  Integer getID();
 
   /** Returns the modelName of this {@link Uncertainties}. If not set returns null. */
-  public String getModelName();
+  String getModelName();
 
   /** Returns the comment of this {@link Uncertainties}. If not set returns null. */
-  public String getComment();
+  String getComment();
 
   /** Returns the r2 of this {@link Uncertainties}. If not set returns null. */
-  public Double getR2();
+  Double getR2();
 
   /** Returns the rms of this {@link Uncertainties}. If not set returns null. */
-  public Double getRMS();
+  Double getRMS();
 
   /** Returns the sse of this {link Uncertainties}. If not set returns null. */
-  public Double getSSE();
+  Double getSSE();
 
   /** Returns the aic of this {link Uncertainties}. If not set returns null. */
-  public Double getAIC();
+  Double getAIC();
 
   /** Returns the bic of this {link Uncertainties}. If not set returns null. */
-  public Double getBIC();
+  Double getBIC();
 
   /** Returns the dof of this {link Uncertainties}. If not set returns null. */
-  public Integer getDOF();
+  Integer getDOF();
 
   /** Sets the id value with 'id'. */
-  public void setID(int id);
+  void setID(int id);
 
   /**
    * Sets the modelName value with 'modelName'. If 'modelName' is null or empty it will do nothing.
    */
-  public void setModelName(final String modelName);
+  void setModelName(final String modelName);
 
   /** Sets the comment value with 'comment'. If 'comment' is null or empty it will do nothing. */
-  public void setComment(final String comment);
+  void setComment(final String comment);
 
   /** Sets the r2 value with 'r2'. */
-  public void setR2(final double r2);
+  void setR2(final double r2);
 
   /** Sets the rms value with 'rms'. */
-  public void setRMS(final double rms);
+  void setRMS(final double rms);
 
   /** Sets the sse value with 'sse'. */
-  public void setSSE(final double sse);
+  void setSSE(final double sse);
 
   /** Sets the aic value with 'aic'. */
-  public void setAIC(final double aic);
+  void setAIC(final double aic);
 
   /** Sets the bic value with 'bic'. */
-  public void setBIC(final double bic);
+  void setBIC(final double bic);
 
   /** Sets the dof value with 'dof'. */
-  public void setDOF(final int dof);
+  void setDOF(final int dof);
 
   /** Returns true if the id of this {@link Uncertainties} is set. */
-  public boolean isSetID();
+  boolean isSetID();
 
   /** Returns true if the modelName of this {@link Uncertainties} is set. */
-  public boolean isSetModelName();
+  boolean isSetModelName();
 
   /** Returns true if the comment of this {@link Uncertainties} is set. */
-  public boolean isSetComment();
+  boolean isSetComment();
 
   /** Returns true if the r2 of this {@link Uncertainties} is set. */
-  public boolean isSetR2();
+  boolean isSetR2();
 
   /** Returns true if the rms of this {@link Uncertainties} is set. */
-  public boolean isSetRMS();
+  boolean isSetRMS();
 
   /** Returns true if the sse of this {@link Uncertainties} is set. */
-  public boolean isSetSSE();
+  boolean isSetSSE();
 
   /** Returns true if the aic of this {@link Uncertainties} is set. */
-  public boolean isSetAIC();
+  boolean isSetAIC();
 
   /** Returns true if the bic of this {@link Uncertainties} is set. */
-  public boolean isSetBIC();
+  boolean isSetBIC();
 
   /** Returns true if the dof of this {@link Uncertainties} is set. */
-  public boolean isSetDOF();
+  boolean isSetDOF();
 }

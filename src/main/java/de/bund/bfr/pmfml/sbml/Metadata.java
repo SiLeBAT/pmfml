@@ -26,88 +26,88 @@ import de.bund.bfr.pmfml.ModelType;
 public interface Metadata {
 
   /** Returns the given name of this {@link Metadata}. If not set returns null. */
-  public String getGivenName();
+  String getGivenName();
 
   /** Returns the family name of this {@link Metadata}. If not set returns null. */
-  public String getFamilyName();
+  String getFamilyName();
 
   /** Returns the contact of this {@link Metadata}. If not set returns null. */
-  public String getContact();
+  String getContact();
 
   /** Returns the created date of this {@link Metadata}. If not set returns null. */
-  public String getCreatedDate();
+  String getCreatedDate();
 
   /** Returns the modified date of this {@link Metadata}. If not set returns null. */
-  public String getModifiedDate();
+  String getModifiedDate();
 
   /** Returns the {@link ModelType} of this {@link Metadata}. If not set returns null. */
-  public ModelType getType();
+  ModelType getType();
 
   /** Returns the rights of this {@link Metadata}. If not set returns null. */
-  public String getRights();
+  String getRights();
 
   /** Returns the reference link of this {@link Metadata}. If not set returns null. */
-  public String getReferenceLink();
+  String getReferenceLink();
 
   /**
    * Sets the given name value with 'givenName'. If 'givenName' is null or empty it will do nothing.
    */
-  public void setGivenName(final String givenName);
+  void setGivenName(final String givenName);
 
   /**
    * Sets the family name value with 'familyName'. If 'familyName' is null or empty it will do
    * nothing
    */
-  public void setFamilyName(final String familyName);
+  void setFamilyName(final String familyName);
 
   /** Sets the contact value with 'contact'. If 'contact' is null or empty it will do nothing. */
-  public void setContact(final String contact);
+  void setContact(final String contact);
 
   /**
    * Sets the created date value with 'createdDate'. If 'createdDate' is null or empty it will do
    * nothing.
    */
-  public void setCreatedDate(final String createdDate);
+  void setCreatedDate(final String createdDate);
 
   /**
    * Sets the modified date value with 'modifiedDate'. If 'modifiedDate' is null or empty it will do
    * nothing.
    */
-  public void setModifiedDate(final String modifiedDate);
+  void setModifiedDate(final String modifiedDate);
 
   /** Sets the {@link ModelType} value with 'type'. If 'modelType' is null it will do nothing. */
-  public void setType(final ModelType type);
+  void setType(final ModelType type);
 
   /** Sets the rights value with 'rights'. If 'rights' is null or empty it will do nothing. */
-  public void setRights(final String rights);
+  void setRights(final String rights);
 
   /**
    * Sets the reference link value with 'referenceLink'. If 'referenceLink' is null or empty it will
    * do nothing.
    */
-  public void setReferenceLink(final String referenceLink);
+  void setReferenceLink(final String referenceLink);
 
   /** Returns true if the given name of this {@link Metadata} is set. */
-  public boolean isSetGivenName();
+  boolean isSetGivenName();
 
   /** Returns true if the family name of this {@link Metadata} is set. */
-  public boolean isSetFamilyName();
+  boolean isSetFamilyName();
 
   /** Returns true if the contact of this {@link Metadata} is set. */
-  public boolean isSetContact();
+  boolean isSetContact();
 
   /** Returns true if the created date of this {@link Metadata} is set. */
-  public boolean isSetCreatedDate();
+  boolean isSetCreatedDate();
 
   /** Returns true if the modified date of this {@link Metadata} is set. */
-  public boolean isSetModifiedDate();
+  boolean isSetModifiedDate();
 
   /** Returns true if the {@link ModelType} of this {@link Metadata} is set. */
-  public boolean isSetType();
+  boolean isSetType();
 
   /** Returns true if the rights of this {@link Metadata} are set. */
-  public boolean isSetRights();
+  boolean isSetRights();
 
   /** Returns true if the reference link of this {@link Metadata} is set. */
-  public boolean isSetReferenceLink();
+  boolean isSetReferenceLink();
 }

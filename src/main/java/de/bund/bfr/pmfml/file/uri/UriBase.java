@@ -26,5 +26,5 @@ import java.net.URI;
  *      org/standards/specifications/</a>
  */
 public interface UriBase {
-  public URI createURI();
+  URI createURI();
 }

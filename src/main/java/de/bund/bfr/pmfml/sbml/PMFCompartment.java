@@ -33,57 +33,57 @@ import org.sbml.jsbml.Compartment;
 public interface PMFCompartment {
 
   /** Returns the id of this {@link PMFCompartment}. */
-  public String getId();
+  String getId();
 
   /** Returns the name of this {@link PMFCompartment}. */
-  public String getName();
+  String getName();
 
   /** Returns the PMF code of this {@link PMFCompartment}. If not set, returns null. */
-  public String getPMFCode();
+  String getPMFCode();
 
   /** Returns the detail of this {@link PMFCompartment}. If not set, returns null. */
-  public String getDetail();
+  String getDetail();
 
   /**
    * Returns the {@link ModelVariable}s of this {@link PMFCompartment}. If not set, returns null.
    */
-  public ModelVariable[] getModelVariables();
+  ModelVariable[] getModelVariables();
 
   /** Returns the {@link Compartment} of this {@link PMFCompartment}. */
-  public Compartment getCompartment();
+  Compartment getCompartment();
 
   /**
    * Sets the id value of this {@link PMFCompartment} with 'id'. Ignores null or empty strings.
    */
-  public void setId(final String id);
+  void setId(final String id);
 
   /**
    * Sets the name value of this {@link PMFCompartment} with 'name'. Ignores null or empty strings.
    */
-  public void setName(final String name);
+  void setName(final String name);
 
   /**
    * Sets the PMF code value of this {@link PMFCompartment} with 'pmfCode'. Ignores null or empty
    * strings.
    */
-  public void setPMFCode(final String pmfCode);
+  void setPMFCode(final String pmfCode);
 
   /**
    * Sets the detail of this {@link PMFCompartment} with 'detail'. Ignores null or empty strings.
    */
-  public void setDetail(final String detail);
+  void setDetail(final String detail);
 
   /**
    * Sets the model variables of this (@link PMFCompartment) with 'modelVariables'. Ignores null.
    */
-  public void setModelVariables(final ModelVariable[] modelVariables);
+  void setModelVariables(final ModelVariable[] modelVariables);
 
   /** Returns true if the PMF code of this {@link PMFCompartment} is set. */
-  public boolean isSetPMFCode();
+  boolean isSetPMFCode();
 
   /** Returns true if the detail of this {@link PMFCompartment} is set. */
-  public boolean isSetDetail();
+  boolean isSetDetail();
 
   /** Returns true if the {@link ModelVariable}s of this {@link PMFCompartment} are set. */
-  public boolean isSetModelVariables();
+  boolean isSetModelVariables();
 }

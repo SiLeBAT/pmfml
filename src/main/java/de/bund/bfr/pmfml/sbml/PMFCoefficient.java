@@ -27,86 +27,86 @@ import org.sbml.jsbml.Parameter;
 public interface PMFCoefficient {
 
   /** Returns the {@link Parameter} of this {@link PMFCoefficient}. */
-  public Parameter getParameter();
+  Parameter getParameter();
 
   /** Returns the id of this {@link PMFCoefficient}. */
-  public String getId();
+  String getId();
 
   /** Returns the value of this {@link PMFCoefficient}. */
-  public double getValue();
+  double getValue();
 
   /** Returns the unit of this {@link PMFCoefficient}. */
-  public String getUnit();
+  String getUnit();
 
   /** Returns the P of this {@link PMFCoefficient}. If not set set returns null. */
-  public Double getP();
+  Double getP();
 
   /** Returns the error of this {@link PMFCoefficient}. If not set returns null. */
-  public Double getError();
+  Double getError();
 
   /** Returns the T of this {@link PMFCoefficient}. If not set returns null. */
-  public Double getT();
+  Double getT();
 
   /** Returns the {@link Correlation}s of this {@link PMFCoefficient}. If not set returns null. */
-  public Correlation[] getCorrelations();
+  Correlation[] getCorrelations();
 
   /** Returns the description of this {@link PMFCoefficient}. If not set return null. */
-  public String getDescription();
+  String getDescription();
 
-  public Boolean getIsStart();
+  Boolean getIsStart();
   
   /**
    * Sets the id value of this {@link PMFCoefficient} with 'id'. If 'id' is null or empty it will do
    * nothing.
    */
-  public void setId(final String id);
+  void setId(final String id);
 
   /** Sets the value of this {@link PMFCoefficient} with 'value'. */
-  public void setValue(final double value);
+  void setValue(final double value);
 
   /**
    * Sets the unit of this {@link PMFCoefficient} with 'unit'. If 'unit' is null or empty it will do
    * nothing.
    */
-  public void setUnit(final String unit);
+  void setUnit(final String unit);
 
   /** Sets the P value of this {@link PMFCoefficient} with 'p'. */
-  public void setP(final double p);
+  void setP(final double p);
 
   /** Sets the T value of this {@link PMFCoefficient} with 'T'. */
-  public void setT(final double t);
+  void setT(final double t);
 
   /** Sets the error value of this {@link PMFCoefficient} with 'error'. */
-  public void setError(final double error);
+  void setError(final double error);
 
   /**
    * Sets the {@link Correlation}s of this {@link PMFCoefficient} with 'correlations'. If
    * 'correlations is null it will do nothing.
    */
-  public void setCorrelations(Correlation[] correlations);
+  void setCorrelations(Correlation[] correlations);
 
   /**
    * Sets the description of this {@link PMFCoefficient} with 'description'. If 'description' is
    * null or empty it will do nothing.
    */
-  public void setDescription(final String description);
-  
-  public void setIsStart(final boolean isStart);
+  void setDescription(final String description);
+
+  void setIsStart(final boolean isStart);
 
   /** Returns true if the P of this {@link PMFCoefficient} is set. */
-  public boolean isSetP();
+  boolean isSetP();
 
   /** Returns true if the error of this {@link PMFCoefficient} is set. */
-  public boolean isSetError();
+  boolean isSetError();
 
   /** Returns true if the T of this {@link PMFCoefficient} is set. */
-  public boolean isSetT();
+  boolean isSetT();
 
   /** Returns true if the {@link Correlation}s of this {@link PMFCoefficient} are set. */
-  public boolean isSetCorrelations();
+  boolean isSetCorrelations();
 
   /** Returns true if the description of this {@link PMFCoefficient} is set. */
-  public boolean isSetDescription();
-  
-  public boolean isSetIsStart();
+  boolean isSetDescription();
+
+  boolean isSetIsStart();
 }

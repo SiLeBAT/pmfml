@@ -21,5 +21,5 @@ package de.bund.bfr.pmfml.numl;
  *
  */
 public enum DataType {
-  STRING, FLOAT, DOUBLE, INTEGER;
+  STRING, FLOAT, DOUBLE, INTEGER
 }

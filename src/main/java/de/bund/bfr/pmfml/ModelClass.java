@@ -39,7 +39,7 @@ public enum ModelClass {
 	private int value;
 	private String fullName;
 
-	private ModelClass(final int value, final String fullName) {
+	ModelClass(final int value, final String fullName) {
 		this.value = value;
 		this.fullName = fullName;
 	}

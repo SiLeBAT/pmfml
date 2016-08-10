@@ -24,7 +24,7 @@ public enum ReferenceType {
 
   private int value;
 
-  private ReferenceType(final int value) {
+  ReferenceType(final int value) {
     this.value = value;
   }
 
@@ -44,4 +44,4 @@ public enum ReferenceType {
     }
     return null;
   }
-};
+}

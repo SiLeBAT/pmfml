@@ -21,27 +21,27 @@ package de.bund.bfr.pmfml;
  */
 public interface LiteratureSpecificationI {
 
-  public String getAuthor();
+  String getAuthor();
 
-  public String getYear();
+  String getYear();
 
-  public String getTitle();
+  String getTitle();
 
-  public String getAbstract();
+  String getAbstract();
 
-  public String getJournal();
+  String getJournal();
 
-  public String getVolume();
+  String getVolume();
 
-  public String getIssue();
+  String getIssue();
 
-  public String getPage();
+  String getPage();
 
-  public String getApproval();
+  String getApproval();
 
-  public String getWebsite();
+  String getWebsite();
 
-  public String getType();
+  String getType();
 
-  public String getComment();
+  String getComment();
 }
