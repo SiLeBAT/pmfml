@@ -82,7 +82,7 @@ public class ReferenceImpl implements Reference {
         }
 
         if (website != null && !website.isEmpty()) {
-            props.put(WEBSITE, website.toString());
+            props.put(WEBSITE, website);
         }
 
         if (referenceType != null) {

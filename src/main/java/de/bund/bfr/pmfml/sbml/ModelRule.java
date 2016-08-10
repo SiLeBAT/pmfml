@@ -16,8 +16,7 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import java.util.List;
-
+import de.bund.bfr.pmfml.ModelClass;
 import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.Annotation;
 import org.sbml.jsbml.AssignmentRule;
@@ -26,7 +25,7 @@ import org.sbml.jsbml.text.parser.ParseException;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 
-import de.bund.bfr.pmfml.ModelClass;
+import java.util.List;
 
 
 /**
@@ -215,7 +214,7 @@ class ModelRuleAnnotation {
 
     // Create annotation for pmmlabID
     final XMLNode idNode = new XMLNode(new XMLTriple(PMMLAB_ID, null, "pmmlab"));
-    idNode.addChild(new XMLNode(new Integer(pmmlabID).toString()));
+    idNode.addChild(new XMLNode(Integer.toString(pmmlabID)));
     metadataNode.addChild(idNode);
 
     // Builds reference nodes

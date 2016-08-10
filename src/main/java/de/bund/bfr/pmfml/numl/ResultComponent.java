@@ -125,33 +125,33 @@ public class ResultComponent {
 
         final NodeList combaseIdNodes = metadataNode.getElementsByTagName(COMBASEID);
         if (combaseIdNodes.getLength() == 1) {
-            strProps.put(COMBASEID, ((Element) combaseIdNodes.item(0)).getTextContent());
+            strProps.put(COMBASEID, combaseIdNodes.item(0).getTextContent());
         }
 
         final NodeList creatorGivenNameNodes = metadataNode.getElementsByTagName(CREATOR_GIVEN_NAME);
         if (creatorGivenNameNodes.getLength() == 1) {
-            strProps.put(CREATOR_GIVEN_NAME, ((Element) creatorGivenNameNodes.item(0)).getTextContent());
+            strProps.put(CREATOR_GIVEN_NAME, creatorGivenNameNodes.item(0).getTextContent());
         }
 
         final NodeList creatorFamilyNameNodes = metadataNode.getElementsByTagName(CREATOR_FAMILY_NAME);
         if (creatorFamilyNameNodes.getLength() == 1) {
             strProps.put(CREATOR_FAMILY_NAME,
-                    ((Element) creatorFamilyNameNodes.item(0)).getTextContent());
+                    creatorFamilyNameNodes.item(0).getTextContent());
         }
 
         final NodeList creatorContactNodes = metadataNode.getElementsByTagName(CREATOR_CONTACT);
         if (creatorContactNodes.getLength() == 1) {
-            strProps.put(CREATOR_CONTACT, ((Element) creatorContactNodes.item(0)).getTextContent());
+            strProps.put(CREATOR_CONTACT, creatorContactNodes.item(0).getTextContent());
         }
 
         final NodeList createdDateNodes = metadataNode.getElementsByTagName(CREATED_DATE);
         if (createdDateNodes.getLength() == 1) {
-            strProps.put(CREATED_DATE, ((Element) createdDateNodes.item(0)).getTextContent());
+            strProps.put(CREATED_DATE, createdDateNodes.item(0).getTextContent());
         }
 
         final NodeList modifiedDateNodes = metadataNode.getElementsByTagName(MODIFIED_DATE);
         if (modifiedDateNodes.getLength() == 1) {
-            strProps.put(MODIFIED_DATE, ((Element) modifiedDateNodes.item(0)).getTextContent());
+            strProps.put(MODIFIED_DATE, modifiedDateNodes.item(0).getTextContent());
         }
 
         final NodeList modelTypeNodes = metadataNode.getElementsByTagName(MODEL_TYPE);
@@ -164,7 +164,7 @@ public class ResultComponent {
 
         final NodeList rightsNodes = metadataNode.getElementsByTagName(RIGHTS);
         if (rightsNodes.getLength() == 1) {
-            strProps.put(RIGHTS, ((Element) rightsNodes.item(0)).getTextContent());
+            strProps.put(RIGHTS, rightsNodes.item(0).getTextContent());
         }
 
         final NodeList refNodes = metadataNode.getElementsByTagName(ReferenceNuMLNode.TAG);
@@ -554,7 +554,7 @@ class ReferenceNuMLNode {
         final String author;
         final NodeList authorNodes = node.getElementsByTagName(SPEC.getAuthor());
         if (authorNodes.getLength() == 1) {
-            author = ((Element) authorNodes.item(0)).getTextContent();
+            author = authorNodes.item(0).getTextContent();
         } else {
             author = null;
         }
@@ -562,7 +562,7 @@ class ReferenceNuMLNode {
         final String title;
         final NodeList titleNodes = node.getElementsByTagName(SPEC.getTitle());
         if (titleNodes.getLength() == 1) {
-            title = ((Element) titleNodes.item(0)).getTextContent();
+            title = titleNodes.item(0).getTextContent();
         } else {
             title = null;
         }
@@ -570,7 +570,7 @@ class ReferenceNuMLNode {
         final String abstractText;
         final NodeList abstractNodes = node.getElementsByTagName(SPEC.getAbstract());
         if (abstractNodes.getLength() == 1) {
-            abstractText = ((Element) abstractNodes.item(0)).getTextContent();
+            abstractText = abstractNodes.item(0).getTextContent();
         } else {
             abstractText = null;
         }
@@ -578,7 +578,7 @@ class ReferenceNuMLNode {
         final Integer year;
         final NodeList yearNodes = node.getElementsByTagName(SPEC.getYear());
         if (yearNodes.getLength() == 1) {
-            year = Integer.parseInt(((Element) yearNodes.item(0)).getTextContent());
+            year = Integer.parseInt(yearNodes.item(0).getTextContent());
         } else {
             year = null;
         }
@@ -586,7 +586,7 @@ class ReferenceNuMLNode {
         final String journal;
         final NodeList journalNodes = node.getElementsByTagName(SPEC.getJournal());
         if (journalNodes.getLength() == 1) {
-            journal = ((Element) journalNodes.item(0)).getTextContent();
+            journal = journalNodes.item(0).getTextContent();
         } else {
             journal = null;
         }
@@ -594,7 +594,7 @@ class ReferenceNuMLNode {
         final String volume;
         final NodeList volumeNodes = node.getElementsByTagName(SPEC.getVolume());
         if (volumeNodes.getLength() == 1) {
-            volume = ((Element) volumeNodes.item(0)).getTextContent();
+            volume = volumeNodes.item(0).getTextContent();
         } else {
             volume = null;
         }
@@ -602,7 +602,7 @@ class ReferenceNuMLNode {
         final String issue;
         final NodeList issueNodes = node.getElementsByTagName(SPEC.getIssue());
         if (issueNodes.getLength() == 1) {
-            issue = ((Element) issueNodes.item(0)).getTextContent();
+            issue = issueNodes.item(0).getTextContent();
         } else {
             issue = null;
         }
@@ -610,7 +610,7 @@ class ReferenceNuMLNode {
         final Integer page;
         final NodeList pageNodes = node.getElementsByTagName(SPEC.getPage());
         if (pageNodes.getLength() == 1) {
-            page = Integer.parseInt(((Element) pageNodes.item(0)).getTextContent());
+            page = Integer.parseInt(pageNodes.item(0).getTextContent());
         } else {
             page = null;
         }
@@ -618,7 +618,7 @@ class ReferenceNuMLNode {
         final Integer approvalMode;
         final NodeList approvalNodes = node.getElementsByTagName(SPEC.getApproval());
         if (approvalNodes.getLength() == 1) {
-            approvalMode = Integer.parseInt(((Element) approvalNodes.item(0)).getTextContent());
+            approvalMode = Integer.parseInt(approvalNodes.item(0).getTextContent());
         } else {
             approvalMode = null;
         }
@@ -626,7 +626,7 @@ class ReferenceNuMLNode {
         final String website;
         final NodeList websiteNodes = node.getElementsByTagName(SPEC.getWebsite());
         if (websiteNodes.getLength() == 1) {
-            website = ((Element) websiteNodes.item(0)).getTextContent();
+            website = websiteNodes.item(0).getTextContent();
         } else {
             website = null;
         }
@@ -634,7 +634,7 @@ class ReferenceNuMLNode {
         final ReferenceType type;
         final NodeList typeNodes = node.getElementsByTagName(SPEC.getType());
         if (typeNodes.getLength() == 1) {
-            type = ReferenceType.valueOf(((Element) typeNodes.item(0)).getTextContent());
+            type = ReferenceType.valueOf(typeNodes.item(0).getTextContent());
         } else {
             type = null;
         }
@@ -642,7 +642,7 @@ class ReferenceNuMLNode {
         final String comment;
         final NodeList commentNodes = node.getElementsByTagName(SPEC.getComment());
         if (commentNodes.getLength() == 1) {
-            comment = ((Element) commentNodes.item(0)).getTextContent();
+            comment = commentNodes.item(0).getTextContent();
         } else {
             comment = null;
         }
