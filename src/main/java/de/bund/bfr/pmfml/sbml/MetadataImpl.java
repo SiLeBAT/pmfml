@@ -195,7 +195,7 @@ public class MetadataImpl implements Metadata {
   /** {@inheritDoc} */
   @Override
   public int hashCode() {
-    return 31 * 1 + ((props == null) ? 0 : props.hashCode());
+      return 31 + ((props == null) ? 0 : props.hashCode());
   }
 
   /** {@inheritDoc} */
