@@ -26,6 +26,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -244,7 +246,7 @@ public class ResultComponentTest {
 	public void testToString() {
 		ResultComponent rc = new ResultComponent(id, tupleDescription, tuples);
 		String expectedString = String.format("ResultComponent [id=%s, dimensionDescription=%s, dimension=%s]",
-				rc.getID(), rc.getDimensionDescription().toString(), rc.getDimensions().toString());
+				rc.getID(), rc.getDimensionDescription().toString(), Arrays.asList(rc.getDimensions()).toString());
 		String obtainedString = rc.toString();
 		assertEquals(expectedString, obtainedString);
 	}

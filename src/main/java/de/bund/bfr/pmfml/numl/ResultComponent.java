@@ -26,6 +26,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -334,7 +335,7 @@ public class ResultComponent {
     @Override
     public String toString() {
         return "ResultComponent [id=" + strProps.get(ID) + ", dimensionDescription=" + dimensionDescription + ", " +
-                "dimension=" + dimensions + "]";
+                "dimension=" + Arrays.asList(dimensions) + "]";
     }
 
     @Override
