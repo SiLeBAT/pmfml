@@ -1,12 +1,13 @@
 package de.bund.bfr.pmfml.sbml;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-/**
- * Created by de on 12.08.2016.
- */
-public class Model2AnnotationTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+public class Model2AnnotationTest {
+
+    @Test
     public void test() {
         Uncertainties uncert1 = new UncertaintiesImpl(101, "BacillusCereus_CultureMedium", "uncertainties", 0.996,
                 0.345, 1.909, -32.997, -34.994, 16);

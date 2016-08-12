@@ -1,14 +1,15 @@
 package de.bund.bfr.pmfml.sbml;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 
-/**
- * Created by de on 12.08.2016.
- */
-public class Model1AnnotationTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+public class Model1AnnotationTest {
+
+    @Test
     public void test() {
         Uncertainties uncert1 = new UncertaintiesImpl(101, "BacillusCereus_CultureMedium", "uncertainties", 0.996,
                 0.345, 1.909, -32.997, -34.994, 16);
@@ -18,7 +19,7 @@ public class Model1AnnotationTest extends TestCase {
                 "http://www.sciencedirect.com/science/article/pii/0168160594901570",
                 ReferenceType.Paper, "comment");
 
-        Model1Annotation annot1 = new Model1Annotation(uncert1, Arrays.asList(ref), 1);
+        Model1Annotation annot1 = new Model1Annotation(uncert1, Collections.singletonList(ref), 1);
         Model1Annotation annot2 = new Model1Annotation(annot1.getAnnotation());
 
         // check condId
