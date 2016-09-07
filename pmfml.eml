@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component LANGUAGE_LEVEL="JDK_1_8" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/target/test-classes"/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
+		<excludeFolder url="file://$MODULE_DIR$/target"/>
+	</contentEntry>
+	<lib name="Maven: junit:junit:4.11" scope="TEST"/>
+	<lib name="Maven: org.hamcrest:hamcrest-core:1.3" scope="TEST"/>
+	<levels>
+		<level name="CombineArchive-1.1-jar-with-dependencies" value="project"/>
+		<level name="Maven: junit:junit:4.11" value="project"/>
+		<level name="Maven: org.hamcrest:hamcrest-core:1.3" value="project"/>
+		<level name="Maven: com.google.guava:guava:19.0" value="project"/>
+		<level name="Maven: commons-io:commons-io:2.5" value="project"/>
+		<level name="Maven: org.jdom:jdom2:2.0.6" value="project"/>
+		<level name="Maven: org.sbml.jsbml:jsbml:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml:jsbml-core:1.1" value="project"/>
+		<level name="Maven: log4j:log4j:1.2.8" value="project"/>
+		<level name="Maven: com.fasterxml.woodstox:woodstox-core:5.0.1" value="project"/>
+		<level name="Maven: org.w3c.jigsaw:jigsaw:2.2.6" value="project"/>
+		<level name="Maven: org.biojava:biojava3-ontology:3.1.0" value="project"/>
+		<level name="Maven: com.thoughtworks.xstream:xstream:1.3.1" value="project"/>
+		<level name="Maven: xpp3:xpp3_min:1.1.4c" value="project"/>
+		<level name="Maven: com.fasterxml.staxmate:staxmate:2.3.0" value="project"/>
+		<level name="Maven: org.mangosdk.spi:spi:0.2.4" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-arrays:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-comp:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-distrib:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-dyn:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-fbc:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-groups:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-layout:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-multi:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-qual:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-render:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-req:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.ext:jsbml-spatial:1.1" value="project"/>
+		<level name="Maven: org.sbml.jsbml.modules:jsbml-tidy:1.1" value="project"/>
+		<level name="Maven: net.sf.jtidy:jtidy:r938" value="project"/>
+		<level name="Maven: org.codehaus.woodstox:woodstox-core-lgpl:4.0.9" value="project"/>
+		<level name="Maven: javax.xml.stream:stax-api:1.0-2" value="project"/>
+		<level name="Maven: org.codehaus.woodstox:stax2-api:3.0.3" value="project"/>
+	</levels>
+</component>
