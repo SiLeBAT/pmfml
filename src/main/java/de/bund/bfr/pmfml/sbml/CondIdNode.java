@@ -29,16 +29,16 @@ public class CondIdNode {
 
   XMLNode node;
 
-  public CondIdNode(final int id) {
+  public CondIdNode(final String id) {
     node = new XMLNode(new XMLTriple(TAG, null, NS));
-    node.addChild(new XMLNode(Integer.toString(id)));
+    node.addChild(new XMLNode(id));
   }
 
   public CondIdNode(final XMLNode node) {
     this.node = node;
   }
 
-  public int getCondId() {
-    return Integer.parseInt(node.getChild(0).getCharacters());
+  public String getCondId() {
+    return node.getChild(0).getCharacters();
   }
 }

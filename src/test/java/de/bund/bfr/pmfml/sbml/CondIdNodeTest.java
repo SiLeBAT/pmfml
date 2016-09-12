@@ -19,9 +19,9 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -29,11 +29,11 @@ import org.junit.Test;
  */
 public class CondIdNodeTest {
 
-	private int condId = 1;
+	private String condId = "1";
 
 	@Test
 	public void test() {
-		assertTrue(condId == new CondIdNode(new CondIdNode(condId).node).getCondId());
+		assertEquals(condId, new CondIdNode(new CondIdNode(condId).node).getCondId());
 	}
 
 }

@@ -35,7 +35,7 @@ public class Model1Annotation {
 
     Uncertainties uncertainties;
     List<Reference> refs;
-    int condID;
+    String condID;
     Annotation annotation;
 
     /**
@@ -62,7 +62,7 @@ public class Model1Annotation {
     }
 
     public Model1Annotation(final Uncertainties uncertainties, final List<Reference> references,
-                            final int condID) {
+                            final String condID) {
 
         // Builds metadata node
         final XMLNode metadataNode = new XMLNode(new XMLTriple(METADATA_TAG, "", METADATA_NS));
@@ -95,7 +95,7 @@ public class Model1Annotation {
         return refs;
     }
 
-    public int getCondID() {
+    public String getCondID() {
         return condID;
     }
 

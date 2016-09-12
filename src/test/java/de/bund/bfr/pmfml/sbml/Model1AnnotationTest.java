@@ -19,11 +19,11 @@ public class Model1AnnotationTest {
                 "http://www.sciencedirect.com/science/article/pii/0168160594901570",
                 ReferenceType.Paper, "comment");
 
-        Model1Annotation annot1 = new Model1Annotation(uncert1, Collections.singletonList(ref), 1);
+        Model1Annotation annot1 = new Model1Annotation(uncert1, Collections.singletonList(ref), "1");
         Model1Annotation annot2 = new Model1Annotation(annot1.getAnnotation());
 
         // check condId
-        assertTrue(1 == annot2.getCondID());
+        assertEquals("1", annot2.getCondID());
 
         // check uncertainties
         Uncertainties uncert2 = annot2.getUncertainties();
