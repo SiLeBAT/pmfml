@@ -30,19 +30,21 @@ import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
 import de.unirostock.sems.cbarchive.meta.MetaDataObject;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.sbml.jsbml.*;
+import org.sbml.jsbml.Annotation;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.xml.XMLNode;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Case 2a: Two step secondary model file. Secondary models generated with the classical 2-step
@@ -52,30 +54,30 @@ import java.util.*;
  */
 public class TwoStepSecondaryModelFile {
 
+    private static final Logger LOGGER = Logger.getLogger("TwoStepSecondaryModelFile");
+
     private static final URI SBML_URI = UriFactory.createSBMLURI();
     private static final URI PMF_URI = UriFactory.createPMFURI();
     private static final URI NUML_URI = UriFactory.createNuMLURI();
 
-    private static final SBMLWriter WRITER = new SBMLWriter();
-
-    public static List<TwoStepSecondaryModel> readPMF(final File file) throws Exception {
+    public static List<TwoStepSecondaryModel> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
-    public static List<TwoStepSecondaryModel> readPMFX(final File file) throws Exception {
+    public static List<TwoStepSecondaryModel> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
     /**
      */
     public static void writePMF(final String dir, final String filename, final List<TwoStepSecondaryModel> models)
-            throws Exception {
+            throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), SBML_URI, models);
     }
 
     public static void writePMFX(final String dir, final String filename, final List<TwoStepSecondaryModel> models)
-            throws Exception {
+            throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), PMF_URI, models);
     }
@@ -84,104 +86,94 @@ public class TwoStepSecondaryModelFile {
      * Reads {@link TwoStepSecondaryModel}(s) from a PMF or PMFX file. Faulty models are skipped.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static List<TwoStepSecondaryModel> read(final File file, final URI modelURI)
-            throws CombineArchiveException {
+    private static List<TwoStepSecondaryModel> read(File file, URI modelUri) throws CombineArchiveException {
 
-        // Creates CombineArchive
-        CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        Map<String, NuMLDocument> dataEntryMap = new HashMap<>();
+        Map<String, SBMLDocument> secModelMap = new HashMap<>();
+        Map<String, SBMLDocument> primModelMap = new HashMap<>();
 
-        final List<TwoStepSecondaryModel> models = new LinkedList<>();
-
-        // Gets data entries
-        final List<ArchiveEntry> dataEntriesList = combineArchive.getEntriesWithFormat(NUML_URI);
-        final Map<String, NuMLDocument> dataEntriesMap = new HashMap<>(dataEntriesList.size());
-        for (final ArchiveEntry entry : dataEntriesList) {
-            try {
-                final NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
-                dataEntriesMap.put(entry.getFileName(), doc);
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                System.err.println(entry.getFileName() + " could not be read");
-                e.printStackTrace();
-            }
-        }
-
-        // Gets master files
-        final MetaDataObject mdo = combineArchive.getDescriptions().get(0);
-        final Element metaParent = mdo.getXmlDescription();
-        final PMFMetadataNode metadataAnnotation = new PMFMetadataNode(metaParent);
-        final Set<String> masterFiles = metadataAnnotation.masterFiles;
-
-        // List of SBML entries
-        final List<ArchiveEntry> sbmlEntries = combineArchive.getEntriesWithFormat(modelURI);
-
-        // Classify models into primary or secondary models
-        final int numSecModels = masterFiles.size();
-        final int numPrimModels = sbmlEntries.size() - masterFiles.size();
-        final Map<String, SBMLDocument> secModelsMap = new HashMap<>(numSecModels);
-        final Map<String, SBMLDocument> primModelsMap = new HashMap<>(numPrimModels);
-
-        for (final ArchiveEntry entry : sbmlEntries) {
-            final String docName = entry.getFileName();
-            try {
-                final SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
-
-                if (masterFiles.contains(entry.getFileName())) {
-                    secModelsMap.put(docName, doc);
-                } else {
-                    primModelsMap.put(docName, doc);
+        try (CombineArchive ca = new CombineArchive(file)) {
+            // Gets data entries
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(NUML_URI)) {
+                String dataDocName = entry.getFileName();
+                try {
+                    NuMLDocument dataDoc = CombineArchiveUtil.readData(entry.getPath());
+                    dataEntryMap.put(dataDocName, dataDoc);
+                } catch (ParserConfigurationException | SAXException e) {
+                    LOGGER.warning(entry.getFileName() + ": could not be retrieved. Skipping entry.");
                 }
-            } catch (IOException | XMLStreamException e) {
-                System.err.println(docName + " could not be read");
-                e.printStackTrace();
             }
+
+            // Gets master files
+            MetaDataObject mdo = ca.getDescriptions().get(0);
+            Element metaParent = mdo.getXmlDescription();
+            PMFMetadataNode annot = new PMFMetadataNode(metaParent);
+            Set<String> masterFiles = annot.masterFiles;
+
+            // Classify models into primary or secondary models
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelUri)) {
+                String docName = entry.getFileName();
+
+                try {
+                    SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
+                    if (masterFiles.contains(docName)) {
+                        secModelMap.put(docName, doc);
+                    } else {
+                        primModelMap.put(docName, doc);
+                    }
+                } catch (XMLStreamException | IOException e) {
+                    LOGGER.warning(docName + ": could not be read. Skipping entry.");
+                }
+            }
+
+
+        } catch (IOException | ParseException | JDOMException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
 
-        CombineArchiveUtil.close(combineArchive);
+        List<TwoStepSecondaryModel> models = new ArrayList<>();
 
-        for (final Map.Entry<String, SBMLDocument> entry : secModelsMap.entrySet()) {
-            final String secModelName = entry.getKey();
-            final SBMLDocument secModelDoc = entry.getValue();
+        for (Map.Entry<String, SBMLDocument> entry : secModelMap.entrySet()) {
+            String secModelName = entry.getKey();
+            SBMLDocument secModelDoc = entry.getValue();
 
-            final Model md = secModelDoc.getModel();
+            Model md = secModelDoc.getModel();
 
-            final Annotation m2Annot = md.getAnnotation();
+            Annotation m2Annot = md.getAnnotation();
             if (!m2Annot.isSetNonRDFannotation()) {
                 continue;
             }
 
-            final XMLNode m2MetaData = m2Annot.getNonRDFannotation().getChildElement("metadata", "");
-            final List<PrimaryModelWData> pms = new LinkedList<>();
+            XMLNode m2MetaData = m2Annot.getNonRDFannotation().getChildElement("metadata", "");
+            List<XMLNode> refs = m2MetaData.getChildElements(PrimaryModelNode.TAG, "");
+            List<PrimaryModelWData> pms = new ArrayList<>(refs.size());
 
-            final List<XMLNode> refs = m2MetaData.getChildElements(PrimaryModelNode.TAG, "");
-            for (final XMLNode ref : refs) {
-                final String primModelName = ref.getChild(0).getCharacters();
-                final SBMLDocument primModelDoc = primModelsMap.get(primModelName);
+            for (XMLNode ref : refs) {
+                String primModelName = ref.getChild(0).getCharacters();
+                SBMLDocument primModelDoc = primModelMap.get(primModelName);
 
                 // Looks for DataSourceNode
-                final XMLNode m1Annot = primModelDoc.getModel().getAnnotation().getNonRDFannotation();
-                final XMLNode m1MetaData = m1Annot.getChildElement("metadata", "");
-                final XMLNode dataSourceRawNode = m1MetaData.getChildElement("dataSource", "");
+                XMLNode m1Annot = primModelDoc.getModel().getAnnotation().getNonRDFannotation();
+                XMLNode m1MetaData = m1Annot.getChildElement("metadata", "");
+                XMLNode dataSourceRawNode = m1MetaData.getChildElement("dataSource", "");
 
                 if (dataSourceRawNode == null) {
                     continue;
                 }
 
-                final DataSourceNode dsn = new DataSourceNode(dataSourceRawNode);
-                final String dataFileName = dsn.getFile();
-                final NuMLDocument numlDoc = dataEntriesMap.get(dataFileName);
+                String dataFileName = new DataSourceNode(dataSourceRawNode).getFile();
+                NuMLDocument numlDoc = dataEntryMap.get(dataFileName);
 
                 pms.add(new PrimaryModelWData(primModelName, primModelDoc, dataFileName, numlDoc));
             }
+
             models.add(new TwoStepSecondaryModel(secModelName, secModelDoc, pms));
         }
+
         return models;
     }
 
@@ -190,61 +182,64 @@ public class TwoStepSecondaryModelFile {
      * files are overwritten.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @param models
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static void write(final File file, final URI modelURI,
-                              final List<TwoStepSecondaryModel> models) throws CombineArchiveException {
+
+    private static void write(File file, URI modelUri, List<TwoStepSecondaryModel> models)
+            throws CombineArchiveException {
 
         // Remove if existent file
         if (file.exists()) {
             file.delete();
         }
 
-        // Creates new CombineArchive
-        final CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        // Creates a COMBINE archive
+        try (CombineArchive ca = new CombineArchive(file)) {
 
-        final Set<String> masterFiles = new HashSet<>(models.size());
+            Set<String> masterFiles = new HashSet<>();
 
-        // Adds models and data
-        for (final TwoStepSecondaryModel model : models) {
-            try {
-                // Creates temporary file for the secondary model
-                final File secTmpFile = File.createTempFile("sec", "");
-                secTmpFile.deleteOnExit();
+            for (TwoStepSecondaryModel model : models) {
 
-                // Writes model to secTmpFile and adds it to the file
-                WRITER.write(model.getSecDoc(), secTmpFile);
-                final ArchiveEntry masterEntry =
-                        combineArchive.addEntry(secTmpFile, model.getSecDocName(), modelURI);
-                masterFiles.add(masterEntry.getPath().getFileName().toString());
+                // Utility list with the entries added with the current model
+                // If an error occurs this it may be used for cleaning the archive
+                List<ArchiveEntry> addedEntries = new ArrayList<>();
 
-                for (final PrimaryModelWData primModel : model.getPrimModels()) {
-                    CombineArchiveUtil.writeData(combineArchive, primModel.getDataDoc(),
-                            primModel.getDataDocName());
-                    CombineArchiveUtil.writeModel(combineArchive, primModel.getModelDoc(),
-                            primModel.getModelDocName(), modelURI);
+                // Write sec model
+                // Creates temporary file for the model
+                try {
+                    ArchiveEntry entry = CombineArchiveUtil.writeModel(ca, model.getSecDoc(), model.getSecDocName(),
+                            modelUri);
+
+                    addedEntries.add(entry);
+                    masterFiles.add(entry.getPath().getFileName().toString());
+
+                    for (PrimaryModelWData primModel : model.getPrimModels()) {
+                        ArchiveEntry dataEntry = CombineArchiveUtil.writeData(ca, primModel.getDataDoc(), primModel
+                                .getDataDocName());
+                        addedEntries.add(dataEntry);
+
+                        // Write model
+                        CombineArchiveUtil.writeModel(ca, primModel.getModelDoc(), primModel.getModelDocName(),
+                                modelUri);
+                    }
+                } catch (XMLStreamException | ParserConfigurationException | TransformerException e) {
+                    LOGGER.warning(model.getSecDocName() + ": could not be read");
+                    for (ArchiveEntry entry : addedEntries) {
+                        ca.removeEntry(entry);
+                    }
                 }
-            } catch (IOException | SBMLException | XMLStreamException
-                    | TransformerFactoryConfigurationError | TransformerException
-                    | ParserConfigurationException e) {
-                System.err.println(model.getSecDocName() + " could not be read");
-                e.printStackTrace();
             }
+
+            // Adds description with model type
+            Element annot = new PMFMetadataNode(ModelType.TWO_STEP_SECONDARY_MODEL, masterFiles).node;
+            ca.addDescription(new DefaultMetaDataObject(annot));
+
+            ca.pack();
+
+        } catch (IOException | JDOMException | ParseException | TransformerException e) {
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        // Adds description with model type
-        final ModelType modelType = ModelType.TWO_STEP_SECONDARY_MODEL;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, masterFiles).node;
-        combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
-
-        CombineArchiveUtil.pack(combineArchive);
-        CombineArchiveUtil.close(combineArchive);
     }
 }

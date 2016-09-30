@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Case 2b: One step secondary model file. Secondary models generated "implicitly" during 1-step
@@ -53,22 +54,24 @@ import java.util.*;
  */
 public class OneStepSecondaryModelFile {
 
+    private static final Logger LOGGER = Logger.getLogger("OneStepSecondaryModelFile");
+
     private static final URI SBML_URI = UriFactory.createSBMLURI();
     private static final URI PMF_URI = UriFactory.createPMFURI();
     private static final URI NuML_URI = UriFactory.createNuMLURI();
 
-    public static List<OneStepSecondaryModel> readPMF(final File file) throws Exception {
+    public static List<OneStepSecondaryModel> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
-    public static List<OneStepSecondaryModel> readPMFX(final File file) throws Exception {
+    public static List<OneStepSecondaryModel> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
     /**
      */
     public static void writePMF(final String dir, final String filename,
-                                final List<OneStepSecondaryModel> models) throws Exception {
+                                final List<OneStepSecondaryModel> models) throws CombineArchiveException {
 
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmf";
@@ -76,7 +79,7 @@ public class OneStepSecondaryModelFile {
     }
 
     public static void writePMFX(final String dir, final String filename,
-                                 final List<OneStepSecondaryModel> models) throws Exception {
+                                 final List<OneStepSecondaryModel> models) throws CombineArchiveException {
 
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmfx";
@@ -87,69 +90,64 @@ public class OneStepSecondaryModelFile {
      * Reads {@link OneStepSecondaryModel}(s) from a PMF or PMFX file. Faulty models are skipped.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static List<OneStepSecondaryModel> read(final File file, final URI modelURI)
-            throws CombineArchiveException {
+    private static List<OneStepSecondaryModel> read(File file, URI modelUri) throws CombineArchiveException {
 
-        // Creates CombineArchive
-        CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        try (CombineArchive ca = new CombineArchive(file)) {
 
-        final List<OneStepSecondaryModel> models = new LinkedList<>();
+            List<OneStepSecondaryModel> models = new ArrayList<>();
 
-        // Gets data entries
-        final List<ArchiveEntry> dataEntriesList = combineArchive.getEntriesWithFormat(NuML_URI);
-        final Map<String, NuMLDocument> dataEntriesMap = new HashMap<>(dataEntriesList.size());
-        for (final ArchiveEntry entry : dataEntriesList) {
-            try {
-                final NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
-                dataEntriesMap.put(entry.getFileName(), doc);
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                System.err.println(entry.getFileName() + " could not be read");
-                e.printStackTrace();
-            }
-        }
-
-        for (final ArchiveEntry entry : combineArchive.getEntriesWithFormat(modelURI)) {
-            final String modelName = entry.getFileName();
-            final SBMLDocument modelDoc;
-            try {
-                modelDoc = CombineArchiveUtil.readModel(entry.getPath());
-            } catch (IOException | SBMLException | XMLStreamException e) {
-                System.err.println(entry.getFileName() + " could not be read");
-                e.printStackTrace();
-                continue;
+            // Gets data entries
+            Map<String, NuMLDocument> dataEntryMap = new HashMap<>();
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
+                try {
+                    NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
+                    dataEntryMap.put(entry.getFileName(), doc);
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    LOGGER.warning(entry.getFileName() + ": could not be read");
+                }
             }
 
-            // Looks for DataSourceNode
-            final CompSBMLDocumentPlugin secCompPlugin =
-                    (CompSBMLDocumentPlugin) modelDoc.getPlugin(CompConstants.shortLabel);
-            final ModelDefinition md = secCompPlugin.getModelDefinition(0);
-            final XMLNode m2Annot = md.getAnnotation().getNonRDFannotation();
-            final XMLNode metadata = m2Annot.getChildElement("metadata", "");
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelUri)) {
+                String modelName = entry.getFileName();
 
-            final List<String> numlDocNames = new LinkedList<>();
-            final List<NuMLDocument> numlDocs = new LinkedList<>();
+                SBMLDocument modelDoc;
+                try {
+                    modelDoc = CombineArchiveUtil.readModel(entry.getPath());
+                } catch (IOException | SBMLException | XMLStreamException e) {
+                    LOGGER.warning(entry.getFileName() + ": could not be read");
+                    continue;
+                }
 
-            for (final XMLNode node : metadata.getChildElements("dataSource", "")) {
-                final DataSourceNode dsn = new DataSourceNode(node);
-                final String dataFileName = dsn.getFile();
+                // Looks for DataSourceNode
+                CompSBMLDocumentPlugin secCompPlugin = (CompSBMLDocumentPlugin) modelDoc.getPlugin(CompConstants
+                        .shortLabel);
+                ModelDefinition md = secCompPlugin.getModelDefinition(0);
+                XMLNode m2Annot = md.getAnnotation().getNonRDFannotation();
+                XMLNode metadata = m2Annot.getChildElement("metadata", "");
 
-                numlDocNames.add(dataFileName);
-                numlDocs.add(dataEntriesMap.get(dataFileName));
+                List<String> numlDocNames = new ArrayList<>();
+                List<NuMLDocument> numlDocs = new ArrayList<>();
+
+                for (XMLNode node : metadata.getChildElements("dataSource", "")) {
+                    DataSourceNode dsn = new DataSourceNode(node);
+                    String dataFileName = dsn.getFile();
+
+                    numlDocNames.add(dataFileName);
+                    numlDocs.add(dataEntryMap.get(dataFileName));
+                }
+
+                models.add(new OneStepSecondaryModel(modelName, modelDoc, numlDocNames, numlDocs));
             }
-            models.add(new OneStepSecondaryModel(modelName, modelDoc, numlDocNames, numlDocs));
+
+            return models;
+
+        } catch (IOException | ParseException | JDOMException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        CombineArchiveUtil.close(combineArchive);
-
-        return models;
     }
 
     /**
@@ -157,50 +155,50 @@ public class OneStepSecondaryModelFile {
      * files are overwritten.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @param models
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static void write(final File file, final URI modelURI,
-                              final List<OneStepSecondaryModel> models) throws CombineArchiveException {
+    private static void write(File file, URI modelUri, List<OneStepSecondaryModel> models)
+        throws CombineArchiveException {
 
         // Remove if existent file
         if (file.exists()) {
             file.delete();
         }
 
-        // Creates new CombineArchive
-        final CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        // Creates COMBINE archive
+        try (CombineArchive ca = new CombineArchive(file)) {
 
-        // Adds models and data
-        for (final OneStepSecondaryModel model : models) {
-            try {
-                for (int i = 0; i < model.getDataDocs().size(); i++) {
-                    final String dataDocName = model.getDataDocNames().get(i);
-                    final NuMLDocument dataDoc = model.getDataDocs().get(i);
-                    CombineArchiveUtil.writeData(combineArchive, dataDoc, dataDocName);
+            for (OneStepSecondaryModel model : models) {
+                List<ArchiveEntry> addedEntries = new ArrayList<>();
+
+                try {
+                    for (int i = 0; i < model.getDataDocs().size(); i++) {
+                        String dataDocName = model.getDataDocNames().get(i);
+                        NuMLDocument dataDoc = model.getDataDocs().get(i);
+                        addedEntries.add(CombineArchiveUtil.writeData(ca, dataDoc, dataDocName));
+                    }
+
+                    addedEntries.add(CombineArchiveUtil.writeModel(ca, model.getModelDoc(), model.getModelDocName(),
+                            modelUri));
+                } catch (IOException | TransformerFactoryConfigurationError | TransformerException |
+                        ParserConfigurationException | SBMLException | XMLStreamException e) {
+                    LOGGER.warning(model.getModelDocName() + ": could not be read");
+                    for (ArchiveEntry entry : addedEntries) {
+                        ca.removeEntry(entry);
+                    }
                 }
-
-                CombineArchiveUtil.writeModel(combineArchive, model.getModelDoc(), model.getModelDocName(),
-                        modelURI);
-            } catch (IOException | TransformerFactoryConfigurationError | TransformerException
-                    | ParserConfigurationException | SBMLException | XMLStreamException e) {
-                System.err.println(model.getModelDocName() + " could not be read");
-                e.printStackTrace();
             }
+
+            Element annot = new PMFMetadataNode(ModelType.ONE_STEP_SECONDARY_MODEL, Collections.emptySet()).node;
+            ca.addDescription(new DefaultMetaDataObject(annot));
+
+            ca.pack();
+
+        } catch (IOException | JDOMException | ParseException | TransformerException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        // Adds description with model type
-        final ModelType modelType = ModelType.ONE_STEP_SECONDARY_MODEL;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<>(0)).node;
-        combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
-
-        CombineArchiveUtil.pack(combineArchive);
-        CombineArchiveUtil.close(combineArchive);
     }
 }

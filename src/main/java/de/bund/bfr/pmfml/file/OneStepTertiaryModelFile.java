@@ -27,10 +27,8 @@ import de.unirostock.sems.cbarchive.CombineArchiveException;
 import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.comp.CompConstants;
 import org.sbml.jsbml.ext.comp.CompSBMLDocumentPlugin;
 import org.sbml.jsbml.ext.comp.ExternalModelDefinition;
@@ -40,12 +38,12 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Case 3b: File with tertiary model generated with 1-step fit approach.
@@ -58,24 +56,24 @@ public class OneStepTertiaryModelFile {
     private static final URI PMF_URI = UriFactory.createPMFURI();
     private static final URI NuML_URI = UriFactory.createNuMLURI();
 
-    private static final SBMLWriter WRITER = new SBMLWriter();
+    private static Logger LOGGER = Logger.getLogger("OneStepTertiaryModelFile");
 
-    public static List<OneStepTertiaryModel> readPMF(final File file) throws Exception {
+    public static List<OneStepTertiaryModel> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
-    public static List<OneStepTertiaryModel> readPMFX(final File file) throws Exception {
+    public static List<OneStepTertiaryModel> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
     public static void writePMF(final String dir, final String filename,
-                                final List<OneStepTertiaryModel> models) throws Exception {
+                                final List<OneStepTertiaryModel> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), SBML_URI, models);
     }
 
     public static void writePMFX(String dir, final String filename,
-                                 final List<OneStepTertiaryModel> models) throws Exception {
+                                 final List<OneStepTertiaryModel> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), PMF_URI, models);
     }
@@ -84,94 +82,86 @@ public class OneStepTertiaryModelFile {
      * Reads one step tertiary models from a PMF or PMFX file. Faulty models are skipped.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static List<OneStepTertiaryModel> read(final File file, final URI modelURI)
-            throws CombineArchiveException {
+    private static List<OneStepTertiaryModel> read(File file, URI modelUri) throws CombineArchiveException {
 
-        // Creates CombineArchive
-        CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
+        Map<String, SBMLDocument> tertDocs = new HashMap<>();
+        Map<String, SBMLDocument> secDocs = new HashMap<>();
+        Map<String, NuMLDocument> dataDocs = new HashMap<>();
+
+        try (CombineArchive ca = new CombineArchive(file)) {
+
+            // Gets data entries
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
+                String dataDocName = entry.getFileName();
+                try {
+                    NuMLDocument dataDoc = CombineArchiveUtil.readData(entry.getPath());
+                    dataDocs.put(dataDocName, dataDoc);
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    LOGGER.warning(dataDocName + " could not be read");
+                    e.printStackTrace();
+                }
+            }
+
+            // Classify models into tertiary or secondary models
+
+            Element metaParent = ca.getDescriptions().get(0).getXmlDescription();
+            Set<String> masterFiles = new PMFMetadataNode(metaParent).masterFiles;
+
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelUri)) {
+                String docName = entry.getFileName();
+
+                try {
+                    SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
+                    if (masterFiles.contains(docName)) {
+                        tertDocs.put(docName, doc);
+                    } else {
+                        secDocs.put(docName, doc);
+                    }
+                } catch (IOException | XMLStreamException e) {
+                    LOGGER.warning(docName + " could not be read");
+                    e.printStackTrace();
+                }
+            }
         } catch (IOException | JDOMException | ParseException error) {
             throw new CombineArchiveException(file.getName() + " could not be opened");
         }
 
-        final List<OneStepTertiaryModel> models = new LinkedList<>();
 
-        // Get data entries
-        final List<ArchiveEntry> dataEntriesList = combineArchive.getEntriesWithFormat(NuML_URI);
-        final Map<String, NuMLDocument> dataEntriesMap = new HashMap<>(dataEntriesList.size());
-        for (final ArchiveEntry entry : dataEntriesList) {
-            final String dataDocName = entry.getFileName();
-            try {
-                final NuMLDocument dataDoc = CombineArchiveUtil.readData(entry.getPath());
-                dataEntriesMap.put(dataDocName, dataDoc);
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                System.err.println(dataDocName + " could not be read");
-                e.printStackTrace();
-            }
-        }
+        List<OneStepTertiaryModel> models = new ArrayList<>();
+        for (Map.Entry<String, SBMLDocument> entry : tertDocs.entrySet()) {
+            String tertDocName = entry.getKey();
+            SBMLDocument tertDoc = entry.getValue();
 
-        // Classify models into tertiary or secondary models
-        final Map<String, SBMLDocument> tertDocs = new HashMap<>();
-        final Map<String, SBMLDocument> secDocs = new HashMap<>();
+            List<String> secModelNames = new ArrayList<>();
+            List<SBMLDocument> secModels = new ArrayList<>();
 
-        final Element metaParent = combineArchive.getDescriptions().get(0).getXmlDescription();
-        final Set<String> masterFiles = new PMFMetadataNode(metaParent).masterFiles;
-
-        for (final ArchiveEntry entry : combineArchive.getEntriesWithFormat(modelURI)) {
-            final String docName = entry.getFileName();
-            try {
-                final SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
-                if (masterFiles.contains(docName)) {
-                    tertDocs.put(docName, doc);
-                } else {
-                    secDocs.put(docName, doc);
-                }
-            } catch (IOException | XMLStreamException e) {
-                System.err.println(docName + " could not be read");
-                e.printStackTrace();
-            }
-        }
-
-        CombineArchiveUtil.close(combineArchive);
-
-        for (final Map.Entry<String, SBMLDocument> entry : tertDocs.entrySet()) {
-            final String tertDocName = entry.getKey();
-            final SBMLDocument tertDoc = entry.getValue();
-
-            final List<SBMLDocument> secModels = new LinkedList<>();
-            final List<String> secModelNames = new LinkedList<>();
-
-            final CompSBMLDocumentPlugin tertPlugin =
-                    (CompSBMLDocumentPlugin) tertDoc.getPlugin(CompConstants.shortLabel);
-            // Gets secondary model ids
-            final ListOf<ExternalModelDefinition> emds = tertPlugin.getListOfExternalModelDefinitions();
-            for (final ExternalModelDefinition emd : emds) {
-                final String secModelName = emd.getSource();
+            // Gets secondary models
+            CompSBMLDocumentPlugin tertPlugin = (CompSBMLDocumentPlugin) tertDoc.getPlugin(CompConstants.shortLabel);
+            for (ExternalModelDefinition emd : tertPlugin.getListOfExternalModelDefinitions()) {
+                String secModelName = emd.getSource();
                 secModelNames.add(secModelName);
 
-                final SBMLDocument secDoc = secDocs.get(secModelName);
+                SBMLDocument secDoc = secDocs.get(secModelName);
                 secModels.add(secDoc);
             }
 
             // Gets data files from the tertiary model document
-            final List<String> numlDocNames = new LinkedList<>();
-            final List<NuMLDocument> numlDocs = new LinkedList<>();
+            List<String> numlDocNames = new ArrayList<>();
+            List<NuMLDocument> numlDocs = new ArrayList<>();
 
-            final XMLNode tertAnnot = tertDoc.getModel().getAnnotation().getNonRDFannotation();
-            final XMLNode tertAnnotMetadata = tertAnnot.getChildElement("metadata", "");
-            for (final XMLNode node : tertAnnotMetadata.getChildElements(DataSourceNode.TAG, "")) {
-                final String numlDocName = new DataSourceNode(node).getFile();
+            XMLNode tertAnnot = tertDoc.getModel().getAnnotation().getNonRDFannotation();
+            XMLNode tertAnnotMetadata = tertAnnot.getChildElement("metadata", "");
+            for (XMLNode node : tertAnnotMetadata.getChildElements(DataSourceNode.TAG, "")) {
+                String numlDocName = new DataSourceNode(node).getFile();
                 numlDocNames.add(numlDocName);
-
-                final NuMLDocument numlDoc = dataEntriesMap.get(numlDocName);
-                numlDocs.add(numlDoc);
+                numlDocs.add(dataDocs.get(numlDocName));
             }
-            models.add(new OneStepTertiaryModel(tertDocName, tertDoc, secModelNames, secModels,
-                    numlDocNames, numlDocs));
+
+            models.add(new OneStepTertiaryModel(tertDocName, tertDoc, secModelNames, secModels, numlDocNames,
+                    numlDocs));
         }
 
         return models;
@@ -182,78 +172,68 @@ public class OneStepTertiaryModelFile {
      * files are overwritten.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @param models
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static void write(final File file, final URI modelURI,
-                              final List<OneStepTertiaryModel> models) throws CombineArchiveException {
-
+    private static void write(File file, URI modelUri, List<OneStepTertiaryModel> models)
+            throws CombineArchiveException {
         // Remove if existent file
         if (file.exists()) {
             file.delete();
         }
 
-        // Creates new CombineArchive
-        final CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
+        // Creates COMBINE archive
+        try (CombineArchive ca = new CombineArchive(file)) {
+            Set<String> masterFiles = new HashSet<>(models.size());
+
+            // Adds models
+            for (OneStepTertiaryModel model : models) {
+                for (int i = 0; i < model.getDataDocs().size(); i++) {
+                    String numlDocName = model.getDataDocNames().get(i);
+                    NuMLDocument numlDoc = model.getDataDocs().get(i);
+
+                    try {
+                        CombineArchiveUtil.writeData(ca, numlDoc, numlDocName);
+                    } catch (IOException | TransformerException | ParserConfigurationException
+                            e) {
+                        LOGGER.warning(numlDocName + " could not be saved");
+                        e.printStackTrace();
+                    }
+                }
+
+                // Tertiary model
+                try {
+                    ArchiveEntry masterEntry = CombineArchiveUtil.writeModel(ca, model.getTertiaryDoc(), model
+                            .getTertiaryDocName(), modelUri);
+                    masterFiles.add(masterEntry.getPath().getFileName().toString());
+                } catch (IOException | SBMLException | XMLStreamException e) {
+                    LOGGER.warning(model.getTertiaryDocName() + " could not be saved");
+                    e.printStackTrace();
+                    continue;
+                }
+
+                for (int i = 0; i < model.getSecDocs().size(); i++) {
+                    String secDocName = model.getSecDocNames().get(i);
+                    SBMLDocument secDoc = model.getSecDocs().get(i);
+
+                    try {
+                        CombineArchiveUtil.writeModel(ca, secDoc, secDocName, modelUri);
+                    } catch (IOException | SBMLException | XMLStreamException e) {
+                        LOGGER.warning(secDocName + " could not be saved");
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            // Adds description with model type
+            Element annot = new PMFMetadataNode(ModelType.ONE_STEP_TERTIARY_MODEL, masterFiles).node;
+            ca.addDescription(new DefaultMetaDataObject(annot));
+
+            ca.pack();
+
+        } catch (IOException | JDOMException | ParseException | TransformerException e) {
             throw new CombineArchiveException(file.getName() + " could not be opened");
         }
-
-        final Set<String> masterFiles = new HashSet<>(models.size());
-
-        // Adds models
-        for (final OneStepTertiaryModel model : models) {
-
-            for (int i = 0; i < model.getDataDocs().size(); i++) {
-                final String numlDocName = model.getDataDocNames().get(i);
-                final NuMLDocument numlDoc = model.getDataDocs().get(i);
-                try {
-                    CombineArchiveUtil.writeData(combineArchive, numlDoc, numlDocName);
-                } catch (IOException | TransformerFactoryConfigurationError | TransformerException
-                        | ParserConfigurationException e) {
-                    System.err.println(numlDocName + " could not be saved");
-                    e.printStackTrace();
-                }
-            }
-
-            // Creates tmp file for the tertiary model
-            try {
-                final File tertTmp = File.createTempFile("tert", "");
-                tertTmp.deleteOnExit();
-
-                // Writes tertiary model to tertTmp and adds it to the model
-                WRITER.write(model.getTertiaryDoc(), tertTmp);
-                final ArchiveEntry masterEntry =
-                        combineArchive.addEntry(tertTmp, model.getTertiaryDocName(), modelURI);
-                masterFiles.add(masterEntry.getPath().getFileName().toString());
-            } catch (IOException | SBMLException | XMLStreamException e) {
-                System.err.println(model.getTertiaryDocName() + " could not be saved");
-                e.printStackTrace();
-                continue;
-            }
-
-            for (int i = 0; i < model.getSecDocs().size(); i++) {
-                final String secDocName = model.getSecDocNames().get(i);
-                final SBMLDocument secDoc = model.getSecDocs().get(i);
-
-                try {
-                    CombineArchiveUtil.writeModel(combineArchive, secDoc, secDocName, modelURI);
-                } catch (IOException | SBMLException | XMLStreamException e) {
-                    System.err.println(secDocName + " could not be saved");
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // Adds description with model type
-        final ModelType modelType = ModelType.ONE_STEP_TERTIARY_MODEL;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, masterFiles).node;
-        combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
-
-        CombineArchiveUtil.pack(combineArchive);
-        CombineArchiveUtil.close(combineArchive);
     }
 }

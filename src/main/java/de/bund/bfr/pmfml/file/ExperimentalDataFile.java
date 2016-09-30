@@ -30,14 +30,14 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Case 0: Experimental data file.
@@ -46,18 +46,18 @@ import java.util.List;
  */
 public class ExperimentalDataFile {
 
+    private static Logger LOGGER = Logger.getLogger("ExperimentalDataFile");
+
     private static final URI numlURI = UriFactory.createNuMLURI();
 
     private ExperimentalDataFile() {
     }
 
-    public static List<ExperimentalData> readPMF(final File file)
-            throws CombineArchiveException {
+    public static List<ExperimentalData> readPMF(final File file) throws CombineArchiveException {
         return read(file);
     }
 
-    public static List<ExperimentalData> readPMFX(final File file)
-            throws CombineArchiveException {
+    public static List<ExperimentalData> readPMFX(final File file) throws CombineArchiveException {
         return read(file);
     }
 
@@ -78,33 +78,30 @@ public class ExperimentalDataFile {
      *
      * @param file
      * @return List of experimental data files
-     * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
+     * @throws CombineArchiveException error with the COMBINE archive
      */
     private static List<ExperimentalData> read(final File file) throws CombineArchiveException {
 
-        CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        try (CombineArchive ca = new CombineArchive(file)) {
+            List<ExperimentalData> dataRecords = new ArrayList<>();
 
-        final List<ExperimentalData> dataRecords = new LinkedList<>();
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(numlURI)) {
+                String docName = entry.getFileName();
 
-        for (final ArchiveEntry entry : combineArchive.getEntriesWithFormat(numlURI)) {
-            final String docName = entry.getFileName();
-            try {
-                final NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
-                dataRecords.add(new ExperimentalData(docName, doc));
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                System.err.println(docName + " could not be retrieved");
-                e.printStackTrace();
+                try {
+                    NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
+                    dataRecords.add(new ExperimentalData(docName, doc));
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    LOGGER.warning(docName + " could not be retrieved");
+                    e.printStackTrace();
+                }
             }
+
+            return dataRecords;
+        } catch (IOException | ParseException | JDOMException | CombineArchiveException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        CombineArchiveUtil.close(combineArchive);
-
-        return dataRecords;
     }
 
     /**
@@ -113,41 +110,34 @@ public class ExperimentalDataFile {
      *
      * @param file
      * @param dataRecords
-     * @throws CombineArchiveException if the CombineArchive cannot be opened or closed properly
+     * @throws CombineArchiveException errors with COMBINE archive
      */
-    private static void write(final File file, final List<ExperimentalData> dataRecords)
-            throws CombineArchiveException {
+    private static void write(File file, List<ExperimentalData> dataRecords) throws CombineArchiveException {
 
         // Remove if existent file
         if (file.exists()) {
             file.delete();
         }
 
-        // Creates new CombineArchive
-        final CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        try (CombineArchive ca = new CombineArchive(file)) {
 
-        // Add data records
-        for (final ExperimentalData ed : dataRecords) {
-            try {
-                CombineArchiveUtil.writeData(combineArchive, ed.getDoc(), ed.getDocName());
-            } catch (IOException | TransformerFactoryConfigurationError | TransformerException
-                    | ParserConfigurationException e) {
-                System.err.println(ed.getDocName() + " could not be saved");
-                e.printStackTrace();
+            // Add data records
+            for (ExperimentalData ed : dataRecords) {
+                try {
+                    CombineArchiveUtil.writeData(ca, ed.getDoc(), ed.getDocName());
+                } catch (TransformerException | ParserConfigurationException e) {
+                    LOGGER.warning(ed.getDocName() + " could not be saved");
+                    e.printStackTrace();
+                }
             }
+
+            Element metadataAnnotation = new PMFMetadataNode(ModelType.EXPERIMENTAL_DATA, Collections.emptySet()).node;
+            ca.addDescription(new DefaultMetaDataObject(metadataAnnotation));
+
+            ca.pack();
+        } catch (IOException | JDOMException | ParseException | CombineArchiveException | TransformerException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        final ModelType modelType = ModelType.EXPERIMENTAL_DATA;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<>(0)).node;
-        combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
-
-        // Packs and closes the combineArchive
-        CombineArchiveUtil.pack(combineArchive);
-        CombineArchiveUtil.close(combineArchive);
     }
 }

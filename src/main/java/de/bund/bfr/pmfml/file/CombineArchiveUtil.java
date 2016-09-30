@@ -29,6 +29,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
+import de.bund.bfr.pmfml.model.ExperimentalData;
+import de.unirostock.sems.cbarchive.ArchiveEntry;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
@@ -44,87 +46,83 @@ import de.unirostock.sems.cbarchive.CombineArchiveException;
 
 public class CombineArchiveUtil {
 
-  private static final URI numlURI = UriFactory.createNuMLURI();
+    private static final URI numlURI = UriFactory.createNuMLURI();
 
-  private static final SBMLReader READER = new SBMLReader();
-  private static final SBMLWriter WRITER = new SBMLWriter();
+    private static final SBMLReader READER = new SBMLReader();
+    private static final SBMLWriter WRITER = new SBMLWriter();
 
-  private CombineArchiveUtil() {}
-
-  /**
-   * Packs safely a CombineArchive
-   *
-   * @param combineArchive
-   * @throws CombineArchiveException if the CombineArchive could not be packed properly
-   */
-  public static void pack(final CombineArchive combineArchive) throws CombineArchiveException {
-    try {
-      combineArchive.pack();
-    } catch (IOException | TransformerException e) {
-      throw new CombineArchiveException(combineArchive.getEntityPath() + " could not be packed");
+    private CombineArchiveUtil() {
     }
-  }
 
-  /**
-   * Closes safely a CombineArchive
-   *
-   * @param combineArchive
-   * @throws CombineArchiveException if the CombineArchive could not be closed properly
-   */
-  public static void close(final CombineArchive combineArchive) throws CombineArchiveException {
-    try {
-      combineArchive.close();
-    } catch (IOException e) {
-      throw new CombineArchiveException(combineArchive.getEntityPath() + " could not be closed");
+    /**
+     * Packs safely a CombineArchive
+     *
+     * @param combineArchive
+     * @throws CombineArchiveException if the CombineArchive could not be packed properly
+     * @deprecated Use try-with instead
+     */
+    public static void pack(final CombineArchive combineArchive) throws CombineArchiveException {
+        try {
+            combineArchive.pack();
+        } catch (IOException | TransformerException e) {
+            throw new CombineArchiveException(combineArchive.getEntityPath() + " could not be packed");
+        }
     }
-  }
 
-  public static NuMLDocument readData(final Path path)
-      throws IOException, ParserConfigurationException, SAXException {
-    final InputStream stream = Files.newInputStream(path, StandardOpenOption.READ);
-    final NuMLDocument doc = NuMLReader.read(stream);
-    stream.close();
-
-    return doc;
-  }
-
-  public static void writeData(final CombineArchive combineArchive, final NuMLDocument doc,
-      final String docName) throws IOException, TransformerFactoryConfigurationError,
-          TransformerException, ParserConfigurationException {
-    // Creates temporary file
-    final File tmpFile = File.createTempFile("tmpNuML", "");
-    tmpFile.deleteOnExit();
-
-    // Writes data to tmpFile and adds it to combineArchive
-    NuMLWriter.write(doc, tmpFile);
-    combineArchive.addEntry(tmpFile, docName, numlURI);
-  }
-
-  public static SBMLDocument readModel(final Path path) throws IOException, XMLStreamException {
-    final InputStream stream = Files.newInputStream(path, StandardOpenOption.READ);
-    final SBMLDocument doc = READER.readSBMLFromStream(stream);
-    stream.close();
-
-    return doc;
-  }
-
-  public static void writeModel(final CombineArchive combineArchive, final SBMLDocument doc,
-      final String docName, final URI modelURI)
-          throws IOException, SBMLException, XMLStreamException {
-    // Creates temporary file for the model
-    final File tmpFile = File.createTempFile("tmpSBML", "");
-    tmpFile.deleteOnExit();
-
-    // Writes model to tmpFile and adds it to the file
-    WRITER.write(doc, tmpFile);
-    combineArchive.addEntry(tmpFile, docName, modelURI);
-  }
-
-  /** Removes previous CombineArchive if it exists */
-  public static void removeExistentFile(final String filename) {
-    final File tmpFile = new File(filename);
-    if (tmpFile.exists()) {
-      tmpFile.delete();
+    /**
+     * Closes safely a CombineArchive
+     *
+     * @param combineArchive
+     * @throws CombineArchiveException if the CombineArchive could not be closed properly
+     * @deprecated Use try-with instead when opening {@link CombineArchive}
+     */
+    public static void close(final CombineArchive combineArchive) throws CombineArchiveException {
+        try {
+            combineArchive.close();
+        } catch (IOException e) {
+            throw new CombineArchiveException(combineArchive.getEntityPath() + " could not be closed");
+        }
     }
-  }
+
+    /**
+     * Removes previous CombineArchive if it exists
+     */
+    public static void removeExistentFile(final String filename) {
+        final File tmpFile = new File(filename);
+        if (tmpFile.exists()) {
+            tmpFile.delete();
+        }
+    }
+
+    // New functions --- old ones should be deleted
+    static NuMLDocument readData(Path path) throws IOException, ParserConfigurationException, SAXException {
+        try (InputStream is = Files.newInputStream(path, StandardOpenOption.READ)) {
+            return NuMLReader.read(is);
+        }
+    }
+
+    static ArchiveEntry writeData(CombineArchive archive, NuMLDocument doc, String docName)
+            throws IOException, TransformerFactoryConfigurationError, TransformerException, ParserConfigurationException {
+
+        File tmpFile = File.createTempFile("tmp", ".numl");
+        tmpFile.deleteOnExit();
+        NuMLWriter.write(doc, tmpFile);
+        return archive.addEntry(tmpFile, docName, numlURI);
+    }
+
+    static SBMLDocument readModel(Path path) throws IOException, XMLStreamException {
+        try (InputStream stream = Files.newInputStream(path, StandardOpenOption.READ)) {
+            return READER.readSBMLFromStream(stream);
+        }
+    }
+
+    static ArchiveEntry writeModel(CombineArchive archive, SBMLDocument doc, String docName, URI modelUri)
+            throws IOException, SBMLException, XMLStreamException {
+        // Creates temporary file for the model
+        final File tmpFile = File.createTempFile("tmp", ".sbml");
+        tmpFile.deleteOnExit();
+        // Writes model to tmpFile and adds it to the file
+        WRITER.write(doc, tmpFile);
+        return archive.addEntry(tmpFile, docName, modelUri);
+    }
 }

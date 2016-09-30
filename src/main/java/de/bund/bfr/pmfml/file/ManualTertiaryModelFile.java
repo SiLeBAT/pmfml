@@ -28,17 +28,18 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.comp.CompConstants;
 import org.sbml.jsbml.ext.comp.CompSBMLDocumentPlugin;
 import org.sbml.jsbml.ext.comp.ExternalModelDefinition;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Case 2c: Manual secondary models. Secondary models generated manually.
@@ -50,25 +51,25 @@ public class ManualTertiaryModelFile {
     private static final URI SBML_URI = UriFactory.createSBMLURI();
     private static final URI PMF_URI = UriFactory.createPMFURI();
 
-    private static final SBMLWriter WRITER = new SBMLWriter();
+    private static final Logger LOGGER = Logger.getLogger("ManualTertiaryModelFile");
 
-    public static List<ManualTertiaryModel> readPMF(final File file) throws Exception {
+    public static List<ManualTertiaryModel> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
-    public static List<ManualTertiaryModel> readPMFX(final File file) throws Exception {
+    public static List<ManualTertiaryModel> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
     public static void writePMF(final String dir, final String filename,
-                                final List<ManualTertiaryModel> models) throws Exception {
+                                final List<ManualTertiaryModel> models) throws CombineArchiveException {
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), SBML_URI, models);
     }
 
     public static void writePMFX(final String dir, final String filename,
-                                 final List<ManualTertiaryModel> models) throws Exception {
+                                 final List<ManualTertiaryModel> models) throws CombineArchiveException {
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), PMF_URI, models);
@@ -78,68 +79,55 @@ public class ManualTertiaryModelFile {
      * Reads manual tertiary models from a PMF or PFMX file. Faulty models are skipped.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static List<ManualTertiaryModel> read(final File file, final URI modelURI)
-            throws CombineArchiveException {
+    private static List<ManualTertiaryModel> read(File file, URI modelUri)
+        throws CombineArchiveException {
 
-        // Creates CombineArchive
-        CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
+        Map<String, SBMLDocument> tertDocMap = new HashMap<>();
+        Map<String, SBMLDocument> secDocMap = new HashMap<>();
+
+        try (CombineArchive ca = new CombineArchive(file)) {
+
+            MetaDataObject mdo = ca.getDescriptions().get(0);
+            Element metaParent = mdo.getXmlDescription();
+            PMFMetadataNode metadataAnnotation = new PMFMetadataNode(metaParent);
+            Set<String> masterFiles = metadataAnnotation.masterFiles;
+
+            // Classify models into tertiary or secondary models
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelUri)) {
+                String docName = entry.getFileName();
+                try {
+                    SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
+                    if (masterFiles.contains(docName)) {
+                        tertDocMap.put(docName, doc);
+                    } else {
+                        secDocMap.put(docName, doc);
+                    }
+                } catch (IOException | XMLStreamException e) {
+                    LOGGER.warning(docName + " could not be read");
+                }
+            }
         } catch (IOException | JDOMException | ParseException error) {
             throw new CombineArchiveException(file.getName() + " could not be opened");
         }
 
-        final List<ManualTertiaryModel> models = new LinkedList<>();
+        List<ManualTertiaryModel> models = new ArrayList<>();
+        for (Map.Entry<String, SBMLDocument> entry : tertDocMap.entrySet()) {
+            String tertDocName = entry.getKey();
+            SBMLDocument tertDoc = entry.getValue();
 
-        final MetaDataObject mdo = combineArchive.getDescriptions().get(0);
-        final Element metaParent = mdo.getXmlDescription();
-        final PMFMetadataNode metadataAnnotation = new PMFMetadataNode(metaParent);
-        final Set<String> masterFiles = metadataAnnotation.masterFiles;
+            List<String> secModelNames = new ArrayList<>();
+            List<SBMLDocument> secModels = new ArrayList<>();
+            CompSBMLDocumentPlugin plugin = (CompSBMLDocumentPlugin) tertDoc.getPlugin(CompConstants.shortLabel);
 
-        final List<ArchiveEntry> sbmlEntries = combineArchive.getEntriesWithFormat(modelURI);
-
-        // Classify models into tertiary or secondary models
-        final int numTertDocs = masterFiles.size();
-        final int numSecDocs = sbmlEntries.size() - numTertDocs;
-        final Map<String, SBMLDocument> tertDocsMap = new HashMap<>(numTertDocs);
-        final Map<String, SBMLDocument> secDocsMap = new HashMap<>(numSecDocs);
-
-        // Reads model documents
-        for (final ArchiveEntry entry : sbmlEntries) {
-            final String docName = entry.getFileName();
-
-            try {
-                final SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
-                if (masterFiles.contains(docName)) {
-                    tertDocsMap.put(docName, doc);
-                } else {
-                    secDocsMap.put(docName, doc);
-                }
-            } catch (IOException | XMLStreamException e) {
-                System.err.println(docName + " could not be read");
-                e.printStackTrace();
-            }
-        }
-
-        CombineArchiveUtil.close(combineArchive);
-
-        for (final Map.Entry<String, SBMLDocument> entry : tertDocsMap.entrySet()) {
-            final String tertDocName = entry.getKey();
-            final SBMLDocument tertDoc = entry.getValue();
-
-            final List<String> secModelNames = new LinkedList<>();
-            final List<SBMLDocument> secModels = new LinkedList<>();
-            final CompSBMLDocumentPlugin plugin =
-                    (CompSBMLDocumentPlugin) tertDoc.getPlugin(CompConstants.shortLabel);
-            // Gets secondary model ids
-            for (final ExternalModelDefinition emd : plugin.getListOfExternalModelDefinitions()) {
-                final String secModelName = emd.getSource();
+            // Gets secondary models
+            for (ExternalModelDefinition emd : plugin.getListOfExternalModelDefinitions()) {
+                String secModelName = emd.getSource();
                 secModelNames.add(secModelName);
 
-                final SBMLDocument secModel = secDocsMap.get(secModelName);
+                SBMLDocument secModel = secDocMap.get(secModelName);
                 secModels.add(secModel);
             }
 
@@ -154,61 +142,52 @@ public class ManualTertiaryModelFile {
      * are overwritten.
      *
      * @param file
-     * @param modelURI
+     * @param modelUri
      * @param models
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static void write(final File file, final URI modelURI,
-                              final List<ManualTertiaryModel> models) throws CombineArchiveException {
-
+    private static void write(File file, URI modelUri, List<ManualTertiaryModel> models)
+        throws CombineArchiveException {
         // Remove if existent file
         if (file.exists()) {
             file.delete();
         }
 
-        // Creates new CombineArchive
-        final CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        // Creates COMBINE archive
+        try (CombineArchive ca = new CombineArchive(file)) {
 
-        final Set<String> masterFiles = new HashSet<>(models.size());
+            Set<String> masterFiles = new HashSet<>(models.size());
 
-        // Adds models and data
-        for (final ManualTertiaryModel model : models) {
-            try {
-                // Creates tmp file for the tert model
-                final File tertTmp = File.createTempFile("sec", "");
-                tertTmp.deleteOnExit();
-                // Writes tertiary model to tertTmp and adds it to the file
-                WRITER.write(model.getTertiaryDoc(), tertTmp);
-                final ArchiveEntry masterEntry =
-                        combineArchive.addEntry(tertTmp, model.getTertiaryDocName(), modelURI);
-                masterFiles.add(masterEntry.getPath().getFileName().toString());
-            } catch (IOException | SBMLException | XMLStreamException e) {
-                System.err.println(model.getTertiaryDocName() + " could not be saved");
-                continue;
-            }
-
-            for (int i = 0; i < model.getSecDocs().size(); i++) {
-                final SBMLDocument secDoc = model.getSecDocs().get(i);
-                final String secDocName = model.getSecDocNames().get(i);
-
+            // Adds models and data
+            for (ManualTertiaryModel model : models) {
                 try {
-                    CombineArchiveUtil.writeModel(combineArchive, secDoc, secDocName, modelURI);
+                    ArchiveEntry masterEntry = CombineArchiveUtil.writeModel(ca, model.getTertiaryDoc(), model
+                            .getTertiaryDocName(), modelUri);
+                    masterFiles.add(masterEntry.getPath().getFileName().toString());
                 } catch (IOException | SBMLException | XMLStreamException e) {
-                    System.err.println(secDocName + " could not be saved");
+                    LOGGER.warning(model.getTertiaryDocName() + " could not be saved");
+                    continue;
+                }
+
+                for (int i = 0; i < model.getSecDocs().size(); i++) {
+                    SBMLDocument secDoc = model.getSecDocs().get(i);
+                    String secDocName = model.getSecDocNames().get(i);
+
+                    try {
+                        CombineArchiveUtil.writeModel(ca, secDoc, secDocName, modelUri);
+                    } catch (IOException | SBMLException | XMLStreamException e) {
+                        LOGGER.warning(secDocName + " could not be saved");
+                    }
                 }
             }
+
+            Element annot = new PMFMetadataNode(ModelType.MANUAL_TERTIARY_MODEL, masterFiles).node;
+            ca.addDescription(new DefaultMetaDataObject(annot));
+
+            ca.pack();
+
+        } catch (IOException | JDOMException | ParseException | TransformerException e) {
+            throw new CombineArchiveException(file.getName() + " could not be opened");
         }
-
-        final ModelType modelType = ModelType.MANUAL_TERTIARY_MODEL;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, masterFiles).node;
-        combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
-
-        CombineArchiveUtil.pack(combineArchive);
-        CombineArchiveUtil.close(combineArchive);
     }
 }

@@ -16,6 +16,7 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.file;
 
+import de.binfalse.bflog.LOGGER;
 import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWOData;
@@ -26,15 +27,16 @@ import de.unirostock.sems.cbarchive.meta.DefaultMetaDataObject;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,24 +49,22 @@ public class PrimaryModelWODataFile {
     private static final URI SBML_URI = UriFactory.createNuMLURI();
     private static final URI PMF_URI = UriFactory.createPMFURI();
 
-    public static List<PrimaryModelWOData> readPMF(final File file)
-            throws CombineArchiveException {
+    public static List<PrimaryModelWOData> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
-    public static List<PrimaryModelWOData> readPMFX(final File file)
-            throws CombineArchiveException {
+    public static List<PrimaryModelWOData> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
     public static void writePMF(final String dir, final String filename,
-                                final List<PrimaryModelWOData> models) throws Exception {
+                                final List<PrimaryModelWOData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), SBML_URI, models);
     }
 
     public static void writePMFX(final String dir, final String filename,
-                                 final List<PrimaryModelWOData> models) throws Exception {
+                                 final List<PrimaryModelWOData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), PMF_URI, models);
     }
@@ -78,35 +78,33 @@ public class PrimaryModelWODataFile {
      *                 {@link de.bund.bfr.pmfml.file.uri.SbmlUri}
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
-    private static List<PrimaryModelWOData> read(final File file, final URI modelURI)
+
+    private static List<PrimaryModelWOData> read(File file, URI modelURI)
             throws CombineArchiveException {
 
-        CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
+        try (CombineArchive ca = new CombineArchive(file)) {
 
-        final List<PrimaryModelWOData> models = new LinkedList<>();
+            List<PrimaryModelWOData> models = new ArrayList<>();
 
-        // Parse models in the combineArchive
-        final List<ArchiveEntry> modelEntries = combineArchive.getEntriesWithFormat(modelURI);
-        for (final ArchiveEntry entry : modelEntries) {
-            final String docName = entry.getFileName();
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelURI)) {
+                String docName = entry.getFileName();
 
-            try {
-                final SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
-                models.add(new PrimaryModelWOData(docName, doc));
-            } catch (IOException | XMLStreamException e) {
-                System.err.println(docName + " could not be retrieved");
-                e.printStackTrace();
+                // Read model
+                try {
+                    SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
+                    models.add(new PrimaryModelWOData(docName, doc));
+                } catch (XMLStreamException e) {
+                    e.printStackTrace();
+                    LOGGER.warn(docName + ": could not be read. Skipping entry");
+                }
             }
+
+            return models;
+
+        } catch (IOException | ParseException | JDOMException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        CombineArchiveUtil.close(combineArchive);
-
-        return models;
     }
 
     /**
@@ -117,39 +115,35 @@ public class PrimaryModelWODataFile {
      * @param models
      * @throws CombineArchiveException if the CombineArchive cannot be opened or closed properly
      */
-    private static void write(final File file, final URI modelURI,
-                              final List<PrimaryModelWOData> models) throws CombineArchiveException {
+    private static void write(File file, URI modelUri, List<PrimaryModelWOData> models) throws
+            CombineArchiveException {
 
         // Remove if existent file
         if (file.exists()) {
             file.delete();
         }
 
-        // Creates new CombineArchive
-        final CombineArchive combineArchive;
-        try {
-            combineArchive = new CombineArchive(file);
-        } catch (IOException | JDOMException | ParseException error) {
-            throw new CombineArchiveException(file.getName() + " could not be opened");
-        }
-
-        // Add models
-        for (final PrimaryModelWOData model : models) {
-            try {
-                CombineArchiveUtil.writeModel(combineArchive, model.getDoc(), model.getDocName(), modelURI);
-            } catch (SBMLException | XMLStreamException | IOException e) {
-                System.err.println(model.getDocName() + " could not be saved");
-                e.printStackTrace();
+        // Creates new COMBINE archive
+        try (CombineArchive ca = new CombineArchive(file)) {
+            for (PrimaryModelWOData model : models) {
+                // Write model
+                try {
+                    CombineArchiveUtil.writeModel(ca, model.getDoc(), model.getDocName(), modelUri);
+                } catch (IOException | TransformerFactoryConfigurationError |
+                        XMLStreamException e) {
+                    LOGGER.warn(model.getDocName() + ": could not be saved. Skipping model.");
+                }
             }
+
+            // Adds description with model type
+            Element annot = new PMFMetadataNode(ModelType.PRIMARY_MODEL_WODATA, Collections.emptySet()).node;
+            ca.addDescription(new DefaultMetaDataObject(annot));
+
+            ca.pack();
+
+        } catch (IOException | ParseException | JDOMException | TransformerException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
         }
-
-        // Adds description with model type
-        final ModelType modelType = ModelType.PRIMARY_MODEL_WODATA;
-        final Element metadataAnnotation = new PMFMetadataNode(modelType, new HashSet<>(0)).node;
-        combineArchive.addDescription(new DefaultMetaDataObject(metadataAnnotation));
-
-        // Packs and closes the combineArchive
-        CombineArchiveUtil.pack(combineArchive);
-        CombineArchiveUtil.close(combineArchive);
     }
 }
