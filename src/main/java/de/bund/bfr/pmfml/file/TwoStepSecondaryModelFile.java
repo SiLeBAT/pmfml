@@ -238,7 +238,9 @@ public class TwoStepSecondaryModelFile {
 
             ca.pack();
 
-        } catch (IOException | JDOMException | ParseException | TransformerException e) {
+        } catch (Exception e) {
+            file.delete();  // Removes faulty file
+            e.printStackTrace();
             throw new CombineArchiveException(e.getMessage());
         }
     }

@@ -29,7 +29,6 @@ import org.jdom2.JDOMException;
 import org.sbml.jsbml.SBMLDocument;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
@@ -141,7 +140,8 @@ public class PrimaryModelWODataFile {
 
             ca.pack();
 
-        } catch (IOException | ParseException | JDOMException | TransformerException e) {
+        } catch (Exception e) {
+            file.delete();  // Removes faulty file
             e.printStackTrace();
             throw new CombineArchiveException(e.getMessage());
         }

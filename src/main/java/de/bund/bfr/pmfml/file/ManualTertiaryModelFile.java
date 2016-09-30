@@ -33,7 +33,6 @@ import org.sbml.jsbml.ext.comp.CompSBMLDocumentPlugin;
 import org.sbml.jsbml.ext.comp.ExternalModelDefinition;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -186,7 +185,9 @@ public class ManualTertiaryModelFile {
 
             ca.pack();
 
-        } catch (IOException | JDOMException | ParseException | TransformerException e) {
+        } catch (Exception e) {
+            file.delete();  // Removes faulty file
+            e.printStackTrace();
             throw new CombineArchiveException(file.getName() + " could not be opened");
         }
     }

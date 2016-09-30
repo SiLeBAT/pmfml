@@ -135,7 +135,8 @@ public class ExperimentalDataFile {
             ca.addDescription(new DefaultMetaDataObject(metadataAnnotation));
 
             ca.pack();
-        } catch (IOException | JDOMException | ParseException | CombineArchiveException | TransformerException e) {
+        } catch (Exception e) {
+            file.delete();  // Removes faulty file
             e.printStackTrace();
             throw new CombineArchiveException(e.getMessage());
         }
