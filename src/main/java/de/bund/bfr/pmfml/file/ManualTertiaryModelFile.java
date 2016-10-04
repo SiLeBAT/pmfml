@@ -87,7 +87,7 @@ public class ManualTertiaryModelFile {
         Map<String, SBMLDocument> tertDocMap = new HashMap<>();
         Map<String, SBMLDocument> secDocMap = new HashMap<>();
 
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             MetaDataObject mdo = ca.getDescriptions().get(0);
             Element metaParent = mdo.getXmlDescription();
@@ -153,7 +153,7 @@ public class ManualTertiaryModelFile {
         }
 
         // Creates COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             Set<String> masterFiles = new HashSet<>(models.size());
 

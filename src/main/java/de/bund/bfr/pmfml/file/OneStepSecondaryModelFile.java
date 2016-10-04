@@ -95,7 +95,7 @@ public class OneStepSecondaryModelFile {
      */
     private static List<OneStepSecondaryModel> read(File file, URI modelUri) throws CombineArchiveException {
 
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             List<OneStepSecondaryModel> models = new ArrayList<>();
 
@@ -168,7 +168,7 @@ public class OneStepSecondaryModelFile {
         }
 
         // Creates COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             for (OneStepSecondaryModel model : models) {
                 List<ArchiveEntry> addedEntries = new ArrayList<>();

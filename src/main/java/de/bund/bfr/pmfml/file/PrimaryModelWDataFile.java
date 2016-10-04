@@ -92,7 +92,7 @@ public class PrimaryModelWDataFile {
      */
     private static List<PrimaryModelWData> read(File file, URI modelURI) throws CombineArchiveException {
 
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             // Gets data and model entries
             List<ArchiveEntry> dataEntries = ca.getEntriesWithFormat(NUML_URI);
@@ -170,7 +170,7 @@ public class PrimaryModelWDataFile {
         }
 
         // Creates new COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             for (PrimaryModelWData model : models) {
 

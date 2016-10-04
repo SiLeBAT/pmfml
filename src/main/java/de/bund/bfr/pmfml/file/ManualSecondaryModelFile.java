@@ -29,7 +29,6 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -82,7 +81,7 @@ public class ManualSecondaryModelFile {
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
     private static List<ManualSecondaryModel> read(File file, URI modelUri) throws CombineArchiveException {
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             List<ManualSecondaryModel> models = new ArrayList<>();
 
@@ -121,7 +120,7 @@ public class ManualSecondaryModelFile {
         }
 
         // Creates COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             // Adds models
             for (ManualSecondaryModel model : models) {

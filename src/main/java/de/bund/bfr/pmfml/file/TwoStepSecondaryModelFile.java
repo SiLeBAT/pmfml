@@ -95,7 +95,7 @@ public class TwoStepSecondaryModelFile {
         Map<String, SBMLDocument> secModelMap = new HashMap<>();
         Map<String, SBMLDocument> primModelMap = new HashMap<>();
 
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
             // Gets data entries
             for (ArchiveEntry entry : ca.getEntriesWithFormat(NUML_URI)) {
                 String dataDocName = entry.getFileName();
@@ -196,7 +196,7 @@ public class TwoStepSecondaryModelFile {
         }
 
         // Creates a COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             Set<String> masterFiles = new HashSet<>();
 

@@ -91,7 +91,7 @@ public class OneStepTertiaryModelFile {
         Map<String, SBMLDocument> secDocs = new HashMap<>();
         Map<String, NuMLDocument> dataDocs = new HashMap<>();
 
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
 
             // Gets data entries
             for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
@@ -184,7 +184,7 @@ public class OneStepTertiaryModelFile {
         }
 
         // Creates COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file, true)) {
+        try (CombineArchive ca = new CombineArchive(file)) {
             Set<String> masterFiles = new HashSet<>(models.size());
 
             // Adds models
