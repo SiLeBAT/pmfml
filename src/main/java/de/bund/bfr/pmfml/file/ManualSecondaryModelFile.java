@@ -82,7 +82,7 @@ public class ManualSecondaryModelFile {
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
     private static List<ManualSecondaryModel> read(File file, URI modelUri) throws CombineArchiveException {
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
 
             List<ManualSecondaryModel> models = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class ManualSecondaryModelFile {
         }
 
         // Creates COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
 
             // Adds models
             for (ManualSecondaryModel model : models) {

@@ -93,7 +93,7 @@ public class TwoStepTertiaryModelFile {
         Map<String, SBMLDocument> primDocs = new HashMap<>();
         Map<String, SBMLDocument> secDocs = new HashMap<>();
 
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
 
             // Gets data documents
             for (ArchiveEntry entry : ca.getEntriesWithFormat(NUML_URI)) {
@@ -200,7 +200,7 @@ public class TwoStepTertiaryModelFile {
         }
 
         // Creates COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
             Set<String> masterFiles = new HashSet<>(models.size());
 
             // Adds models and data

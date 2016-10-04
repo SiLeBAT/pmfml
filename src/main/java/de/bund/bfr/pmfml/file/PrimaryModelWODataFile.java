@@ -81,7 +81,7 @@ public class PrimaryModelWODataFile {
     private static List<PrimaryModelWOData> read(File file, URI modelURI)
             throws CombineArchiveException {
 
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
 
             List<PrimaryModelWOData> models = new ArrayList<>();
 
@@ -123,7 +123,7 @@ public class PrimaryModelWODataFile {
         }
 
         // Creates new COMBINE archive
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
             for (PrimaryModelWOData model : models) {
                 // Write model
                 try {

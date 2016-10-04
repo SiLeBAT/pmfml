@@ -82,7 +82,7 @@ public class ExperimentalDataFile {
      */
     private static List<ExperimentalData> read(final File file) throws CombineArchiveException {
 
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
             List<ExperimentalData> dataRecords = new ArrayList<>();
 
             for (ArchiveEntry entry : ca.getEntriesWithFormat(numlURI)) {
@@ -119,7 +119,7 @@ public class ExperimentalDataFile {
             file.delete();
         }
 
-        try (CombineArchive ca = new CombineArchive(file)) {
+        try (CombineArchive ca = new CombineArchive(file, true)) {
 
             // Add data records
             for (ExperimentalData ed : dataRecords) {
