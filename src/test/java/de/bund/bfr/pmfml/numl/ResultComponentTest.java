@@ -31,14 +31,15 @@ import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.bund.bfr.pmfml.ModelType;
+import de.bund.bfr.pmfml.sbml.ReferenceImpl;
+import de.bund.bfr.pmfml.sbml.ReferenceType;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.sbml.Reference;
-import de.bund.bfr.pmfml.sbml.ReferenceImpl;
-import de.bund.bfr.pmfml.sbml.ReferenceType;
 
 /**
  * @author Miguel Alba
@@ -196,7 +197,7 @@ public class ResultComponentTest {
 		assertFalse(rc.isSetModelType());
 		assertNull(rc.getModelType());
 		rc.setModelType(ModelType.TWO_STEP_SECONDARY_MODEL);
-		assertEquals(ModelType.TWO_STEP_SECONDARY_MODEL, rc.getModelType());
+		Assert.assertEquals(ModelType.TWO_STEP_SECONDARY_MODEL, rc.getModelType());
 		assertTrue(rc.isSetModelType());
 	}
 

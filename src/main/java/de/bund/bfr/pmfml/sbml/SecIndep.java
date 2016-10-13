@@ -16,12 +16,11 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import de.bund.bfr.pmfml.PMFUtil;
 import org.sbml.jsbml.Annotation;
 import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
-
-import de.bund.bfr.pmfml.PMFUtil;
 
 /** @author Miguel Alba */
 public class SecIndep {

@@ -18,6 +18,7 @@ package de.bund.bfr.pmfml.sbml;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Miguel Alba
@@ -213,10 +214,7 @@ public class UncertaintiesImpl implements Uncertainties {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((props == null) ? 0 : props.hashCode());
-    return result;
+    return Objects.hashCode(props);
   }
 
   @Override
@@ -228,11 +226,6 @@ public class UncertaintiesImpl implements Uncertainties {
     if (getClass() != obj.getClass())
       return false;
     UncertaintiesImpl other = (UncertaintiesImpl) obj;
-    if (props == null) {
-      if (other.props != null)
-        return false;
-    } else if (!props.equals(other.props))
-      return false;
-    return true;
+    return Objects.equals(props, other.props);
   }
 }

@@ -20,6 +20,7 @@ import de.bund.bfr.pmfml.ModelType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Miguel Alba
@@ -208,11 +209,6 @@ public class MetadataImpl implements Metadata {
     if (getClass() != obj.getClass())
       return false;
     MetadataImpl other = (MetadataImpl) obj;
-    if (props == null) {
-      if (other.props != null)
-        return false;
-    } else if (!props.equals(other.props))
-      return false;
-    return true;
+    return Objects.equals(props, other.props);
   }
 }

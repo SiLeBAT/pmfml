@@ -20,6 +20,8 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 
+import java.util.Objects;
+
 public class PMFSpeciesImpl implements PMFSpecies {
 
     private static final int LEVEL = 3;
@@ -271,12 +273,12 @@ public class PMFSpeciesImpl implements PMFSpecies {
             return false;
 
         PMFSpeciesImpl other = (PMFSpeciesImpl) obj;
-        return species.getCompartment().equals(other.species.getCompartment()) &&
-                species.getId().equals(other.species.getId()) &&
-                species.getName().equals(other.species.getName()) &&
-                species.getSubstanceUnits().equals(other.species.getSubstanceUnits()) &&
-                !(combaseCode != null && other.combaseCode != null && !combaseCode.equals(other.combaseCode)) &&
-                !(detail != null && other.detail != null && !detail.equals(other.detail)) &&
-                !(description != null && other.description != null && !description.equals(other.description));
+        return Objects.equals(species.getCompartment(), other.species.getCompartment()) &&
+                Objects.equals(species.getId(), other.species.getId()) &&
+                Objects.equals(species.getName(), other.species.getName()) &&
+                Objects.equals(species.getSubstanceUnits(), other.species.getSubstanceUnits()) &&
+                Objects.equals(combaseCode, other.combaseCode) &&
+                Objects.equals(detail, other.detail) &&
+                Objects.equals(description, other.description);
     }
 }

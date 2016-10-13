@@ -16,12 +16,12 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.file;
 
+import de.bund.bfr.pmfml.sbml.DataSourceNode;
 import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWData;
 import de.bund.bfr.pmfml.model.TwoStepTertiaryModel;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
-import de.bund.bfr.pmfml.sbml.DataSourceNode;
 import de.bund.bfr.pmfml.sbml.PrimaryModelNode;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;

@@ -21,6 +21,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Objects;
+
 public class TimeOntology {
 
     static final String ELEMENT_NAME = "ontologyTerm";
@@ -72,7 +74,7 @@ public class TimeOntology {
             return false;
 
         TimeOntology other = (TimeOntology) obj;
-        return unitDefinition.equals(other.unitDefinition);
+        return Objects.equals(unitDefinition, other.unitDefinition);
     }
 
     public Element toNode(final Document doc) {

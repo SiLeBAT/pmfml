@@ -22,6 +22,8 @@ import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 
+import java.util.Objects;
+
 /**
  * Represents the unitDefinition XML element of a PMF-SBML file.
  *
@@ -169,9 +171,9 @@ public class PMFUnitDefinition {
             return false;
 
         PMFUnitDefinition other = (PMFUnitDefinition) obj;
-        return unitDefinition.getId().equals(other.getId()) &&
-                unitDefinition.getName().equals(other.getName()) &&
-                !(transformationName != null && other.transformationName != null && !transformationName.equals(other.transformationName)) &&
-                unitDefinition.getListOfUnits().equals(other.unitDefinition.getListOfUnits());
+        return Objects.equals(unitDefinition.getId(), other.unitDefinition.getId()) &&
+                Objects.equals(unitDefinition.getName(), other.unitDefinition.getName()) &&
+                Objects.equals(transformationName, other.transformationName) &&
+                Objects.equals(unitDefinition.getListOfUnits(), other.unitDefinition.getListOfUnits());
     }
 }

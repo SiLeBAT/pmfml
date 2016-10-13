@@ -24,13 +24,13 @@ import static org.junit.Assert.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.bund.bfr.pmfml.ModelType;
+import de.bund.bfr.pmfml.sbml.ModelVariable;
 import org.junit.Before;
 import org.junit.Test;
 import org.sbml.jsbml.Unit;
 import org.w3c.dom.Document;
 
-import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.sbml.ModelVariable;
 import de.bund.bfr.pmfml.sbml.PMFCompartment;
 import de.bund.bfr.pmfml.sbml.PMFSpecies;
 import de.bund.bfr.pmfml.sbml.PMFUnit;

@@ -21,6 +21,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Objects;
+
 public class ConcentrationOntology {
 
     static final String ELEMENT_NAME = "ontologyTerm";
@@ -98,8 +100,8 @@ public class ConcentrationOntology {
             return false;
 
         final ConcentrationOntology other = (ConcentrationOntology) obj;
-        return unitDefinition.equals(other.unitDefinition) && compartment.equals(other.compartment)
-                && species.equals(other.species);
+        return Objects.equals(unitDefinition, other.unitDefinition) && Objects.equals(compartment, other.compartment)
+                && Objects.equals(species, other.species);
     }
 
     public Element toNode(final Document doc) {

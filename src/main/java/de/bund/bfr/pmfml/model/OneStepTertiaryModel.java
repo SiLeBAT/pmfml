@@ -18,9 +18,8 @@ package de.bund.bfr.pmfml.model;
 
 import java.util.List;
 
-import org.sbml.jsbml.SBMLDocument;
-
 import de.bund.bfr.pmfml.numl.NuMLDocument;
+import org.sbml.jsbml.SBMLDocument;
 
 /**
  * Case 3b: Keeps one {@link SBMLDocument} per each tertiary model, linked to n {@link SBMLDocument}

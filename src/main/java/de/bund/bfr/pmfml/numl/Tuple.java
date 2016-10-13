@@ -20,6 +20,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Objects;
+
 /**
  * @author Miguel Alba
  */
@@ -64,7 +66,7 @@ public class Tuple {
             return false;
 
         Tuple other = (Tuple) obj;
-        return concValue.equals(other.concValue) && timeValue.equals(other.timeValue);
+        return Objects.equals(concValue, other.concValue) && Objects.equals(timeValue, other.timeValue);
     }
 
     public Element toNode(final Document doc) {

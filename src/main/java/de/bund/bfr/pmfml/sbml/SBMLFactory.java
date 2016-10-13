@@ -16,11 +16,10 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import de.bund.bfr.pmfml.ModelType;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.Species;
-
-import de.bund.bfr.pmfml.ModelType;
 
 /**
  * @author Miguel Alba
@@ -33,8 +32,8 @@ public class SBMLFactory {
   }
 
   public static Metadata createMetadata(String givenName, String familyName, String contact,
-      String createdDate, String modifiedDate, ModelType type, String rights,
-      String referenceLink) {
+                                        String createdDate, String modifiedDate, ModelType type, String rights,
+                                        String referenceLink) {
     return new MetadataImpl(givenName, familyName, contact, createdDate, modifiedDate, type, rights,
         referenceLink);
   }

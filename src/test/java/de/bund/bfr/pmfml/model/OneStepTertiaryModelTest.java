@@ -21,10 +21,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 
+import de.bund.bfr.pmfml.numl.NuMLDocument;
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
-
-import de.bund.bfr.pmfml.numl.NuMLDocument;
 
 /**
  * @author Miguel Alba

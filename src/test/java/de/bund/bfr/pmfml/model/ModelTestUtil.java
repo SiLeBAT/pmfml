@@ -16,11 +16,13 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
+import de.bund.bfr.pmfml.numl.AtomicDescription;
+import de.bund.bfr.pmfml.sbml.ModelVariable;
+import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Unit;
 
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.numl.AtomicDescription;
 import de.bund.bfr.pmfml.numl.AtomicValue;
 import de.bund.bfr.pmfml.numl.ConcentrationOntology;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
@@ -28,11 +30,9 @@ import de.bund.bfr.pmfml.numl.ResultComponent;
 import de.bund.bfr.pmfml.numl.TimeOntology;
 import de.bund.bfr.pmfml.numl.Tuple;
 import de.bund.bfr.pmfml.numl.TupleDescription;
-import de.bund.bfr.pmfml.sbml.ModelVariable;
 import de.bund.bfr.pmfml.sbml.PMFCompartment;
 import de.bund.bfr.pmfml.sbml.PMFSpecies;
 import de.bund.bfr.pmfml.sbml.PMFUnit;
-import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 import de.bund.bfr.pmfml.sbml.Reference;
 import de.bund.bfr.pmfml.sbml.ReferenceType;
 import de.bund.bfr.pmfml.sbml.SBMLFactory;

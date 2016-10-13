@@ -17,6 +17,7 @@
 package de.bund.bfr.pmfml.sbml;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @author Miguel Alba
@@ -61,6 +62,6 @@ public class Correlation {
       return false;
 
     final Correlation other = (Correlation) obj;
-    return name.equals(other.name) && value.equals(other.value);
+    return Objects.equals(name, other.name) && Objects.equals(value, other.value);
   }
 }

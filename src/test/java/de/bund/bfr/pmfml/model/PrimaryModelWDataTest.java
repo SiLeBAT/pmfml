@@ -18,10 +18,10 @@ package de.bund.bfr.pmfml.model;
 
 import static org.junit.Assert.assertEquals;
 
+import de.bund.bfr.pmfml.numl.NuMLDocument;
+import org.junit.Assert;
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
-
-import de.bund.bfr.pmfml.numl.NuMLDocument;
 
 public class PrimaryModelWDataTest {
 
@@ -35,6 +35,6 @@ public class PrimaryModelWDataTest {
     assertEquals("model.sbml", model.getModelDocName());
     assertEquals(modelDoc, model.getModelDoc());
     assertEquals("data.numl", model.getDataDocName());
-    assertEquals(dataDoc, model.getDataDoc());
+    Assert.assertEquals(dataDoc, model.getDataDoc());
   }
 }

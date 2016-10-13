@@ -18,8 +18,10 @@ package de.bund.bfr.pmfml.file;
 
 import de.binfalse.bflog.LOGGER;
 import de.bund.bfr.pmfml.ModelType;
+import de.bund.bfr.pmfml.file.uri.SbmlUri;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWOData;
+import de.bund.bfr.pmfml.file.uri.PmfUri;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
@@ -73,8 +75,8 @@ public class PrimaryModelWODataFile {
      * Reads primary models without data from a PMF or PMFX file. Faulty files are skipped.
      *
      * @param file
-     * @param modelURI URI used for the models: {@link de.bund.bfr.pmfml.file.uri.PmfUri} or
-     *                 {@link de.bund.bfr.pmfml.file.uri.SbmlUri}
+     * @param modelURI URI used for the models: {@link PmfUri} or
+     *                 {@link SbmlUri}
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      */
 

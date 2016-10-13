@@ -21,8 +21,8 @@ import org.sbml.jsbml.xml.XMLAttributes;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class PMFCompartmentImpl implements PMFCompartment {
 
@@ -254,10 +254,10 @@ public class PMFCompartmentImpl implements PMFCompartment {
 
         PMFCompartmentImpl other = (PMFCompartmentImpl) obj;
 
-        return compartment.getId().equals(other.compartment.getId()) &&
-                compartment.getName().equals(other.compartment.getName()) &&
-                !(pmfCode != null && other.pmfCode != null && !pmfCode.equals(other.pmfCode)) &&
-                !(detail != null && other.detail != null && !detail.equals(other.detail)) &&
-                !(modelVariables != null && other.modelVariables != null && !Arrays.equals(modelVariables, other.modelVariables));
+        return Objects.equals(compartment.getId(), other.compartment.getId()) &&
+                Objects.equals(compartment.getName(), other.compartment.getName()) &&
+                Objects.equals(pmfCode, other.pmfCode) &&
+                Objects.equals(detail, other.detail) &&
+                Objects.deepEquals(modelVariables, other.modelVariables);
     }
 }

@@ -16,11 +16,10 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import de.bund.bfr.pmfml.LiteratureSpecificationI;
 import org.sbml.jsbml.xml.XMLNamespaces;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
-
-import de.bund.bfr.pmfml.LiteratureSpecificationI;
 
 /**
  * @author Miguel Alba

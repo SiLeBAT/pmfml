@@ -21,10 +21,9 @@ package de.bund.bfr.pmfml.sbml;
 
 import static org.junit.Assert.*;
 
+import de.bund.bfr.pmfml.ModelClass;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.bund.bfr.pmfml.ModelClass;
 
 public class ModelRuleTest {
 

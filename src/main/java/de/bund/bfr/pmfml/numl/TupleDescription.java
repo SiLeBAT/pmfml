@@ -20,6 +20,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Objects;
+
 /**
  * @author Miguel Alba
  */
@@ -64,7 +66,7 @@ public class TupleDescription {
             return false;
 
         final TupleDescription other = (TupleDescription) obj;
-        return concDesc.equals(other.concDesc) && timeDesc.equals(other.timeDesc);
+        return Objects.equals(concDesc, other.concDesc) && Objects.equals(timeDesc, other.timeDesc);
     }
 
     public Element toNode(final Document doc) {

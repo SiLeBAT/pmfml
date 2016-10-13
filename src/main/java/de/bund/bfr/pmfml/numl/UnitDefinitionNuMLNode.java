@@ -16,13 +16,12 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
+import de.bund.bfr.pmfml.sbml.PMFUnit;
+import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 import org.sbml.jsbml.Unit;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import de.bund.bfr.pmfml.sbml.PMFUnit;
-import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 
 public class UnitDefinitionNuMLNode {
 

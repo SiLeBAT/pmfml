@@ -16,8 +16,8 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.file;
 
-import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
+import de.bund.bfr.pmfml.ModelType;
 import de.bund.bfr.pmfml.model.ManualSecondaryModel;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;

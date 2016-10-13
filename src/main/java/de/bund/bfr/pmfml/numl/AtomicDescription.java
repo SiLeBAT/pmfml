@@ -19,6 +19,8 @@ package de.bund.bfr.pmfml.numl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.Objects;
+
 /**
  * @author Miguel Alba
  */
@@ -70,7 +72,7 @@ public class AtomicDescription {
       return false;
 
     AtomicDescription other = (AtomicDescription) obj;
-    return name.equals(other.name) && ontologyTermId.equals(other.ontologyTermId);
+    return Objects.equals(name, other.name) && Objects.equals(ontologyTermId, other.ontologyTermId);
   }
 
   public Element toNode(final Document doc) {

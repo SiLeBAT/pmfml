@@ -17,6 +17,7 @@
 package de.bund.bfr.pmfml.sbml;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class ModelVariable {
 
@@ -52,16 +53,6 @@ public class ModelVariable {
     if (getClass() != obj.getClass())
       return false;
     ModelVariable other = (ModelVariable) obj;
-    if (name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!name.equals(other.name))
-      return false;
-    if (value == null) {
-      if (other.value != null)
-        return false;
-    } else if (!value.equals(other.value))
-      return false;
-    return true;
+    return Objects.equals(name, other.name) && Objects.equals(value, other.value);
   }
 }

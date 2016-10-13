@@ -29,7 +29,10 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import de.bund.bfr.pmfml.model.ExperimentalData;
+import de.bund.bfr.pmfml.file.uri.UriFactory;
+import de.bund.bfr.pmfml.numl.NuMLDocument;
+import de.bund.bfr.pmfml.numl.NuMLReader;
+import de.bund.bfr.pmfml.numl.NuMLWriter;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
@@ -37,10 +40,6 @@ import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 import org.xml.sax.SAXException;
 
-import de.bund.bfr.pmfml.file.uri.UriFactory;
-import de.bund.bfr.pmfml.numl.NuMLDocument;
-import de.bund.bfr.pmfml.numl.NuMLReader;
-import de.bund.bfr.pmfml.numl.NuMLWriter;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
 
