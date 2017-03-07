@@ -16,6 +16,23 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.file;
 
+import de.bund.bfr.pmfml.file.uri.UriFactory;
+import de.bund.bfr.pmfml.numl.NuMLDocument;
+import de.bund.bfr.pmfml.numl.NuMLReader;
+import de.bund.bfr.pmfml.numl.NuMLWriter;
+import de.unirostock.sems.cbarchive.ArchiveEntry;
+import de.unirostock.sems.cbarchive.CombineArchive;
+import de.unirostock.sems.cbarchive.CombineArchiveException;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
+import org.sbml.jsbml.SBMLReader;
+import org.sbml.jsbml.SBMLWriter;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,25 +40,6 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-
-import de.bund.bfr.pmfml.file.uri.UriFactory;
-import de.bund.bfr.pmfml.numl.NuMLDocument;
-import de.bund.bfr.pmfml.numl.NuMLReader;
-import de.bund.bfr.pmfml.numl.NuMLWriter;
-import de.unirostock.sems.cbarchive.ArchiveEntry;
-import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.SBMLWriter;
-import org.xml.sax.SAXException;
-
-import de.unirostock.sems.cbarchive.CombineArchive;
-import de.unirostock.sems.cbarchive.CombineArchiveException;
 
 public class CombineArchiveUtil {
 
@@ -123,5 +121,13 @@ public class CombineArchiveUtil {
         // Writes model to tmpFile and adds it to the file
         WRITER.write(doc, tmpFile);
         return archive.addEntry(tmpFile, docName, modelUri);
+    }
+
+    static URI getModelURI(Path path) {
+        if (path.endsWith(".pmf"))
+            return UriFactory.createSBMLURI();
+        if (path.endsWith(".pmfx") || path.endsWith(".fskx"))
+            return UriFactory.createPMFURI();
+        throw new IllegalArgumentException("Not supported file: " + path);
     }
 }

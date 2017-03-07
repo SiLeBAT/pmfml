@@ -18,10 +18,10 @@ package de.bund.bfr.pmfml.file;
 
 import de.binfalse.bflog.LOGGER;
 import de.bund.bfr.pmfml.ModelType;
+import de.bund.bfr.pmfml.file.uri.PmfUri;
 import de.bund.bfr.pmfml.file.uri.SbmlUri;
 import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWOData;
-import de.bund.bfr.pmfml.file.uri.PmfUri;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
@@ -35,6 +35,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,26 +52,41 @@ public class PrimaryModelWODataFile {
     private static final URI SBML_URI = UriFactory.createNuMLURI();
     private static final URI PMF_URI = UriFactory.createPMFURI();
 
+    /**
+     * @deprecated use {@link PrimaryModelWODataFile#read(Path)} instead
+     */
+    @Deprecated
     public static List<PrimaryModelWOData> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
+    /**
+     * @deprecated use {@link PrimaryModelWODataFile#read(Path)} instead
+     */
+    @Deprecated
     public static List<PrimaryModelWOData> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
+    /**
+     * @deprecated use {@link PrimaryModelWODataFile#write(Path, List)} instead
+     */
+    @Deprecated
     public static void writePMF(final String dir, final String filename,
                                 final List<PrimaryModelWOData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), SBML_URI, models);
     }
 
+    /**
+     * @deprecated use {@link PrimaryModelWODataFile#write(Path, List)} instead
+     */
+    @Deprecated
     public static void writePMFX(final String dir, final String filename,
                                  final List<PrimaryModelWOData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
         write(new File(caName), PMF_URI, models);
     }
-
 
     /**
      * Reads primary models without data from a PMF or PMFX file. Faulty files are skipped.
@@ -78,8 +95,9 @@ public class PrimaryModelWODataFile {
      * @param modelURI URI used for the models: {@link PmfUri} or
      *                 {@link SbmlUri}
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
+     * @deprecated use {@link PrimaryModelWODataFile#read(Path)} instead
      */
-
+    @Deprecated
     private static List<PrimaryModelWOData> read(File file, URI modelURI)
             throws CombineArchiveException {
 
@@ -109,13 +127,50 @@ public class PrimaryModelWODataFile {
     }
 
     /**
+     * Reads primary models without data from a file. Faulty files are skipped.
+     *
+     * @param path
+     * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
+     */
+    public static List<PrimaryModelWOData> read(Path path)
+            throws CombineArchiveException {
+        URI modelUri = CombineArchiveUtil.getModelURI(path);
+
+        try (CombineArchive ca = new CombineArchive(path.toFile())) {
+
+            List<PrimaryModelWOData> models = new ArrayList<>();
+
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelUri)) {
+                String docName = entry.getFileName();
+
+                // Read model
+                try {
+                    SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
+                    models.add(new PrimaryModelWOData(docName, doc));
+                } catch (XMLStreamException e) {
+                    e.printStackTrace();
+                    LOGGER.warn(docName + ": could not be read. Skipping entry");
+                }
+            }
+
+            return models;
+
+        } catch (IOException | ParseException | JDOMException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
+        }
+    }
+
+    /**
      * Writes primary models without data to a PMF or PMFX file. Faulty data files are skipped.
      * Existent files with the same filename are overwritten.
      *
      * @param file
      * @param models
      * @throws CombineArchiveException if the CombineArchive cannot be opened or closed properly
+     * @deprecated use {@link PrimaryModelWODataFile#write(Path, List)} instead
      */
+    @Deprecated
     private static void write(File file, URI modelUri, List<PrimaryModelWOData> models) throws
             CombineArchiveException {
 
@@ -144,6 +199,42 @@ public class PrimaryModelWODataFile {
 
         } catch (Exception e) {
             file.delete();  // Removes faulty file
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
+        }
+    }
+
+    /**
+     * Writes primary models without data to a file. Fault data files are skipped. Existent files with the same filename
+     * are overwritten.
+     */
+    public static void write(Path path, List<PrimaryModelWOData> models) throws CombineArchiveException, IOException {
+
+        URI modelUri = CombineArchiveUtil.getModelURI(path);
+
+        // Remove if existent file
+        Files.deleteIfExists(path);
+
+        // Creates new Combine archive
+        try (CombineArchive ca = new CombineArchive(path.toFile())) {
+            for (PrimaryModelWOData model : models) {
+                // Write model
+                try {
+                    CombineArchiveUtil.writeModel(ca, model.getDoc(), model.getDocName(), modelUri);
+                } catch (IOException | TransformerFactoryConfigurationError |
+                        XMLStreamException e) {
+                    LOGGER.warn(model.getDocName() + ": could not be saved. Skipping model.");
+                }
+
+                // Adds description with model type
+                Element annot = new PMFMetadataNode(ModelType.PRIMARY_MODEL_WODATA, Collections.emptySet()).node;
+                ca.addDescription(new DefaultMetaDataObject(annot));
+
+                ca.pack();
+            }
+
+        } catch (Exception e) {
+            Files.delete(path);  // Removes faulty file
             e.printStackTrace();
             throw new CombineArchiveException(e.getMessage());
         }

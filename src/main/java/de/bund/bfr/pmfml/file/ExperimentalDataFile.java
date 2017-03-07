@@ -33,6 +33,8 @@ import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,20 +55,32 @@ public class ExperimentalDataFile {
     private ExperimentalDataFile() {
     }
 
+    /**
+     * @deprecated use {@link ExperimentalDataFile#read(File)} instead
+     */
     public static List<ExperimentalData> readPMF(final File file) throws CombineArchiveException {
         return read(file);
     }
 
+    /**
+     * @deprecated use {@link ExperimentalDataFile#read(File)} instead
+     */
     public static List<ExperimentalData> readPMFX(final File file) throws CombineArchiveException {
         return read(file);
     }
 
+    /**
+     * @deprecated use {@link ExperimentalDataFile#write(File, List)} instead
+     */
     public static void writePMF(final String dir, final String filename,
                                 List<ExperimentalData> dataRecords) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
         write(new File(caName), dataRecords);
     }
 
+    /**
+     * @deprecated use {@link ExperimentalDataFile#write(File, List)} instead
+     */
     public static void writePMFX(final String dir, final String filename,
                                  List<ExperimentalData> dataRecords) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
@@ -79,7 +93,9 @@ public class ExperimentalDataFile {
      * @param file
      * @return List of experimental data files
      * @throws CombineArchiveException error with the COMBINE archive
+     * @deprecated use {@link ExperimentalDataFile#read(Path)} instead
      */
+    @Deprecated
     private static List<ExperimentalData> read(final File file) throws CombineArchiveException {
 
         try (CombineArchive ca = new CombineArchive(file)) {
@@ -111,7 +127,9 @@ public class ExperimentalDataFile {
      * @param file
      * @param dataRecords
      * @throws CombineArchiveException errors with COMBINE archive
+     * @deprecated use {@link ExperimentalDataFile#write(Path, List)} instead
      */
+    @Deprecated
     private static void write(File file, List<ExperimentalData> dataRecords) throws CombineArchiveException {
 
         // Remove if existent file
@@ -137,6 +155,74 @@ public class ExperimentalDataFile {
             ca.pack();
         } catch (Exception e) {
             file.delete();  // Removes faulty file
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
+        }
+    }
+
+    /**
+     * Reads experimental data files from a file. Faulty data files are skipped.
+     *
+     * @param path
+     * @return List of experimental data files
+     * @throws CombineArchiveException error with the COMBINE archive
+     */
+    public static List<ExperimentalData> read(final Path path) throws CombineArchiveException {
+
+        try (CombineArchive ca = new CombineArchive(path.toFile())) {
+            List<ExperimentalData> dataRecords = new ArrayList<>();
+
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(numlURI)) {
+                String docName = entry.getFileName();
+
+                try {
+                    NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
+                    dataRecords.add(new ExperimentalData(docName, doc));
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    LOGGER.warning(docName + " could not be retrieved");
+                    e.printStackTrace();
+                }
+            }
+
+            return dataRecords;
+        } catch (IOException | ParseException | JDOMException | CombineArchiveException e) {
+            e.printStackTrace();
+            throw new CombineArchiveException(e.getMessage());
+        }
+    }
+
+    /**
+     * Writes experimental data files to a PMF or PMFX file. Faulty data files are skipped Existent
+     * files with the same filename are overwritten.
+     *
+     * @param path
+     * @param dataRecords
+     * @throws CombineArchiveException errors with COMBINE archive
+     */
+    public static void write(Path path, List<ExperimentalData> dataRecords) throws CombineArchiveException,
+            IOException {
+
+        // Remove if existent file
+        Files.deleteIfExists(path);
+
+        try (CombineArchive ca = new CombineArchive(path.toFile())) {
+
+            // Add data records
+            for (ExperimentalData ed : dataRecords) {
+                try {
+                    CombineArchiveUtil.writeData(ca, ed.getDoc(), ed.getDocName());
+                } catch (TransformerException | ParserConfigurationException e) {
+                    LOGGER.warning(ed.getDocName() + " could not be saved");
+                    e.printStackTrace();
+                }
+            }
+
+            Element metadataAnnotation = new PMFMetadataNode(ModelType.EXPERIMENTAL_DATA, Collections.emptySet()).node;
+            ca.addDescription(new DefaultMetaDataObject(metadataAnnotation));
+
+            ca.pack();
+        } catch (Exception e) {
+            Files.delete(path);  // Removes faulty file
             e.printStackTrace();
             throw new CombineArchiveException(e.getMessage());
         }

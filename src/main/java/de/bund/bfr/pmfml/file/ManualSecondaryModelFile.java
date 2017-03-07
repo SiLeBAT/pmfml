@@ -16,8 +16,8 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.file;
 
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.ModelType;
+import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.ManualSecondaryModel;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
@@ -32,6 +32,8 @@ import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,14 +52,26 @@ public class ManualSecondaryModelFile {
     private static final URI SBML_URI = UriFactory.createSBMLURI();
     private static final URI PMF_URI = UriFactory.createPMFURI();
 
+    /**
+     * @deprecated use {@link ManualSecondaryModelFile#read(Path)} instead
+     */
+    @Deprecated
     public static List<ManualSecondaryModel> readPMF(final File file) throws CombineArchiveException {
         return read(file, SBML_URI);
     }
 
+    /**
+     * @deprecated use {@link ManualSecondaryModelFile#read(Path)} instead
+     */
+    @Deprecated
     public static List<ManualSecondaryModel> readPMFX(final File file) throws CombineArchiveException {
         return read(file, PMF_URI);
     }
 
+    /**
+     * @deprecated use {@link ManualSecondaryModelFile#write(Path, List)} instead
+     */
+    @Deprecated
     public static void writePMF(final String dir, final String filename,
                                 final List<ManualSecondaryModel> models) throws CombineArchiveException {
         // Creates CombineArchive name
@@ -65,6 +79,10 @@ public class ManualSecondaryModelFile {
         write(new File(caName), SBML_URI, models);
     }
 
+    /**
+     * @deprecated use {@link ManualSecondaryModelFile#write(Path, List)} instead
+     */
+    @Deprecated
     public static void writePMFX(final String dir, final String filename,
                                  final List<ManualSecondaryModel> models) throws CombineArchiveException {
 
@@ -79,7 +97,9 @@ public class ManualSecondaryModelFile {
      * @param file
      * @param modelUri
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
+     * @deprecated use {@Link ManualSecondaryModelFile#read(Path)} instead
      */
+    @Deprecated
     private static List<ManualSecondaryModel> read(File file, URI modelUri) throws CombineArchiveException {
         try (CombineArchive ca = new CombineArchive(file)) {
 
@@ -104,13 +124,46 @@ public class ManualSecondaryModelFile {
     }
 
     /**
+     * Reads manual secondary models from a PMF or PMFX file. Faulty models are skipped.
+     *
+     * @param path
+     * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
+     */
+    public static List<ManualSecondaryModel> read(Path path) throws CombineArchiveException {
+        URI modelUri = CombineArchiveUtil.getModelURI(path);
+
+        try (CombineArchive ca = new CombineArchive(path.toFile())) {
+
+            List<ManualSecondaryModel> models = new ArrayList<>();
+
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(modelUri)) {
+                String docName = entry.getFileName();
+                try {
+                    SBMLDocument doc = CombineArchiveUtil.readModel(entry.getPath());
+                    models.add(new ManualSecondaryModel(docName, doc));
+                } catch (IOException | XMLStreamException e) {
+                    LOGGER.warning(docName + " could not be retrieved");
+                    e.printStackTrace();
+                }
+            }
+
+            return models;
+
+        } catch (IOException | JDOMException | ParseException e) {
+            throw new CombineArchiveException(path.getFileName() + " could not be opened");
+        }
+    }
+
+    /**
      * Writes manual secondary models to a PMF or PMFX file. Faulty models are skipped. Existent files
      * with the same filename are overwritten.
      *
      * @param file
      * @param models
      * @throws CombineArchiveException if the CombineArchive cannot be opened or closed properly
+     * @deprecated use {@link ManualSecondaryModelFile#write(Path, List)} instead
      */
+    @Deprecated
     private static void write(File file, URI modelUri, List<ManualSecondaryModel> models)
         throws CombineArchiveException {
 
@@ -141,6 +194,47 @@ public class ManualSecondaryModelFile {
             file.delete();  // Removes faulty file
             e.printStackTrace();
             throw new CombineArchiveException(file.getName() + " could not be opened");
+        }
+    }
+
+    /**
+     * Writes manual secondary models to a file. Faulty models are skipped. Existent files
+     * with the same filename are overwritten.
+     *
+     * @param path
+     * @param models
+     * @throws CombineArchiveException if the CombineArchive cannot be opened or closed properly
+     */
+    public static void write(Path path, List<ManualSecondaryModel> models)
+            throws CombineArchiveException, IOException {
+
+        URI modelUri = CombineArchiveUtil.getModelURI(path);
+
+        // Remove if existent file
+        Files.deleteIfExists(path);
+
+        // Creates COMBINE archive
+        try (CombineArchive ca = new CombineArchive(path.toFile())) {
+
+            // Adds models
+            for (ManualSecondaryModel model : models) {
+                try {
+                    CombineArchiveUtil.writeModel(ca, model.getDoc(), model.getDocName(), modelUri);
+                } catch (SBMLException | XMLStreamException | IOException e) {
+                    LOGGER.warning(model.getDocName() + " could not be saved");
+                    e.printStackTrace();
+                }
+            }
+
+            // Adds description with model type
+            Element annot = new PMFMetadataNode(ModelType.MANUAL_SECONDARY_MODEL, Collections.emptySet()).node;
+            ca.addDescription(new DefaultMetaDataObject(annot));
+
+            ca.pack();
+        } catch (Exception e) {
+            Files.delete(path);  // Removes faulty file
+            e.printStackTrace();
+            throw new CombineArchiveException(path.getFileName() + " could not be opened");
         }
     }
 }
