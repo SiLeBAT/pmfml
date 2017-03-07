@@ -124,9 +124,10 @@ public class CombineArchiveUtil {
     }
 
     static URI getModelURI(Path path) {
-        if (path.endsWith(".pmf"))
+        String filename = path.getFileName().toString().toLowerCase();
+        if (filename.endsWith(".pmf"))
             return UriFactory.createSBMLURI();
-        if (path.endsWith(".pmfx") || path.endsWith(".fskx"))
+        if (filename.endsWith(".pmfx") || filename.endsWith(".fskx"))
             return UriFactory.createPMFURI();
         throw new IllegalArgumentException("Not supported file: " + path);
     }
