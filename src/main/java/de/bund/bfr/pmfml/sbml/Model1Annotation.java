@@ -71,9 +71,7 @@ public class Model1Annotation {
         metadataNode.addChild(new UncertaintyNode(uncertainties).getNode());
 
         // Builds reference nodes
-        for (final Reference reference : references) {
-            metadataNode.addChild(new ReferenceSBMLNode(reference).node);
-        }
+        references.forEach(ref -> metadataNode.addChild(new ReferenceSBMLNode(ref).node));
 
         // Builds condID node
         metadataNode.addChild(new CondIdNode(condID).node);

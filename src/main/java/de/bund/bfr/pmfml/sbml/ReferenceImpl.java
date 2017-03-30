@@ -16,6 +16,8 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +47,7 @@ public class ReferenceImpl implements Reference {
                          final ReferenceType referenceType, final String comment) {
 
         props = new HashMap<>(12);
-        if (author != null && !author.isEmpty()) {
+        if (StringUtils.isNotEmpty(author)) {
             props.put(AUTHOR, author);
         }
 
@@ -53,23 +55,23 @@ public class ReferenceImpl implements Reference {
             props.put(YEAR, year.toString());
         }
 
-        if (title != null && !title.isEmpty()) {
+        if (StringUtils.isNotEmpty(title)) {
             props.put(TITLE, title);
         }
 
-        if (abstractText != null && !abstractText.isEmpty()) {
+        if (StringUtils.isNotEmpty(abstractText)) {
             props.put(ABSTRACT_TEXT, abstractText);
         }
 
-        if (journal != null && !journal.isEmpty()) {
+        if (StringUtils.isNotEmpty(journal)) {
             props.put(JOURNAL, journal);
         }
 
-        if (volume != null && !volume.isEmpty()) {
+        if (StringUtils.isNotEmpty(volume)) {
             props.put(VOLUME, volume);
         }
 
-        if (issue != null && !issue.isEmpty()) {
+        if (StringUtils.isNotEmpty(issue)) {
             props.put(ISSUE, issue);
         }
 
@@ -81,7 +83,7 @@ public class ReferenceImpl implements Reference {
             props.put(APPROVAL_MODE, approvalMode.toString());
         }
 
-        if (website != null && !website.isEmpty()) {
+        if (StringUtils.isNotEmpty(website)) {
             props.put(WEBSITE, website);
         }
 
@@ -89,7 +91,7 @@ public class ReferenceImpl implements Reference {
             props.put(TYPE, referenceType.name());
         }
 
-        if (comment != null && !comment.isEmpty()) {
+        if (StringUtils.isNotEmpty(comment)) {
             props.put(COMMENT, comment);
         }
     }
@@ -147,18 +149,14 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public Integer getPage() {
-        if (props.containsKey(PAGE))
-            return Integer.parseInt(props.get(PAGE));
-        return null;
+        return props.containsKey(PAGE) ? Integer.parseInt(props.get(PAGE)) : null;
     }
 
     /**
      * {@inheritDoc}
      */
     public Integer getApprovalMode() {
-        if (props.containsKey(APPROVAL_MODE))
-            return Integer.parseInt(props.get(APPROVAL_MODE));
-        return null;
+        return props.containsKey(APPROVAL_MODE) ? Integer.parseInt(props.get(APPROVAL_MODE)) : null;
     }
 
     /**
@@ -172,9 +170,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public ReferenceType getType() {
-        if (props.containsKey(TYPE))
-            return ReferenceType.valueOf(props.get(TYPE));
-        return null;
+        return props.containsKey(TYPE) ? ReferenceType.valueOf(props.get(TYPE)) : null;
     }
 
     /**
@@ -188,7 +184,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setAuthor(final String author) {
-        if (author != null && !author.isEmpty()) {
+        if (StringUtils.isNotEmpty(author)) {
             props.put(AUTHOR, author);
         }
     }
@@ -211,7 +207,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setAbstractText(final String abstractText) {
-        if (abstractText != null && !abstractText.isEmpty()) {
+        if (StringUtils.isNotEmpty(abstractText)) {
             props.put(ABSTRACT_TEXT, abstractText);
         }
     }
@@ -220,7 +216,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setJournal(final String journal) {
-        if (journal != null && !journal.isEmpty()) {
+        if (StringUtils.isNotEmpty(journal)) {
             props.put(JOURNAL, journal);
         }
     }
@@ -229,7 +225,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setVolume(final String volume) {
-        if (volume != null && !volume.isEmpty()) {
+        if (StringUtils.isNotEmpty(volume)) {
             props.put(VOLUME, volume);
         }
     }
@@ -238,7 +234,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setIssue(final String issue) {
-        if (issue != null && !issue.isEmpty()) {
+        if (StringUtils.isNotEmpty(issue)) {
             props.put(ISSUE, issue);
         }
     }
@@ -261,7 +257,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setWebsite(final String website) {
-        if (website != null && !website.isEmpty()) {
+        if (StringUtils.isNotEmpty(website)) {
             props.put(WEBSITE, website);
         }
     }
@@ -279,7 +275,7 @@ public class ReferenceImpl implements Reference {
      * {@inheritDoc}
      */
     public void setComment(final String comment) {
-        if (comment != null && !comment.isEmpty()) {
+        if (StringUtils.isNotEmpty(comment)) {
             props.put(COMMENT, comment);
         }
     }

@@ -17,6 +17,7 @@
 package de.bund.bfr.pmfml.sbml;
 
 import de.bund.bfr.pmfml.ModelType;
+import org.apache.commons.lang3.StringUtils;
 import org.sbml.jsbml.Annotation;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
@@ -120,9 +121,9 @@ public class MetadataAnnotation {
         if (creatorNode != null) {
             final String[] tempStrings = creatorNode.getChild(0).getCharacters().split("\\.", 3);
 
-            metadata.setGivenName((tempStrings[0] == null) ? "" : tempStrings[0]);
-            metadata.setFamilyName((tempStrings[1] == null) ? "" : tempStrings[1]);
-            metadata.setContact((tempStrings[2] == null) ? "" : tempStrings[2]);
+            metadata.setGivenName(StringUtils.defaultString(tempStrings[0]));
+            metadata.setFamilyName(StringUtils.defaultString(tempStrings[1]));
+            metadata.setContact(StringUtils.defaultString(tempStrings[2]));
         }
 
         final XMLNode createdNode = pmfNode.getChildElement(CREATED_TAG, "");

@@ -16,6 +16,7 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.xml.XMLAttributes;
 import org.sbml.jsbml.xml.XMLNode;
@@ -201,7 +202,7 @@ public class PMFCompartmentImpl implements PMFCompartment {
      * {@inheritDoc}
      */
     public void setPMFCode(final String pmfCode) {
-        if (pmfCode != null && !pmfCode.isEmpty()) {
+        if (StringUtils.isNotEmpty(pmfCode)) {
             this.pmfCode = pmfCode;
         }
     }
@@ -210,7 +211,9 @@ public class PMFCompartmentImpl implements PMFCompartment {
      * {@inheritDoc}
      */
     public void setDetail(final String detail) {
-        this.detail = detail;
+        if (StringUtils.isNotEmpty(detail)) {
+            this.detail = detail;
+        }
     }
 
     /**

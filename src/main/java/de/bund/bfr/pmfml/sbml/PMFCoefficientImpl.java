@@ -16,12 +16,13 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import java.util.List;
-
+import org.apache.commons.lang3.StringUtils;
 import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.xml.XMLAttributes;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
+
+import java.util.List;
 
 /**
  * Coefficient that extends the SBML {@link Parameter} with more data: P, error,
@@ -285,7 +286,7 @@ public class PMFCoefficientImpl implements PMFCoefficient {
 
 	/** {@inheritDoc} */
 	public void setDescription(final String description) {
-		if (description != null && !description.isEmpty()) {
+		if (StringUtils.isNotEmpty(description)) {
 			this.desc = description;
 		}
 	}

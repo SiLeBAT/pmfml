@@ -16,6 +16,7 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
@@ -213,7 +214,7 @@ public class PMFSpeciesImpl implements PMFSpecies {
      * {@inheritDoc}
      */
     public void setCombaseCode(final String combaseCode) {
-        if (combaseCode != null && !combaseCode.isEmpty()) {
+        if (StringUtils.isNotEmpty(combaseCode)) {
             this.combaseCode = combaseCode;
         }
     }
@@ -222,7 +223,7 @@ public class PMFSpeciesImpl implements PMFSpecies {
      * {@inheritDoc}
      */
     public void setDetail(final String detail) {
-        if (detail != null && !detail.isEmpty()) {
+        if (StringUtils.isNotEmpty(detail)) {
             this.detail = detail;
         }
     }
@@ -231,7 +232,7 @@ public class PMFSpeciesImpl implements PMFSpecies {
      * {@inheritDoc}
      */
     public void setDescription(final String description) {
-        if (description != null && !description.isEmpty()) {
+        if (StringUtils.isNotEmpty(description)) {
             this.description = description;
         }
     }

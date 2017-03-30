@@ -17,6 +17,7 @@
 package de.bund.bfr.pmfml.sbml;
 
 import de.bund.bfr.pmfml.ModelType;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -99,35 +100,35 @@ public class MetadataImpl implements Metadata {
 
   /** {@inheritDoc} */
   public void setGivenName(final String givenName) {
-    if (givenName != null && !givenName.isEmpty()) {
+    if (StringUtils.isNotEmpty(givenName)) {
       props.put(GIVEN_NAME, givenName);
     }
   }
 
   /** {@inheritDoc} */
   public void setFamilyName(final String familyName) {
-    if (familyName != null && !familyName.isEmpty()) {
+    if (StringUtils.isNotEmpty(familyName)) {
       props.put(FAMILY_NAME, familyName);
     }
   }
 
   /** {@inheritDoc} */
   public void setContact(final String contact) {
-    if (contact != null && !contact.isEmpty()) {
+    if (StringUtils.isNotEmpty(contact)) {
       props.put(CONTACT, contact);
     }
   }
 
   /** {@inheritDoc} */
   public void setCreatedDate(final String createdDate) {
-    if (createdDate != null && !createdDate.isEmpty()) {
+    if (StringUtils.isNotEmpty(createdDate)) {
       props.put(CREATED_DATE, createdDate);
     }
   }
 
   /** {@inheritDoc} */
   public void setModifiedDate(final String modifiedDate) {
-    if (modifiedDate != null && !modifiedDate.isEmpty()) {
+    if (StringUtils.isNotEmpty(modifiedDate)) {
       props.put(MODIFIED_DATE, modifiedDate);
     }
   }
@@ -141,14 +142,14 @@ public class MetadataImpl implements Metadata {
 
   /** {@inheritDoc} */
   public void setRights(final String rights) {
-    if (rights != null && !rights.isEmpty()) {
+    if (StringUtils.isNotEmpty(rights)) {
       props.put(RIGHTS, rights);
     }
   }
 
   /** {@inheritDoc} */
   public void setReferenceLink(final String referenceLink) {
-    if (referenceLink != null && !referenceLink.isEmpty()) {
+    if (StringUtils.isNotEmpty(referenceLink)) {
       props.put(REFERENCE_LINK, referenceLink);
     }
   }

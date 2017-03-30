@@ -22,6 +22,7 @@ import de.bund.bfr.pmfml.sbml.RIS;
 import de.bund.bfr.pmfml.sbml.Reference;
 import de.bund.bfr.pmfml.sbml.ReferenceImpl;
 import de.bund.bfr.pmfml.sbml.ReferenceType;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -29,6 +30,7 @@ import org.w3c.dom.NodeList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Miguel Alba
@@ -64,7 +66,7 @@ public class ResultComponent {
     public ResultComponent(final String id, final TupleDescription dimensionDescription,
                            final Tuple[] dimensions) {
         strProps = new HashMap<>(9);
-        if (id != null && !id.isEmpty()) {
+        if (!StringUtils.isEmpty(id)) {
             strProps.put(ID, id);
         }
         this.dimensionDescription = dimensionDescription;
@@ -77,27 +79,27 @@ public class ResultComponent {
                            final String rights, final String notes, final Reference[] references,
                            final TupleDescription dimensionDescription, final Tuple[] dimensions) {
         strProps = new HashMap<>(9);
-        if (id != null && !id.isEmpty())
+        if (StringUtils.isNotEmpty(id))
             strProps.put(ID, id);
         if (condID != null)
             this.condID = condID;
-        if (combaseID != null && !combaseID.isEmpty())
+        if (StringUtils.isNotEmpty(combaseID))
             strProps.put(COMBASEID, combaseID);
-        if (creatorGivenName != null && !creatorGivenName.isEmpty())
+        if (StringUtils.isNotEmpty(creatorGivenName))
             strProps.put(CREATOR_GIVEN_NAME, creatorGivenName);
-        if (creatorFamilyName != null && !creatorFamilyName.isEmpty())
+        if (StringUtils.isNotEmpty(creatorFamilyName))
             strProps.put(CREATOR_FAMILY_NAME, creatorFamilyName);
-        if (creatorContact != null && !creatorContact.isEmpty())
+        if (StringUtils.isNotEmpty(creatorContact))
             strProps.put(CREATOR_CONTACT, creatorContact);
-        if (createdDate != null && !createdDate.isEmpty())
+        if (StringUtils.isNotEmpty(createdDate))
             strProps.put(CREATED_DATE, createdDate);
-        if (modifiedDate != null && !modifiedDate.isEmpty())
+        if (StringUtils.isNotEmpty(modifiedDate))
             strProps.put(MODIFIED_DATE, modifiedDate);
         if (modelType != null)
             this.modelType = modelType;
-        if (rights != null && !rights.isEmpty())
+        if (StringUtils.isNotEmpty(rights))
             strProps.put(RIGHTS, rights);
-        if (notes != null && !notes.isEmpty())
+        if (StringUtils.isNotEmpty(notes))
             this.notes = notes;
         if (references != null)
             this.references = references;
@@ -348,9 +350,8 @@ public class ResultComponent {
             return false;
 
         final ResultComponent other = (ResultComponent) obj;
-        return !(strProps != null && other.strProps != null && !strProps.equals(other.strProps)) &&
-                !(condID != null && other.condID != null && !condID.equals(other.condID)) &&
-                !(modelType != null && other.modelType != null && !modelType.equals(other.modelType));
+        return Objects.equals(strProps, other.strProps) && Objects.equals(condID, other.condID) && Objects.equals
+                (modelType, other.modelType);
     }
 
     public Element toNode(final Document doc) {

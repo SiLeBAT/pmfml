@@ -16,6 +16,8 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -55,9 +57,9 @@ public class UncertaintiesImpl implements Uncertainties {
     props = new HashMap<>(9);
     if (id != null)
       props.put(ID, id.toString());
-    if (modelName != null && !modelName.isEmpty())
+    if (StringUtils.isNotEmpty(modelName))
       props.put(MODEL_NAME, modelName);
-    if (comment != null && !comment.isEmpty())
+    if (StringUtils.isNotEmpty(comment))
       props.put(COMMENT, comment);
     if (r2 != null)
       props.put(R2, r2.toString());
@@ -125,14 +127,14 @@ public class UncertaintiesImpl implements Uncertainties {
 
   /** {@inheritDoc} */
   public void setModelName(final String modelName) {
-    if (modelName != null && !modelName.isEmpty()) {
+    if (StringUtils.isNotEmpty(modelName)) {
       props.put(MODEL_NAME, modelName);
     }
   }
 
   /** {@inheritDoc} */
   public void setComment(final String comment) {
-    if (comment != null && !comment.isEmpty()) {
+    if (StringUtils.isNotEmpty(comment)) {
       props.put(COMMENT, comment);
     }
   }

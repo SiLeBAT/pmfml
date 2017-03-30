@@ -19,15 +19,14 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sbml.jsbml.Compartment;
 
+import static org.junit.Assert.*;
+
 /**
  * @author Miguel Alba
- *
  */
 public class PMFCompartmentImplTest {
 	// <compartment id="Culture_medium" constant="true" name="Culture medium">
@@ -115,7 +114,7 @@ public class PMFCompartmentImplTest {
 		assertNull(compartment.getDetail());
 
 		// setDetail should ignore empty strings
-		compartment.setDetail(null);
+		compartment.setDetail("");
 		assertFalse(compartment.isSetDetail());
 		assertNull(compartment.getDetail());
 		
