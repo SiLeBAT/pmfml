@@ -17,7 +17,6 @@
 package de.bund.bfr.pmfml.file;
 
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.OneStepSecondaryModel;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import de.bund.bfr.pmfml.sbml.DataSourceNode;
@@ -58,16 +57,12 @@ public class OneStepSecondaryModelFile {
 
     private static final Logger LOGGER = Logger.getLogger("OneStepSecondaryModelFile");
 
-    private static final URI SBML_URI = UriFactory.createSBMLURI();
-    private static final URI PMF_URI = UriFactory.createPMFURI();
-    private static final URI NuML_URI = UriFactory.createNuMLURI();
-
     /**
      * @deprecated use {@link OneStepSecondaryModelFile#read(Path)} instead
      */
     @Deprecated
     public static List<OneStepSecondaryModel> readPMF(final File file) throws CombineArchiveException {
-        return read(file, SBML_URI);
+        return read(file, URIS.sbml);
     }
 
     /**
@@ -75,7 +70,7 @@ public class OneStepSecondaryModelFile {
      */
     @Deprecated
     public static List<OneStepSecondaryModel> readPMFX(final File file) throws CombineArchiveException {
-        return read(file, PMF_URI);
+        return read(file, URIS.pmf);
     }
 
     /**
@@ -87,7 +82,7 @@ public class OneStepSecondaryModelFile {
 
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmf";
-        write(new File(caName), SBML_URI, models);
+        write(new File(caName), URIS.sbml, models);
     }
 
     /**
@@ -99,7 +94,7 @@ public class OneStepSecondaryModelFile {
 
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmfx";
-        write(new File(caName), PMF_URI, models);
+        write(new File(caName), URIS.pmf, models);
     }
 
     /**
@@ -119,7 +114,7 @@ public class OneStepSecondaryModelFile {
 
             // Gets data entries
             Map<String, NuMLDocument> dataEntryMap = new HashMap<>();
-            for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(URIS.numl)) {
                 try {
                     NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
                     dataEntryMap.put(entry.getFileName(), doc);
@@ -184,7 +179,7 @@ public class OneStepSecondaryModelFile {
 
             // Gets data entries
             Map<String, NuMLDocument> dataEntryMap = new HashMap<>();
-            for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(URIS.numl)) {
                 try {
                     NuMLDocument doc = CombineArchiveUtil.readData(entry.getPath());
                     dataEntryMap.put(entry.getFileName(), doc);

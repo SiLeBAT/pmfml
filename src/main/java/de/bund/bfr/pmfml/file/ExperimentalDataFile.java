@@ -17,7 +17,6 @@
 package de.bund.bfr.pmfml.file;
 
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.ExperimentalData;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
@@ -32,7 +31,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
@@ -49,8 +47,6 @@ import java.util.logging.Logger;
 public class ExperimentalDataFile {
 
     private static Logger LOGGER = Logger.getLogger("ExperimentalDataFile");
-
-    private static final URI numlURI = UriFactory.createNuMLURI();
 
     private ExperimentalDataFile() {
     }
@@ -101,7 +97,7 @@ public class ExperimentalDataFile {
         try (CombineArchive ca = new CombineArchive(file)) {
             List<ExperimentalData> dataRecords = new ArrayList<>();
 
-            for (ArchiveEntry entry : ca.getEntriesWithFormat(numlURI)) {
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(URIS.numl)) {
                 String docName = entry.getFileName();
 
                 try {
@@ -172,7 +168,7 @@ public class ExperimentalDataFile {
         try (CombineArchive ca = new CombineArchive(path.toFile())) {
             List<ExperimentalData> dataRecords = new ArrayList<>();
 
-            for (ArchiveEntry entry : ca.getEntriesWithFormat(numlURI)) {
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(URIS.numl)) {
                 String docName = entry.getFileName();
 
                 try {

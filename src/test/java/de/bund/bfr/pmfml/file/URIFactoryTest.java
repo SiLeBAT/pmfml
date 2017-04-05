@@ -1,4 +1,4 @@
-/*******************************************************************************
+/***************************************************************************************************
  * Copyright (c) 2015 Federal Institute for Risk Assessment (BfR), Germany
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
@@ -13,28 +13,27 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  * Contributors: Department Biological Safety - BfR
- *******************************************************************************/
-package de.bund.bfr.pmfml.file.uri;
+ **************************************************************************************************/
+package de.bund.bfr.pmfml.file;
+
+import org.junit.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * Generic SBML URI
- * 
- * @author Miguel de Alba
- * @see <a href="http://co.mbine.org/specifications/sbml">http://co.mbine.org/
- *      specifications/sbml</a>
- */
-public class SbmlUri implements UriBase {
+import static org.junit.Assert.assertEquals;
 
-  public URI createURI() {
-	  
-	  try {
-		  return new URI("http://identifiers.org/combine/specifications/sbml");
-	  } catch (URISyntaxException error) {
-		  // should not occur - passed URL above is valid
-		  throw new RuntimeException(error);
-	  }
-  }
+/**
+ * @author Miguel Alba
+ */
+public class URIFactoryTest {
+
+    @Test
+    public void test() throws URISyntaxException {
+        assertEquals(new URI("https://raw.githubusercontent.com/NuML/NuML/master/NUMLSchema.xsd"),
+                URIS.numl);
+        assertEquals(new URI("http://identifiers.org/combine/specifications/sbml"), URIS.sbml);
+        assertEquals(new URI("http://sourceforge.net/projects/microbialmodelingexchange/files/"),
+                URIS.pmf);
+    }
 }

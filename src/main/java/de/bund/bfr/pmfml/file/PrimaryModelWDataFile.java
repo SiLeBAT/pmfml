@@ -18,7 +18,6 @@ package de.bund.bfr.pmfml.file;
 
 import de.binfalse.bflog.LOGGER;
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWData;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import de.bund.bfr.pmfml.sbml.DataSourceNode;
@@ -55,16 +54,12 @@ import java.util.stream.Collectors;
  */
 public class PrimaryModelWDataFile {
 
-    private static final URI SBML_URI = UriFactory.createSBMLURI();
-    private static final URI NUML_URI = UriFactory.createNuMLURI();
-    private static final URI PMF_URI = UriFactory.createPMFURI();
-
     /**
      * @deprecated use {@link PrimaryModelWDataFile#read(Path)} instead
      */
     @Deprecated
     public static List<PrimaryModelWData> readPMF(final File file) throws CombineArchiveException {
-        return read(file, SBML_URI);
+        return read(file, URIS.sbml);
     }
 
     /**
@@ -72,7 +67,7 @@ public class PrimaryModelWDataFile {
      */
     @Deprecated
     public static List<PrimaryModelWData> readPMFX(final File file) throws CombineArchiveException {
-        return read(file, PMF_URI);
+        return read(file, URIS.pmf);
     }
 
     /**
@@ -84,7 +79,7 @@ public class PrimaryModelWDataFile {
     public static void writePMF(final String dir, final String filename,
                                 final List<PrimaryModelWData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
-        write(new File(caName), SBML_URI, models);
+        write(new File(caName), URIS.sbml, models);
     }
 
     /**
@@ -96,7 +91,7 @@ public class PrimaryModelWDataFile {
     public static void writePMFX(final String dir, final String filename,
                                  final List<PrimaryModelWData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
-        write(new File(caName), PMF_URI, models);
+        write(new File(caName), URIS.pmf, models);
     }
 
     /**
@@ -113,7 +108,7 @@ public class PrimaryModelWDataFile {
         try (CombineArchive ca = new CombineArchive(file)) {
 
             // Gets data and model entries
-            List<ArchiveEntry> dataEntries = ca.getEntriesWithFormat(NUML_URI);
+            List<ArchiveEntry> dataEntries = ca.getEntriesWithFormat(URIS.numl);
             List<ArchiveEntry> modelEntries = ca.getEntriesWithFormat(modelURI);
 
             // define models
@@ -184,7 +179,7 @@ public class PrimaryModelWDataFile {
         try (CombineArchive ca = new CombineArchive(path.toFile())) {
 
             // Gets data and model entries
-            List<ArchiveEntry> dataEntries = ca.getEntriesWithFormat(NUML_URI);
+            List<ArchiveEntry> dataEntries = ca.getEntriesWithFormat(URIS.numl);
             List<ArchiveEntry> modelEntries = ca.getEntriesWithFormat(modelURI);
 
             // define models

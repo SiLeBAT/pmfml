@@ -18,9 +18,6 @@ package de.bund.bfr.pmfml.file;
 
 import de.binfalse.bflog.LOGGER;
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.file.uri.PmfUri;
-import de.bund.bfr.pmfml.file.uri.SbmlUri;
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.PrimaryModelWOData;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
@@ -49,15 +46,12 @@ import java.util.List;
  */
 public class PrimaryModelWODataFile {
 
-    private static final URI SBML_URI = UriFactory.createNuMLURI();
-    private static final URI PMF_URI = UriFactory.createPMFURI();
-
     /**
      * @deprecated use {@link PrimaryModelWODataFile#read(Path)} instead
      */
     @Deprecated
     public static List<PrimaryModelWOData> readPMF(final File file) throws CombineArchiveException {
-        return read(file, SBML_URI);
+        return read(file, URIS.sbml);
     }
 
     /**
@@ -65,7 +59,7 @@ public class PrimaryModelWODataFile {
      */
     @Deprecated
     public static List<PrimaryModelWOData> readPMFX(final File file) throws CombineArchiveException {
-        return read(file, PMF_URI);
+        return read(file, URIS.pmf);
     }
 
     /**
@@ -75,7 +69,7 @@ public class PrimaryModelWODataFile {
     public static void writePMF(final String dir, final String filename,
                                 final List<PrimaryModelWOData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
-        write(new File(caName), SBML_URI, models);
+        write(new File(caName), URIS.sbml, models);
     }
 
     /**
@@ -85,15 +79,15 @@ public class PrimaryModelWODataFile {
     public static void writePMFX(final String dir, final String filename,
                                  final List<PrimaryModelWOData> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
-        write(new File(caName), PMF_URI, models);
+        write(new File(caName), URIS.pmf, models);
     }
 
     /**
      * Reads primary models without data from a PMF or PMFX file. Faulty files are skipped.
      *
      * @param file
-     * @param modelURI URI used for the models: {@link PmfUri} or
-     *                 {@link SbmlUri}
+     * @param modelURI URI used for the models: {@link URIS#pmf} or
+     *                 {@link URIS#sbml}
      * @throws CombineArchiveException if the CombineArchive could not be opened or closed properly
      * @deprecated use {@link PrimaryModelWODataFile#read(Path)} instead
      */

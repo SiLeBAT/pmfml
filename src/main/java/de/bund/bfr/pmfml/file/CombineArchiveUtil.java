@@ -16,7 +16,6 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.file;
 
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import de.bund.bfr.pmfml.numl.NuMLReader;
 import de.bund.bfr.pmfml.numl.NuMLWriter;
@@ -42,8 +41,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 public class CombineArchiveUtil {
-
-    private static final URI numlURI = UriFactory.createNuMLURI();
 
     private static final SBMLReader READER = new SBMLReader();
     private static final SBMLWriter WRITER = new SBMLWriter();
@@ -104,7 +101,7 @@ public class CombineArchiveUtil {
         File tmpFile = File.createTempFile("tmp", ".numl");
         tmpFile.deleteOnExit();
         NuMLWriter.write(doc, tmpFile);
-        return archive.addEntry(tmpFile, docName, numlURI);
+        return archive.addEntry(tmpFile, docName, URIS.numl);
     }
 
     static SBMLDocument readModel(Path path) throws IOException, XMLStreamException {
@@ -126,9 +123,9 @@ public class CombineArchiveUtil {
     static URI getModelURI(Path path) {
         String filename = path.getFileName().toString().toLowerCase();
         if (filename.endsWith(".pmf"))
-            return UriFactory.createSBMLURI();
+            return URIS.sbml;
         if (filename.endsWith(".pmfx") || filename.endsWith(".fskx"))
-            return UriFactory.createPMFURI();
+            return URIS.pmf;
         throw new IllegalArgumentException("Not supported file: " + path);
     }
 }

@@ -17,7 +17,6 @@
 package de.bund.bfr.pmfml.file;
 
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.OneStepTertiaryModel;
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import de.bund.bfr.pmfml.sbml.DataSourceNode;
@@ -54,10 +53,6 @@ import java.util.logging.Logger;
  */
 public class OneStepTertiaryModelFile {
 
-    private static final URI SBML_URI = UriFactory.createSBMLURI();
-    private static final URI PMF_URI = UriFactory.createPMFURI();
-    private static final URI NuML_URI = UriFactory.createNuMLURI();
-
     private static Logger LOGGER = Logger.getLogger("OneStepTertiaryModelFile");
 
     /**
@@ -65,7 +60,7 @@ public class OneStepTertiaryModelFile {
      */
     @Deprecated
     public static List<OneStepTertiaryModel> readPMF(final File file) throws CombineArchiveException {
-        return read(file, SBML_URI);
+        return read(file, URIS.sbml);
     }
 
     /**
@@ -73,7 +68,7 @@ public class OneStepTertiaryModelFile {
      */
     @Deprecated
     public static List<OneStepTertiaryModel> readPMFX(final File file) throws CombineArchiveException {
-        return read(file, PMF_URI);
+        return read(file, URIS.pmf);
     }
 
     /**
@@ -83,7 +78,7 @@ public class OneStepTertiaryModelFile {
     public static void writePMF(final String dir, final String filename,
                                 final List<OneStepTertiaryModel> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmf";
-        write(new File(caName), SBML_URI, models);
+        write(new File(caName), URIS.sbml, models);
     }
 
     /**
@@ -93,7 +88,7 @@ public class OneStepTertiaryModelFile {
     public static void writePMFX(String dir, final String filename,
                                  final List<OneStepTertiaryModel> models) throws CombineArchiveException {
         String caName = dir + "/" + filename + ".pmfx";
-        write(new File(caName), PMF_URI, models);
+        write(new File(caName), URIS.pmf, models);
     }
 
     /**
@@ -114,7 +109,7 @@ public class OneStepTertiaryModelFile {
         try (CombineArchive ca = new CombineArchive(file)) {
 
             // Gets data entries
-            for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(URIS.numl)) {
                 String dataDocName = entry.getFileName();
                 try {
                     NuMLDocument dataDoc = CombineArchiveUtil.readData(entry.getPath());
@@ -204,7 +199,7 @@ public class OneStepTertiaryModelFile {
         try (CombineArchive ca = new CombineArchive(path.toFile())) {
 
             // Gets data entries
-            for (ArchiveEntry entry : ca.getEntriesWithFormat(NuML_URI)) {
+            for (ArchiveEntry entry : ca.getEntriesWithFormat(URIS.numl)) {
                 String dataDocName = entry.getFileName();
                 try {
                     NuMLDocument dataDoc = CombineArchiveUtil.readData(entry.getPath());

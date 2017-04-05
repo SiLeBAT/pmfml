@@ -17,7 +17,6 @@
 package de.bund.bfr.pmfml.file;
 
 import de.bund.bfr.pmfml.ModelType;
-import de.bund.bfr.pmfml.file.uri.UriFactory;
 import de.bund.bfr.pmfml.model.ManualTertiaryModel;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
@@ -49,9 +48,6 @@ import java.util.logging.Logger;
  */
 public class ManualTertiaryModelFile {
 
-    private static final URI SBML_URI = UriFactory.createSBMLURI();
-    private static final URI PMF_URI = UriFactory.createPMFURI();
-
     private static final Logger LOGGER = Logger.getLogger("ManualTertiaryModelFile");
 
     /**
@@ -59,7 +55,7 @@ public class ManualTertiaryModelFile {
      */
     @Deprecated
     public static List<ManualTertiaryModel> readPMF(final File file) throws CombineArchiveException {
-        return read(file, SBML_URI);
+        return read(file, URIS.sbml);
     }
 
     /**
@@ -67,7 +63,7 @@ public class ManualTertiaryModelFile {
      */
     @Deprecated
     public static List<ManualTertiaryModel> readPMFX(final File file) throws CombineArchiveException {
-        return read(file, PMF_URI);
+        return read(file, URIS.pmf);
     }
 
     /**
@@ -78,7 +74,7 @@ public class ManualTertiaryModelFile {
                                 final List<ManualTertiaryModel> models) throws CombineArchiveException {
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmf";
-        write(new File(caName), SBML_URI, models);
+        write(new File(caName), URIS.sbml, models);
     }
 
     /**
@@ -89,7 +85,7 @@ public class ManualTertiaryModelFile {
                                  final List<ManualTertiaryModel> models) throws CombineArchiveException {
         // Creates CombineArchive name
         String caName = dir + "/" + filename + ".pmfx";
-        write(new File(caName), PMF_URI, models);
+        write(new File(caName), URIS.pmf, models);
     }
 
     /**
