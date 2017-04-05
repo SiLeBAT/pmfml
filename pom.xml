@@ -5,6 +5,10 @@
     <artifactId>pmfml</artifactId>
     <version>0.0.11</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <distributionManagement>
         <repository>
             <id>bintray</id>
