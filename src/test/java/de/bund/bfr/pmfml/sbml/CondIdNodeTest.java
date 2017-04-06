@@ -35,5 +35,4 @@ public class CondIdNodeTest {
 	public void test() {
 		assertEquals(condId, new CondIdNode(new CondIdNode(condId).node).getCondId());
 	}
-
 }

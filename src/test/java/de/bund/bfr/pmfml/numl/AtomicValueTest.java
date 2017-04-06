@@ -19,15 +19,15 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Miguel Alba
@@ -58,7 +58,7 @@ public class AtomicValueTest {
 		assertEquals(timeValue, new AtomicValue(timeValue.toNode(doc)));
 		assertEquals(concValue, new AtomicValue(concValue.toNode(doc)));
 		
-		assertFalse(timeValue.equals(concValue));
+		assertNotEquals(timeValue, concValue);
 	}
 	
 	@Test

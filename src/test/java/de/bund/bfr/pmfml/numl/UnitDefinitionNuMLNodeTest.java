@@ -19,11 +19,6 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import de.bund.bfr.pmfml.sbml.PMFUnit;
 import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 import org.junit.Assert;
@@ -31,6 +26,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sbml.jsbml.Unit;
 import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * @author Miguel Alba

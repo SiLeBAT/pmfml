@@ -19,15 +19,15 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Miguel Alba
@@ -87,16 +87,18 @@ public class TupleTest {
 
 	@Test
 	public void testEquals() {
+		Tuple tuple = new Tuple(concValueA, timeValueA);
+
 		// Same concentration and time values
-		assertEquals(new Tuple(concValueA, timeValueA), new Tuple(concValueA, timeValueA));
+		assertEquals(tuple, tuple);
 
 		// Same concentration value and different time value
-		assertFalse(new Tuple(concValueA, timeValueA).equals(new Tuple(concValueA, timeValueB)));
+		assertNotEquals(tuple, new Tuple(concValueA, timeValueB));
 
 		// Different concentration value and same time value
-		assertFalse(new Tuple(concValueA, timeValueA).equals(new Tuple(concValueB, timeValueB)));
+		assertNotEquals(tuple, new Tuple(concValueB, timeValueB));
 
 		// Different concentration and time values
-		assertFalse(new Tuple(concValueA, timeValueA).equals(new Tuple(concValueB, timeValueB)));
+		assertNotEquals(tuple, new Tuple(concValueB, timeValueB));
 	}
 }

@@ -19,12 +19,7 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import de.bund.bfr.pmfml.sbml.PMFUnit;
 import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +27,11 @@ import org.junit.Test;
 import org.sbml.jsbml.Unit;
 import org.w3c.dom.Document;
 
-import de.bund.bfr.pmfml.sbml.PMFUnit;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Miguel Alba
@@ -89,7 +88,7 @@ public class TimeOntologyTest {
 		TimeOntology secondsOntology = new TimeOntology(secondsUnitDefinition);
 
 		assertEquals(hoursOntology, hoursOntology);
-		assertFalse(hoursOntology.equals(secondsOntology));
+		assertNotEquals(hoursOntology, secondsOntology);
 	}
 
 	@Test

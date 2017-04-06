@@ -19,73 +19,74 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Miguel Alba
  */
 public class TupleDescriptionTest {
 
-	private AtomicDescription timeDesc = new AtomicDescription("Time", "time");
-	private AtomicDescription concDesc = new AtomicDescription("concentration", "concentration");
-	private Document doc;
+    private AtomicDescription timeDesc = new AtomicDescription("Time", "time");
+    private AtomicDescription concDesc = new AtomicDescription("concentration", "concentration");
+    private Document doc;
 
-	@Before
-	public void setUp() {
-		try {
-			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    @Before
+    public void setUp() {
+        try {
+            doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	@Test
-	public void testNodes() {
-		TupleDescription td = new TupleDescription(concDesc, timeDesc);
-		assertEquals(td, new TupleDescription(td.toNode(doc)));
-	}
+    @Test
+    public void testNodes() {
+        TupleDescription td = new TupleDescription(concDesc, timeDesc);
+        assertEquals(td, new TupleDescription(td.toNode(doc)));
+    }
 
-	@Test
-	public void testGetters() {
-		TupleDescription td = new TupleDescription(concDesc, timeDesc);
-		assertEquals(concDesc, td.getConcentrationDescription());
-		assertEquals(timeDesc, td.getTimeDescription());
-	}
+    @Test
+    public void testGetters() {
+        TupleDescription td = new TupleDescription(concDesc, timeDesc);
+        assertEquals(concDesc, td.getConcentrationDescription());
+        assertEquals(timeDesc, td.getTimeDescription());
+    }
 
-	@Test
-	public void testEquals() {
-		AtomicDescription otherTimeDesc = new AtomicDescription("_Time", "_time");
-		AtomicDescription otherConcDesc = new AtomicDescription("_Conce", "_conc");
+    @Test
+    public void testEquals() {
+        AtomicDescription otherTimeDesc = new AtomicDescription("_Time", "_time");
+        AtomicDescription otherConcDesc = new AtomicDescription("_Conce", "_conc");
 
-		// Same concentration and time descriptions
-		assertEquals(new TupleDescription(concDesc, timeDesc), new TupleDescription(concDesc, timeDesc));
+        TupleDescription td = new TupleDescription(concDesc, timeDesc);
 
-		// Same concentration description and different time description
-		assertFalse(new TupleDescription(concDesc, timeDesc).equals(new TupleDescription(concDesc, otherTimeDesc)));
+        // Same concentration and time descriptions
+        assertEquals(td, td);
 
-		// Different concentration description and same time description
-		assertFalse(new TupleDescription(concDesc, timeDesc).equals(new TupleDescription(otherConcDesc, timeDesc)));
+        // Same concentration description and different time description
+        assertNotEquals(td, new TupleDescription(concDesc, otherTimeDesc));
 
-		// Different concentration and time descriptions
-		assertFalse(
-				new TupleDescription(concDesc, timeDesc).equals(new TupleDescription(otherConcDesc, otherTimeDesc)));
-	}
+        // Different concentration description and same time description
+        assertNotEquals(td, new TupleDescription(otherConcDesc, timeDesc));
 
-	@Test
-	public void testToString() {
-		TupleDescription td = new TupleDescription(concDesc, timeDesc);
-		String expectedString = String.format("TupleDescription [concentrationDescription=%s, timeDescription=%s]",
-				concDesc, timeDesc);
-		String obtainedString = td.toString();
-		assertEquals(expectedString, obtainedString);
-	}
+        // Different concentration and time descriptions
+        assertNotEquals(td, new TupleDescription(otherConcDesc, otherTimeDesc));
+    }
+
+    @Test
+    public void testToString() {
+        TupleDescription td = new TupleDescription(concDesc, timeDesc);
+        String expectedString = String.format("TupleDescription [concentrationDescription=%s, timeDescription=%s]",
+                concDesc, timeDesc);
+        String obtainedString = td.toString();
+        assertEquals(expectedString, obtainedString);
+    }
 }

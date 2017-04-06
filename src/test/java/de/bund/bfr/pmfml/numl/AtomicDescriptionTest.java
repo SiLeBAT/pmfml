@@ -27,7 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Miguel Alba
@@ -70,11 +70,11 @@ public class AtomicDescriptionTest {
 		// Same name and ontology term
 		assertEquals(concDesc, concDesc);
 		// Same name and different ontology term
-		assertFalse(timeDesc.equals(new AtomicDescription("time", "diff_ontology")));
+		assertNotEquals(timeDesc, new AtomicDescription("time", "diff_ontology"));
 		// Different name and same ontology term
-		assertFalse(timeDesc.equals(new AtomicDescription("diff_name", "time")));
+		assertNotEquals(timeDesc, new AtomicDescription("diff_name", "time"));
 		// Different name and ontology term
-		assertFalse(concDesc.equals(timeDesc));
+		assertNotEquals(concDesc, timeDesc);
 	}
 
 	@Test
