@@ -16,15 +16,14 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-import java.util.List;
-
+import de.bund.bfr.pmfml.numl.NuMLDocument;
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
 
-import de.bund.bfr.pmfml.numl.NuMLDocument;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -33,11 +32,11 @@ public class OneStepSecondaryModelTest {
 
   @Test
   public void test() {
-    final String modelDocName = "secModel.sbml";
-    final SBMLDocument modelDoc = ModelTestUtil.createDummyModel();
-    final List<String> dataDocNames = Arrays.asList("data.numl");
-    final List<NuMLDocument> dataDocs = Arrays.asList(ModelTestUtil.createDummyData());
-    final OneStepSecondaryModel model =
+    String modelDocName = "secModel.sbml";
+    SBMLDocument modelDoc = ModelTestUtil.createDummyModel();
+    List<String> dataDocNames = Collections.singletonList("data.numl");
+    List<NuMLDocument> dataDocs = Collections.singletonList(ModelTestUtil.createDummyData());
+    OneStepSecondaryModel model =
         new OneStepSecondaryModel(modelDocName, modelDoc, dataDocNames, dataDocs);
 
     assertEquals(modelDocName, model.getModelDocName());

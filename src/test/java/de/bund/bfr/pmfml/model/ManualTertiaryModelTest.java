@@ -16,13 +16,13 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -33,8 +33,8 @@ public class ManualTertiaryModelTest {
   public void test() {
     final SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
 
-    final List<String> secDocNames = Arrays.asList("secModel.sbml");
-    final List<SBMLDocument> secDocs = Arrays.asList(ModelTestUtil.createDummyModel());
+    List<String> secDocNames = Collections.singletonList("secModel.sbml");
+    List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
 
     final ManualTertiaryModel model =
         new ManualTertiaryModel("tertDoc.sbml", tertDoc, secDocNames, secDocs);

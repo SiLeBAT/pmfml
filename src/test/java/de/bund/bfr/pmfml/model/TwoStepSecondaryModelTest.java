@@ -16,13 +16,13 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
+
+import java.util.Collections;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -32,16 +32,16 @@ public class TwoStepSecondaryModelTest {
 
   @Test
   public void test() {
-    final SBMLDocument secModel = ModelTestUtil.createDummyModel();
-    final SBMLDocument primModelDoc = ModelTestUtil.createDummyModel();
-    final NuMLDocument primModelData = ModelTestUtil.createDummyData();
-    final PrimaryModelWData primModel =
+    SBMLDocument secModel = ModelTestUtil.createDummyModel();
+    SBMLDocument primModelDoc = ModelTestUtil.createDummyModel();
+    NuMLDocument primModelData = ModelTestUtil.createDummyData();
+    PrimaryModelWData primModel =
         new PrimaryModelWData("primModel.sbml", primModelDoc, "primModelData.numl", primModelData);
-    final TwoStepSecondaryModel model = new TwoStepSecondaryModel("secModel.sbml", secModel,
-        Arrays.asList(primModel));
+    TwoStepSecondaryModel model = new TwoStepSecondaryModel("secModel.sbml", secModel,
+            Collections.singletonList(primModel));
     
     assertEquals("secModel.sbml", model.getSecDocName());
     assertEquals(secModel, model.getSecDoc());
-    assertEquals(Arrays.asList(primModel), model.getPrimModels());
+    assertEquals(Collections.singletonList(primModel), model.getPrimModels());
   }
 }

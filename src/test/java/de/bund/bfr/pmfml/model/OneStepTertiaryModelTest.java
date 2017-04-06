@@ -16,14 +16,14 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-import java.util.List;
-
 import de.bund.bfr.pmfml.numl.NuMLDocument;
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -32,15 +32,15 @@ public class OneStepTertiaryModelTest {
 
   @Test
   public void test() {
-    final SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
+    SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
 
-    final List<String> secDocNames = Arrays.asList("secModel.sbml");
-    final List<SBMLDocument> secDocs = Arrays.asList(ModelTestUtil.createDummyModel());
+    List<String> secDocNames = Collections.singletonList("secModel.sbml");
+    List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
 
-    final List<String> dataDocNames = Arrays.asList("dataDoc.numl");
-    final List<NuMLDocument> dataDocs = Arrays.asList(ModelTestUtil.createDummyData());
+    List<String> dataDocNames = Collections.singletonList("dataDoc.numl");
+    List<NuMLDocument> dataDocs = Collections.singletonList(ModelTestUtil.createDummyData());
 
-    final OneStepTertiaryModel model = new OneStepTertiaryModel("tertDoc.sbml", tertDoc,
+    OneStepTertiaryModel model = new OneStepTertiaryModel("tertDoc.sbml", tertDoc,
         secDocNames, secDocs, dataDocNames, dataDocs);
 
     assertEquals("tertDoc.sbml", model.getTertiaryDocName());
