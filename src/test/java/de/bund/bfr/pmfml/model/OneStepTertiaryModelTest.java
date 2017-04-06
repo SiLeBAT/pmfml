@@ -30,24 +30,24 @@ import static org.junit.Assert.assertEquals;
  */
 public class OneStepTertiaryModelTest {
 
-  @Test
-  public void test() {
-    SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
+    @Test
+    public void test() {
+        SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
 
-    List<String> secDocNames = Collections.singletonList("secModel.sbml");
-    List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
+        List<String> secDocNames = Collections.singletonList("secModel.sbml");
+        List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
 
-    List<String> dataDocNames = Collections.singletonList("dataDoc.numl");
-    List<NuMLDocument> dataDocs = Collections.singletonList(ModelTestUtil.createDummyData());
+        List<String> dataDocNames = Collections.singletonList("dataDoc.numl");
+        List<NuMLDocument> dataDocs = Collections.singletonList(ModelTestUtil.createDummyData());
 
-    OneStepTertiaryModel model = new OneStepTertiaryModel("tertDoc.sbml", tertDoc,
-        secDocNames, secDocs, dataDocNames, dataDocs);
+        OneStepTertiaryModel model = new OneStepTertiaryModel("tertDoc.sbml", tertDoc,
+                secDocNames, secDocs, dataDocNames, dataDocs);
 
-    assertEquals("tertDoc.sbml", model.getTertiaryDocName());
-    assertEquals(tertDoc, model.getTertiaryDoc());
-    assertEquals(secDocNames, model.getSecDocNames());
-    assertEquals(secDocs, model.getSecDocs());
-    assertEquals(dataDocNames, model.getDataDocNames());
-    assertEquals(dataDocs, model.getDataDocs());
-  }
+        assertEquals("tertDoc.sbml", model.getTertiaryDocName());
+        assertEquals(tertDoc, model.getTertiaryDoc());
+        assertEquals(secDocNames, model.getSecDocNames());
+        assertEquals(secDocs, model.getSecDocs());
+        assertEquals(dataDocNames, model.getDataDocNames());
+        assertEquals(dataDocs, model.getDataDocs());
+    }
 }

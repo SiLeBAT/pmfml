@@ -16,23 +16,23 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
  */
 public class ManualSecondaryModelTest {
 
-  @Test
-  public void test() {
-    final String docName = "model.sbml";
-    final SBMLDocument doc = ModelTestUtil.createDummyModel();
-    final ManualSecondaryModel model = new ManualSecondaryModel(docName, doc);
-    
-    assertEquals(docName, model.getDocName());
-    assertEquals(doc, model.getDoc());
-  }
+    @Test
+    public void test() {
+        String docName = "model.sbml";
+        SBMLDocument doc = ModelTestUtil.createDummyModel();
+        ManualSecondaryModel model = new ManualSecondaryModel(docName, doc);
+
+        assertEquals(docName, model.getDocName());
+        assertEquals(doc, model.getDoc());
+    }
 }

@@ -29,10 +29,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class CondIdNodeTest {
 
-	private String condId = "1";
-
 	@Test
 	public void test() {
-		assertEquals(condId, new CondIdNode(new CondIdNode(condId).node).getCondId());
+		assertEquals("1", new CondIdNode(new CondIdNode("1").node).getCondId());
 	}
 }

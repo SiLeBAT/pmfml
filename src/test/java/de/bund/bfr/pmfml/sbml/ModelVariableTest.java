@@ -19,9 +19,10 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author Miguel Alba
@@ -49,8 +50,7 @@ public class ModelVariableTest {
 	@Test
 	public void testToString() {
 		ModelVariable aw = new ModelVariable("Water activity", null);
-		assertEquals(aw.toString(), "ModelVariable [name=Water activity]");
-		
-		assertEquals(pH.toString(), "ModelVariable [name=pH, value=5.630000]");
+		assertEquals("ModelVariable [name=Water activity]", aw.toString());
+		assertEquals("ModelVariable [name=pH, value=5.630000]", pH.toString());
 	}
 }

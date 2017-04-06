@@ -105,7 +105,7 @@ public class UncertaintiesImplTest {
 
 		uncert.setR2(0.996);
 		assertTrue(uncert.isSetR2());
-		assertTrue(Double.compare(0.996, uncert.getR2()) == 0);
+		assertEquals(0.996, uncert.getR2(), 0);
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class UncertaintiesImplTest {
 
 		uncert.setRMS(0.345);
 		assertTrue(uncert.isSetRMS());
-		assertTrue(Double.compare(0.345, uncert.getRMS()) == 0);
+		assertEquals(0.345, uncert.getRMS(), 0);
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class UncertaintiesImplTest {
 
 		uncert.setSSE(1.909);
 		assertTrue(uncert.isSetSSE());
-		assertTrue(Double.compare(1.909, uncert.getSSE()) == 0);
+		assertEquals(1.909, uncert.getSSE(), 0);
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class UncertaintiesImplTest {
 
 		uncert.setAIC(-32.997);
 		assertTrue(uncert.isSetAIC());
-		assertTrue(Double.compare(uncert.getAIC(), -32.997) == 0);
+		assertEquals(-32.997, uncert.getAIC(), 0);
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class UncertaintiesImplTest {
 
 		uncert.setBIC(34.994);
 		assertTrue(uncert.isSetBIC());
-		assertTrue(Double.compare(uncert.getBIC(), 34.994) == 0);
+		assertEquals(34.994, uncert.getBIC(), 0);
 	}
 
 	@Test
@@ -161,6 +161,6 @@ public class UncertaintiesImplTest {
 
 		uncert.setDOF(16);
 		assertTrue(uncert.isSetDOF());
-		assertTrue(uncert.getDOF() == 16);
+		assertTrue(16 == uncert.getDOF());
 	}
 }

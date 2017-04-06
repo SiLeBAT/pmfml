@@ -19,11 +19,11 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import de.bund.bfr.pmfml.ModelClass;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ModelRuleTest {
 
@@ -32,7 +32,7 @@ public class ModelRuleTest {
 	private String formula;
 	private ModelClass modelClass;
 	private int pmmlabID;
-	Reference[] references;
+	private Reference[] references;
 
 	@Before
 	public void setUp() {
@@ -97,21 +97,21 @@ public class ModelRuleTest {
 		ModelRule rule = new ModelRule(variable, formula, formulaName, modelClass, pmmlabID, references);
 		assertArrayEquals(references, rule.getReferences());
 
-		final String author = "Baranyi, J.";
-		final int year = 1994;
-		final String title = "A dynamic approach to predicting bacterial growth in food";
-		final String abstractText = "A new member ...";
-		final String journal = "International Journal of Food Microbiology";
-		final String volume = "23";
-		final String issue = "3";
-		final int page = 277;
-		final int approvalMode = 1;
-		final String website = "http://www.sciencedirect.com/science/article/pii/0168160594901570";
-		final ReferenceType type = ReferenceType.Paper;
-		final String comment = "improvised comment";
+		 String author = "Baranyi, J.";
+		 int year = 1994;
+		 String title = "A dynamic approach to predicting bacterial growth in food";
+		 String abstractText = "A new member ...";
+		 String journal = "International Journal of Food Microbiology";
+		 String volume = "23";
+		 String issue = "3";
+		 int page = 277;
+		 int approvalMode = 1;
+		 String website = "http://www.sciencedirect.com/science/article/pii/0168160594901570";
+		 ReferenceType type = ReferenceType.Paper;
+		 String comment = "improvised comment";
 		Reference otherRef = SBMLFactory.createReference(author, year, title, abstractText, journal, volume, issue, page, approvalMode, website, type, comment);
 		Reference[] otherRefs = new Reference[] { otherRef };
-		
+
 		rule.setReferences(otherRefs);
 		assertArrayEquals(otherRefs, rule.getReferences());
 	}

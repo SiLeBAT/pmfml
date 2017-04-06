@@ -16,19 +16,19 @@
  **************************************************************************************************/
 package de.bund.bfr.pmfml.model;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
 
+import static org.junit.Assert.assertEquals;
+
 public class PrimaryModelWODataTest {
 
-  @Test
-  public void test() {
-    final SBMLDocument doc = ModelTestUtil.createDummyModel();
-    final PrimaryModelWOData model = new PrimaryModelWOData("model.sbml", doc);
-    
-    assertEquals("model.sbml", model.getDocName());
-    assertEquals(doc, model.getDoc());
-  }
+    @Test
+    public void test() {
+        SBMLDocument doc = ModelTestUtil.createDummyModel();
+        PrimaryModelWOData model = new PrimaryModelWOData("model.sbml", doc);
+
+        assertEquals("model.sbml", model.getDocName());
+        assertEquals(doc, model.getDoc());
+    }
 }

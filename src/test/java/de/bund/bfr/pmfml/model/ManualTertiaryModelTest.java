@@ -29,19 +29,19 @@ import static org.junit.Assert.assertEquals;
  */
 public class ManualTertiaryModelTest {
 
-  @Test
-  public void test() {
-    final SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
+    @Test
+    public void test() {
+        SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
 
-    List<String> secDocNames = Collections.singletonList("secModel.sbml");
-    List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
+        List<String> secDocNames = Collections.singletonList("secModel.sbml");
+        List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
 
-    final ManualTertiaryModel model =
-        new ManualTertiaryModel("tertDoc.sbml", tertDoc, secDocNames, secDocs);
-    
-    assertEquals("tertDoc.sbml", model.getTertiaryDocName());
-    assertEquals(tertDoc, model.getTertiaryDoc());
-    assertEquals(secDocNames, model.getSecDocNames());
-    assertEquals(secDocs, model.getSecDocs());
-  }
+        ManualTertiaryModel model =
+                new ManualTertiaryModel("tertDoc.sbml", tertDoc, secDocNames, secDocs);
+
+        assertEquals("tertDoc.sbml", model.getTertiaryDocName());
+        assertEquals(tertDoc, model.getTertiaryDoc());
+        assertEquals(secDocNames, model.getSecDocNames());
+        assertEquals(secDocs, model.getSecDocs());
+    }
 }

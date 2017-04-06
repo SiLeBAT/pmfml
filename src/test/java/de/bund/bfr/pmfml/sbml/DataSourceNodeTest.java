@@ -19,21 +19,17 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
- *
  */
 public class DataSourceNodeTest {
-	
-	private String dataFile = "data.numl";
 
-	@Test
-	public void test() {
-		assertEquals(dataFile, new DataSourceNode(new DataSourceNode(dataFile).getNode()).getFile());
-	}
-
+    @Test
+    public void test() {
+        assertEquals("data.numl", new DataSourceNode(new DataSourceNode("data.numl").getNode()).getFile());
+    }
 }

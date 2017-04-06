@@ -34,11 +34,11 @@ public class CorrelationTest {
 
 	@Test
 	public void testAccesors() {
-		assertEquals(ph.getName(), "pH");
+		assertEquals("pH", ph.getName());
 		assertTrue(ph.isSetValue());
-		assertTrue(Double.compare(ph.getValue(), 5.63) == 0);
+		assertEquals(5.63, ph.getValue(), .0);
 		
-		assertEquals(aw.getName(), "aw");
+		assertEquals("aw", aw.getName());
 		assertFalse(aw.isSetValue());
 	}
 
@@ -50,6 +50,6 @@ public class CorrelationTest {
 	@Test
 	public void testEquals() {
 		assertEquals(ph, ph);
-		assertFalse(ph.equals(aw));
+		assertNotEquals(ph, aw);
 	}
 }

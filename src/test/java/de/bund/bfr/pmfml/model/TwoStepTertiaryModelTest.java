@@ -29,22 +29,22 @@ import static org.junit.Assert.assertEquals;
  */
 public class TwoStepTertiaryModelTest {
 
-  @Test
-  public void test() {
-    SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
+    @Test
+    public void test() {
+        SBMLDocument tertDoc = ModelTestUtil.createDummyModel();
 
-    List<String> secDocNames = Collections.singletonList("secModel.sbml");
-    List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
+        List<String> secDocNames = Collections.singletonList("secModel.sbml");
+        List<SBMLDocument> secDocs = Collections.singletonList(ModelTestUtil.createDummyModel());
 
-    List<PrimaryModelWData> primModels = Collections.singletonList(new PrimaryModelWData("primModel.sbml",
-            ModelTestUtil.createDummyModel(), "primModel.numl", ModelTestUtil.createDummyData()));
+        List<PrimaryModelWData> primModels = Collections.singletonList(new PrimaryModelWData("primModel.sbml",
+                ModelTestUtil.createDummyModel(), "primModel.numl", ModelTestUtil.createDummyData()));
 
-    TwoStepTertiaryModel model =
-        new TwoStepTertiaryModel("tertModel.sbml", tertDoc, primModels, secDocNames, secDocs);
-    assertEquals("tertModel.sbml", model.getTertDocName());
-    assertEquals(tertDoc, model.getTertDoc());
-    assertEquals(primModels, model.getPrimModels());
-    assertEquals(secDocNames, model.getSecDocNames());
-    assertEquals(secDocs, model.getSecDocs());
-  }
+        TwoStepTertiaryModel model =
+                new TwoStepTertiaryModel("tertModel.sbml", tertDoc, primModels, secDocNames, secDocs);
+        assertEquals("tertModel.sbml", model.getTertDocName());
+        assertEquals(tertDoc, model.getTertDoc());
+        assertEquals(primModels, model.getPrimModels());
+        assertEquals(secDocNames, model.getSecDocNames());
+        assertEquals(secDocs, model.getSecDocs());
+    }
 }

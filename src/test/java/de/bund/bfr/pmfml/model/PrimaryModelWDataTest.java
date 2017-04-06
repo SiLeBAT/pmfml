@@ -24,16 +24,16 @@ import static org.junit.Assert.assertEquals;
 
 public class PrimaryModelWDataTest {
 
-  @Test
-  public void test() {
-    final SBMLDocument modelDoc = ModelTestUtil.createDummyModel();
-    final NuMLDocument dataDoc = ModelTestUtil.createDummyData();
-    final PrimaryModelWData model =
-        new PrimaryModelWData("model.sbml", modelDoc, "data.numl", dataDoc);
+    @Test
+    public void test() {
+        SBMLDocument modelDoc = ModelTestUtil.createDummyModel();
+        NuMLDocument dataDoc = ModelTestUtil.createDummyData();
+        PrimaryModelWData model =
+                new PrimaryModelWData("model.sbml", modelDoc, "data.numl", dataDoc);
 
-    assertEquals("model.sbml", model.getModelDocName());
-    assertEquals(modelDoc, model.getModelDoc());
-    assertEquals("data.numl", model.getDataDocName());
-    assertEquals(dataDoc, model.getDataDoc());
-  }
+        assertEquals("model.sbml", model.getModelDocName());
+        assertEquals(modelDoc, model.getModelDoc());
+        assertEquals("data.numl", model.getDataDocName());
+        assertEquals(dataDoc, model.getDataDoc());
+    }
 }

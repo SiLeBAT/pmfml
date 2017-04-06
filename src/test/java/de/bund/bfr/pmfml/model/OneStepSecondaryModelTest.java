@@ -30,18 +30,18 @@ import static org.junit.Assert.assertEquals;
  */
 public class OneStepSecondaryModelTest {
 
-  @Test
-  public void test() {
-    String modelDocName = "secModel.sbml";
-    SBMLDocument modelDoc = ModelTestUtil.createDummyModel();
-    List<String> dataDocNames = Collections.singletonList("data.numl");
-    List<NuMLDocument> dataDocs = Collections.singletonList(ModelTestUtil.createDummyData());
-    OneStepSecondaryModel model =
-        new OneStepSecondaryModel(modelDocName, modelDoc, dataDocNames, dataDocs);
+    @Test
+    public void test() {
+        String modelDocName = "secModel.sbml";
+        SBMLDocument modelDoc = ModelTestUtil.createDummyModel();
+        List<String> dataDocNames = Collections.singletonList("data.numl");
+        List<NuMLDocument> dataDocs = Collections.singletonList(ModelTestUtil.createDummyData());
+        OneStepSecondaryModel model =
+                new OneStepSecondaryModel(modelDocName, modelDoc, dataDocNames, dataDocs);
 
-    assertEquals(modelDocName, model.getModelDocName());
-    assertEquals(modelDoc, model.getModelDoc());
-    assertEquals(dataDocNames, model.getDataDocNames());
-    assertEquals(dataDocs, model.getDataDocs());
-  }
+        assertEquals(modelDocName, model.getModelDocName());
+        assertEquals(modelDoc, model.getModelDoc());
+        assertEquals(dataDocNames, model.getDataDocNames());
+        assertEquals(dataDocs, model.getDataDocs());
+    }
 }

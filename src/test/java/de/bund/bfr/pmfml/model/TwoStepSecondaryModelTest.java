@@ -26,22 +26,21 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
- *
  */
 public class TwoStepSecondaryModelTest {
 
-  @Test
-  public void test() {
-    SBMLDocument secModel = ModelTestUtil.createDummyModel();
-    SBMLDocument primModelDoc = ModelTestUtil.createDummyModel();
-    NuMLDocument primModelData = ModelTestUtil.createDummyData();
-    PrimaryModelWData primModel =
-        new PrimaryModelWData("primModel.sbml", primModelDoc, "primModelData.numl", primModelData);
-    TwoStepSecondaryModel model = new TwoStepSecondaryModel("secModel.sbml", secModel,
-            Collections.singletonList(primModel));
-    
-    assertEquals("secModel.sbml", model.getSecDocName());
-    assertEquals(secModel, model.getSecDoc());
-    assertEquals(Collections.singletonList(primModel), model.getPrimModels());
-  }
+    @Test
+    public void test() {
+        SBMLDocument secModel = ModelTestUtil.createDummyModel();
+        SBMLDocument primModelDoc = ModelTestUtil.createDummyModel();
+        NuMLDocument primModelData = ModelTestUtil.createDummyData();
+        PrimaryModelWData primModel =
+                new PrimaryModelWData("primModel.sbml", primModelDoc, "primModelData.numl", primModelData);
+        TwoStepSecondaryModel model = new TwoStepSecondaryModel("secModel.sbml", secModel,
+                Collections.singletonList(primModel));
+
+        assertEquals("secModel.sbml", model.getSecDocName());
+        assertEquals(secModel, model.getSecDoc());
+        assertEquals(Collections.singletonList(primModel), model.getPrimModels());
+    }
 }

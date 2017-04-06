@@ -19,23 +19,17 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import de.bund.bfr.pmfml.sbml.ModelVariable;
-import de.bund.bfr.pmfml.sbml.PMFSpeciesImpl;
-import de.bund.bfr.pmfml.sbml.PMFUnit;
-import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
+import de.bund.bfr.pmfml.sbml.*;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sbml.jsbml.Unit;
 import org.w3c.dom.Document;
 
-import de.bund.bfr.pmfml.sbml.PMFCompartmentImpl;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -62,19 +56,16 @@ public class ConcentrationOntologyTest {
 
 		String compartmentId = "culture_broth_broth_culture_culture_medium";
 		String compartmentName = "culture broth, broth culture, culture medium";
-		String pmfCode = null;
 		String compartmentDetail = "broth";
 		ModelVariable[] modelVariables = new ModelVariable[] { new ModelVariable("Temperature", 10.0),
 				new ModelVariable("pH", 5.63) };
-		compartment = new PMFCompartmentImpl(compartmentId, compartmentName, pmfCode, compartmentDetail, modelVariables);
+		compartment = new PMFCompartmentImpl(compartmentId, compartmentName, null, compartmentDetail, modelVariables);
 
 		String speciesId = "species4024";
 		String speciesName = "salmonella spp";
-		String combaseCode = null;
 		String speciesDetail = "Salmonella spec";
-		String depDesc = null;
-		species = new PMFSpeciesImpl(compartmentId, speciesId, speciesName, unitDefinition.getId(), combaseCode,
-				speciesDetail, depDesc);
+		species = new PMFSpeciesImpl(compartmentId, speciesId, speciesName, unitDefinition.getId(), null,
+				speciesDetail, null);
 	}
 
 	@After
@@ -88,7 +79,7 @@ public class ConcentrationOntologyTest {
 	public void testGetters() {
 		ConcentrationOntology concOntology = new ConcentrationOntology(unitDefinition, compartment, species);
 		assertEquals(concOntology.getUnitDefinition(), unitDefinition);
-		Assert.assertEquals(concOntology.getCompartment(), compartment);
+		assertEquals(concOntology.getCompartment(), compartment);
 		assertEquals(concOntology.getSpecies(), species);
 	}
 

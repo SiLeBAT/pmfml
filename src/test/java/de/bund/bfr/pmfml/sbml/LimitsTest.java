@@ -19,10 +19,9 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -33,9 +32,9 @@ public class LimitsTest {
 
 	@Test
 	public void testAccesors() {
-		assertEquals(limits.getVar(), "Temperature");
-		assertTrue(Double.compare(limits.getMin(), 65.0) == 0);
-		assertTrue(Double.compare(limits.getMax(), 80.0) == 0);
+		assertEquals("Temperature", limits.getVar());
+		assertEquals(65.0, limits.getMin(), 0);
+		assertEquals(80.0, limits.getMax(), 0);
 	}
 	
 	@Test

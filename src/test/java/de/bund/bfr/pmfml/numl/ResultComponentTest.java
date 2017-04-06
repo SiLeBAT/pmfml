@@ -19,19 +19,8 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.numl;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import de.bund.bfr.pmfml.ModelType;
+import de.bund.bfr.pmfml.sbml.Reference;
 import de.bund.bfr.pmfml.sbml.ReferenceImpl;
 import de.bund.bfr.pmfml.sbml.ReferenceType;
 import org.junit.Assert;
@@ -39,7 +28,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import de.bund.bfr.pmfml.sbml.Reference;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Miguel Alba
@@ -101,25 +94,25 @@ public class ResultComponentTest {
 
 	@Test
 	public void testIdAccesor() {
-		ResultComponent rc = new ResultComponent("exp1", tupleDescription, tuples);
+		ResultComponent rc = new ResultComponent(id, tupleDescription, tuples);
 		assertEquals(rc.getID(), id);
 	}
 
 	@Test
 	public void testCondIdAccessors() {
-		ResultComponent rc = new ResultComponent("exp1", tupleDescription, tuples);
+		ResultComponent rc = new ResultComponent(id, tupleDescription, tuples);
 
 		assertFalse(rc.isSetCondID());
 		assertNull(rc.getCondID());
-		rc.setCondID(1);
-		assertTrue(1 == rc.getCondID());
+		rc.setCondID(condId);
+		assertTrue(condId == rc.getCondID());
 		assertNotNull(rc.getCondID());
 		assertTrue(rc.isSetCondID());
 	}
 
 	@Test
 	public void testCombaseIdAccesors() {
-		ResultComponent rc = new ResultComponent("exp1", tupleDescription, tuples);
+		ResultComponent rc = new ResultComponent(id, tupleDescription, tuples);
 
 		assertFalse(rc.isSetCombaseID());
 		assertNull(rc.getCombaseID());

@@ -19,22 +19,21 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Miguel Alba
- *
  */
 public class GlobalModelIdNodeTest {
 
-	int globalModelId = 2;
+    @Test
+    public void test() {
+        int globalModelId = 2;
 
-	@Test
-	public void test() {
-		GlobalModelIdNode nodeFromId = new GlobalModelIdNode(globalModelId);
-		GlobalModelIdNode nodeFromOtherNode = new GlobalModelIdNode(nodeFromId.getNode());
-		assertTrue(globalModelId == nodeFromOtherNode.getGlobalModelId());
-	}
+        GlobalModelIdNode nodeFromId = new GlobalModelIdNode(globalModelId);
+        GlobalModelIdNode nodeFromOtherNode = new GlobalModelIdNode(nodeFromId.getNode());
+        assertTrue(globalModelId == nodeFromOtherNode.getGlobalModelId());
+    }
 }

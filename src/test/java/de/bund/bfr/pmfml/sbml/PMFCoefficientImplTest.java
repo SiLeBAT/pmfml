@@ -19,21 +19,17 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Miguel Alba
  */
 public class PMFCoefficientImplTest {
 
-	private double P = 0.006;
-	private double error = 0.471;
-	private double t = 3.101;
 	private Correlation[] correlations = new Correlation[] { new Correlation("h0", 0.221),
 			new Correlation("Y0", 0.124) };
-	private String description = "physiological state of the microorganism";
 
 	@Test
 	public void testIdAccesors() {
@@ -68,9 +64,9 @@ public class PMFCoefficientImplTest {
 		assertFalse(h0.isSetP());
 		assertNull(h0.getP());
 
-		h0.setP(P);
+		h0.setP(0.006);
 		assertTrue(h0.isSetP());
-		assertEquals(P, h0.getP(), 0.0);
+		assertEquals(0.006, h0.getP(), 0.0);
 	}
 
 	@Test
@@ -79,9 +75,9 @@ public class PMFCoefficientImplTest {
 		assertFalse(h0.isSetError());
 		assertNull(h0.getError());
 
-		h0.setError(error);
+		h0.setError(0.471);
 		assertTrue(h0.isSetError());
-		assertEquals(error, h0.getError(), 0.0);
+		assertEquals(0.471, h0.getError(), 0.0);
 	}
 
 	@Test
@@ -90,9 +86,9 @@ public class PMFCoefficientImplTest {
 		assertFalse(h0.isSetT());
 		assertNull(h0.getT());
 
-		h0.setT(t);
+		h0.setT(3.101);
 		assertTrue(h0.isSetT());
-		assertEquals(t, h0.getT(), 0.0);
+		assertEquals(3.101, h0.getT(), 0.0);
 	}
 
 	@Test
@@ -129,8 +125,8 @@ public class PMFCoefficientImplTest {
 		assertNull(h0.getDescription());
 
 		// setDescription should accept non-empty strings
-		h0.setDescription(description);
+		h0.setDescription("physiological state of the microorganism");
 		assertTrue(h0.isSetDescription());
-		assertEquals(description, h0.getDescription());
+		assertEquals("physiological state of the microorganism", h0.getDescription());
 	}
 }
