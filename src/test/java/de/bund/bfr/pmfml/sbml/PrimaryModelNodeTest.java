@@ -19,23 +19,19 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
- *
  */
 public class PrimaryModelNodeTest {
 	
-	String modelName = "model.sbml";
-
 	@Test
 	public void test() {
-		PrimaryModelNode nodeFromModel = new PrimaryModelNode(modelName);
+		PrimaryModelNode nodeFromModel = new PrimaryModelNode("model.sbml");
 		PrimaryModelNode nodeFromOtherNode = new PrimaryModelNode(nodeFromModel.getNode());
-		assertEquals(modelName, nodeFromOtherNode.getPrimaryModel());
+		assertEquals("model.sbml", nodeFromOtherNode.getPrimaryModel());
 	}
-
 }

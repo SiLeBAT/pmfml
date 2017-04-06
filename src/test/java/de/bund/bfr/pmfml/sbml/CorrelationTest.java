@@ -19,11 +19,9 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Miguel Alba
@@ -54,5 +52,4 @@ public class CorrelationTest {
 		assertEquals(ph, ph);
 		assertFalse(ph.equals(aw));
 	}
-
 }

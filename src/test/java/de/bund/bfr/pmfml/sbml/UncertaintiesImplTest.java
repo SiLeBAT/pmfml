@@ -19,24 +19,14 @@
  *******************************************************************************/
 package de.bund.bfr.pmfml.sbml;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Miguel Alba
  */
 public class UncertaintiesImplTest {
-
-	private final int id = 101;
-	private final String modelName = "BacillusCereus_CultureMedium";
-	private final String comment = "uncertainties";
-	private final double r2 = 0.996;
-	private final double rms = 0.345;
-	private final double sse = 1.909;
-	private final double aic = -32.997;
-	private final double bic = -34.994;
-	private final int dof = 16;
 
 	@Test
 	public void testIdAccesors() {
@@ -45,9 +35,9 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetID());
 		assertNull(uncert.getID());
 
-		uncert.setID(id);
+		uncert.setID(101);
 		assertTrue(uncert.isSetID());
-		assertTrue(id == uncert.getID());
+		assertTrue(101 == uncert.getID());
 	}
 
 	@Test
@@ -73,9 +63,9 @@ public class UncertaintiesImplTest {
 		assertNull(uncert.getModelName());
 
 		// setModelName should accept non-empty strings
-		uncert.setModelName(modelName);
+		uncert.setModelName("BacillusCereus_CultureMedium");
 		assertTrue(uncert.isSetModelName());
-		assertEquals(uncert.getModelName(), modelName);
+		assertEquals("BacillusCereus_CultureMedium", uncert.getModelName());
 	}
 
 	@Test
@@ -101,9 +91,9 @@ public class UncertaintiesImplTest {
 		assertNull(uncert.getComment());
 
 		// setComment should accept non-empty strings
-		uncert.setComment(comment);
+		uncert.setComment("uncertainties");
 		assertTrue(uncert.isSetComment());
-		assertEquals(uncert.getComment(), comment);
+		assertEquals("uncertainties", uncert.getComment());
 	}
 
 	@Test
@@ -113,9 +103,9 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetR2());
 		assertNull(uncert.getR2());
 
-		uncert.setR2(r2);
+		uncert.setR2(0.996);
 		assertTrue(uncert.isSetR2());
-		assertTrue(Double.compare(uncert.getR2(), r2) == 0);
+		assertTrue(Double.compare(0.996, uncert.getR2()) == 0);
 	}
 
 	@Test
@@ -125,9 +115,9 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetRMS());
 		assertNull(uncert.getRMS());
 
-		uncert.setRMS(rms);
+		uncert.setRMS(0.345);
 		assertTrue(uncert.isSetRMS());
-		assertTrue(Double.compare(uncert.getRMS(), rms) == 0);
+		assertTrue(Double.compare(0.345, uncert.getRMS()) == 0);
 	}
 
 	@Test
@@ -136,9 +126,9 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetSSE());
 		assertNull(uncert.getSSE());
 
-		uncert.setSSE(sse);
+		uncert.setSSE(1.909);
 		assertTrue(uncert.isSetSSE());
-		assertTrue(Double.compare(uncert.getSSE(), sse) == 0);
+		assertTrue(Double.compare(1.909, uncert.getSSE()) == 0);
 	}
 
 	@Test
@@ -147,9 +137,9 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetAIC());
 		assertNull(uncert.getAIC());
 
-		uncert.setAIC(aic);
+		uncert.setAIC(-32.997);
 		assertTrue(uncert.isSetAIC());
-		assertTrue(Double.compare(uncert.getAIC(), aic) == 0);
+		assertTrue(Double.compare(uncert.getAIC(), -32.997) == 0);
 	}
 
 	@Test
@@ -158,9 +148,9 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetBIC());
 		assertNull(uncert.getBIC());
 
-		uncert.setBIC(bic);
+		uncert.setBIC(34.994);
 		assertTrue(uncert.isSetBIC());
-		assertTrue(Double.compare(uncert.getBIC(), bic) == 0);
+		assertTrue(Double.compare(uncert.getBIC(), 34.994) == 0);
 	}
 
 	@Test
@@ -169,8 +159,8 @@ public class UncertaintiesImplTest {
 		assertFalse(uncert.isSetDOF());
 		assertNull(uncert.getDOF());
 
-		uncert.setDOF(dof);
+		uncert.setDOF(16);
 		assertTrue(uncert.isSetDOF());
-		assertTrue(uncert.getDOF() == dof);
+		assertTrue(uncert.getDOF() == 16);
 	}
 }
