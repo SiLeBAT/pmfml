@@ -21,7 +21,6 @@ package de.bund.bfr.pmfml.numl;
 
 import de.bund.bfr.pmfml.sbml.PMFUnit;
 import de.bund.bfr.pmfml.sbml.PMFUnitDefinition;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sbml.jsbml.Unit;
@@ -29,6 +28,8 @@ import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Miguel Alba
@@ -54,8 +55,7 @@ public class UnitDefinitionNuMLNodeTest {
 	@Test
 	public void test() {
 		UnitDefinitionNuMLNode unitDefNode = new UnitDefinitionNuMLNode(unitDefinition, doc);
-		Assert.assertEquals(unitDefinition, unitDefNode.toPMFUnitDefinition());
-		Assert.assertEquals(unitDefinition, new UnitDefinitionNuMLNode(unitDefNode.node).toPMFUnitDefinition());
+		assertEquals(unitDefinition, unitDefNode.toPMFUnitDefinition());
+		assertEquals(unitDefinition, new UnitDefinitionNuMLNode(unitDefNode.node).toPMFUnitDefinition());
 	}
-
 }
