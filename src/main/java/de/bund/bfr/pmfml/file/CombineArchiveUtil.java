@@ -22,6 +22,7 @@ import de.bund.bfr.pmfml.numl.NuMLWriter;
 import de.unirostock.sems.cbarchive.ArchiveEntry;
 import de.unirostock.sems.cbarchive.CombineArchive;
 import de.unirostock.sems.cbarchive.CombineArchiveException;
+import org.apache.commons.io.FileUtils;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
@@ -36,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -130,20 +132,22 @@ public class CombineArchiveUtil {
     }
 
     static ArchiveEntry addReadme(CombineArchive archive) throws IOException {
-        File tmpREADME = File.createTempFile("readme", ".txt");
 
         String readme = "The model is made available in the PMF-ML format, i.e. as .pmfx file. To execute the model " +
                 "or to perform model-based predictions it is recommended to use the software PMM-Lab. PMM-Lab is an " +
                 "open-source extension of the open-source data analytics platform KNIME. To install PMM-Lab follow " +
                 "the installation instructions available at: https://foodrisklabs.bfr.bund.de/pmm-lab_de\n" +
                 "Once PMM-Lab is installed a new KNIME workflow should be created and the “PMF Reader” node should " +
-                "be dragged into it. This “PMF Reader” node can be configured to read in the given “.pmfx” file. To " +
-                "perform a model-based prediction connect the out-port of the “PMF Reader” node with the " +
-                "“Predictor View” and use the node specific configuration user interface (GUI) to select the " +
+                "be dragged into it. This \"PMF Reader\" node can be configured to read in the given \".pmfx\" file. To " +
+                "perform a model-based prediction connect the out-port of the \"PMF Reader\" node with the " +
+                "\"Predictor View\" and use the node specific configuration user interface (GUI) to select the " +
                 "desired simulation parameters, e.g. temperature. Results of model-based predictions are given " +
-                "instantly in the nodes GUI while changing the input parameters. After closing the node’s GUI and " +
+                "instantly in the nodes GUI while changing the input parameters. After closing the node's GUI and " +
                 "execution of the node the prediction results are also available at the out-port as XML object in " +
-                "the column “Data”.";
+                "the column \"Data\".";
+
+        File tmpREADME = File.createTempFile("readme", ".txt");
+        FileUtils.writeStringToFile(tmpREADME, readme, "UTF-8");
 
         ArchiveEntry entry = archive.addEntry(tmpREADME, "readme.txt", URIS.txt);
         tmpREADME.delete();
