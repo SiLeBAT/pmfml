@@ -16,24 +16,12 @@ public class URIS {
      * COMBINE has no official support for NuML, so it has no identifier for NuML.
      * NuML's schema is used instead.
      */
-    public static final URI numl;
+    public static final URI numl = URI.create("https://raw.githubusercontent.com/NuML/NuML/master/NUMLSchema.xsd");
 
     /** Generic SBML URI */
-    public static final URI sbml;
+    public static final URI sbml = URI.create("http://identifiers.org/combine/specifications/sbml");
 
-    public static final URI pmf;
+    public static final URI pmf = URI.create("http://sourceforge.net/projects/microbialmodelingexchange/files/");
 
-    public static final URI txt;
-
-    static {
-        try {
-            numl = new URI("https://raw.githubusercontent.com/NuML/NuML/master/NUMLSchema.xsd");
-            pmf = new URI("http://sourceforge.net/projects/microbialmodelingexchange/files/");
-            sbml = new URI("http://identifiers.org/combine/specifications/sbml");
-            txt = new URI("http://purl.org/NET/mediatypes/text-xplain");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-
-    }
+    public static final URI txt = URI.create("http://purl.org/NET/mediatypes/text-xplain");
 }
