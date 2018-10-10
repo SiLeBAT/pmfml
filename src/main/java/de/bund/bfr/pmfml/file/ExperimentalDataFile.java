@@ -148,6 +148,8 @@ public class ExperimentalDataFile {
             Element metadataAnnotation = new PMFMetadataNode(ModelType.EXPERIMENTAL_DATA, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(metadataAnnotation));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
         } catch (Exception e) {
             file.delete();  // Removes faulty file
@@ -215,6 +217,8 @@ public class ExperimentalDataFile {
 
             Element metadataAnnotation = new PMFMetadataNode(ModelType.EXPERIMENTAL_DATA, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(metadataAnnotation));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
         } catch (Exception e) {

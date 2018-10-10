@@ -189,6 +189,8 @@ public class PrimaryModelWODataFile {
             Element annot = new PMFMetadataNode(ModelType.PRIMARY_MODEL_WODATA, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
 
         } catch (Exception e) {
@@ -223,6 +225,8 @@ public class PrimaryModelWODataFile {
                 // Adds description with model type
                 Element annot = new PMFMetadataNode(ModelType.PRIMARY_MODEL_WODATA, Collections.emptySet()).node;
                 ca.addDescription(new DefaultMetaDataObject(annot));
+
+                CombineArchiveUtil.addReadme(ca);
 
                 ca.pack();
             }

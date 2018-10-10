@@ -364,6 +364,8 @@ public class TwoStepTertiaryModelFile {
             Element annot = new PMFMetadataNode(ModelType.TWO_STEP_TERTIARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
         } catch (Exception e) {
             file.delete();  // Removes faulty file
@@ -434,6 +436,8 @@ public class TwoStepTertiaryModelFile {
             // Adds description with model type
             Element annot = new PMFMetadataNode(ModelType.TWO_STEP_TERTIARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
         } catch (Exception e) {

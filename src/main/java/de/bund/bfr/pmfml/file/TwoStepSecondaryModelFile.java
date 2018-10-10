@@ -346,6 +346,8 @@ public class TwoStepSecondaryModelFile {
             Element annot = new PMFMetadataNode(ModelType.TWO_STEP_SECONDARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
 
         } catch (Exception e) {
@@ -410,6 +412,8 @@ public class TwoStepSecondaryModelFile {
             // Adds description with model type
             Element annot = new PMFMetadataNode(ModelType.TWO_STEP_SECONDARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
 

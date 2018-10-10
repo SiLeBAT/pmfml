@@ -23,11 +23,14 @@ public class URIS {
 
     public static final URI pmf;
 
+    public static final URI txt;
+
     static {
         try {
             numl = new URI("https://raw.githubusercontent.com/NuML/NuML/master/NUMLSchema.xsd");
             pmf = new URI("http://sourceforge.net/projects/microbialmodelingexchange/files/");
             sbml = new URI("http://identifiers.org/combine/specifications/sbml");
+            txt = new URI("http://purl.org/NET/mediatypes/text-xplain");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

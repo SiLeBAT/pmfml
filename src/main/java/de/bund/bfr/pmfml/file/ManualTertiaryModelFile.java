@@ -263,6 +263,8 @@ public class ManualTertiaryModelFile {
             Element annot = new PMFMetadataNode(ModelType.MANUAL_TERTIARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
 
         } catch (Exception e) {
@@ -316,6 +318,8 @@ public class ManualTertiaryModelFile {
 
             Element annot = new PMFMetadataNode(ModelType.MANUAL_TERTIARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
 

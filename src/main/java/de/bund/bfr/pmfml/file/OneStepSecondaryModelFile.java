@@ -274,6 +274,8 @@ public class OneStepSecondaryModelFile {
             Element annot = new PMFMetadataNode(ModelType.ONE_STEP_SECONDARY_MODEL, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
 
         } catch (Exception e) {
@@ -325,6 +327,8 @@ public class OneStepSecondaryModelFile {
 
             Element annot = new PMFMetadataNode(ModelType.ONE_STEP_SECONDARY_MODEL, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
 

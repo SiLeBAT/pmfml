@@ -185,6 +185,8 @@ public class ManualSecondaryModelFile {
             Element annot = new PMFMetadataNode(ModelType.MANUAL_SECONDARY_MODEL, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
         } catch (Exception e) {
             file.delete();  // Removes faulty file
@@ -225,6 +227,8 @@ public class ManualSecondaryModelFile {
             // Adds description with model type
             Element annot = new PMFMetadataNode(ModelType.MANUAL_SECONDARY_MODEL, Collections.emptySet()).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
         } catch (Exception e) {

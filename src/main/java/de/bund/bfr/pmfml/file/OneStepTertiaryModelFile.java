@@ -337,6 +337,8 @@ public class OneStepTertiaryModelFile {
             Element annot = new PMFMetadataNode(ModelType.ONE_STEP_TERTIARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
 
         } catch (Exception e) {
@@ -408,6 +410,8 @@ public class OneStepTertiaryModelFile {
             // Adds description with model type
             Element annot = new PMFMetadataNode(ModelType.ONE_STEP_TERTIARY_MODEL, masterFiles).node;
             ca.addDescription(new DefaultMetaDataObject(annot));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
 

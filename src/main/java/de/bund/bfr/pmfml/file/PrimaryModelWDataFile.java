@@ -284,6 +284,8 @@ public class PrimaryModelWDataFile {
                     .node;
             ca.addDescription(new DefaultMetaDataObject(annotation));
 
+            CombineArchiveUtil.addReadme(ca);
+
             ca.pack();
 
         } catch (Exception e) {
@@ -336,6 +338,8 @@ public class PrimaryModelWDataFile {
             Element annotation = new PMFMetadataNode(ModelType.PRIMARY_MODEL_WDATA, Collections.emptySet())
                     .node;
             ca.addDescription(new DefaultMetaDataObject(annotation));
+
+            CombineArchiveUtil.addReadme(ca);
 
             ca.pack();
 
