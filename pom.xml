@@ -68,10 +68,6 @@
 
     <repositories>
         <repository>
-            <id>bintray</id>
-            <url>http://dl.bintray.com/silebat/bfr-formats</url>
-        </repository>
-        <repository>
             <id>sems-maven-repository-releases</id>
             <name>SEMS Maven Repo</name>
             <url>http://mvn.sems.uni-rostock.de/releases/</url>
