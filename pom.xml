@@ -66,32 +66,11 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>sems-maven-repository-releases</id>
-            <name>SEMS Maven Repo</name>
-            <url>http://mvn.sems.uni-rostock.de/releases/</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>sems-maven-repository-snapshots</id>
-            <name>SEMS Maven Repo</name>
-            <url>http://mvn.sems.uni-rostock.de/snapshots/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
-            <groupId>de.unirostock.sems</groupId>
+            <groupId>de.uni-rostock.sbi</groupId>
             <artifactId>CombineArchive</artifactId>
-            <version>1.2.1</version>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
