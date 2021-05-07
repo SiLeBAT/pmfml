@@ -19,8 +19,9 @@
 
     <distributionManagement>
         <repository>
-            <id>bintray</id>
-            <url>https://api.bintray.com/maven/silebat/bfr-formats/pmfml/;publish=1</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/silebat/pmfml</url>
         </repository>
     </distributionManagement>
 
